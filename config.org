@@ -369,12 +369,13 @@
         jtdowney/line-number-hooks '(org-mode-hook
                                      markdown-mode-hook
                                      text-mode-hook
-                                     prog-mode-hook))
+                                     prog-mode-hook)
+        jtdowney/line-number-mode (if (version< emacs-version "26.0")
+                                      #'linum-mode
+                                    #'display-line-numbers-mode))
 
   (dolist (hook jtdowney/line-number-hooks)
-    (add-hook hook (if (version< emacs-version "26.0")
-                       #'linum-mode
-                     #'display-line-numbers-mode)))
+    (add-hook hook jtdowney/line-number-mode))
 #+END_SRC
 
 ** Show end of file
