@@ -380,9 +380,10 @@
 ** Show end of file
 
 #+BEGIN_SRC emacs-lisp
-  (use-package vi-tilde-fringe
-    :diminish
-    :hook (prog-mode . vi-tilde-fringe-mode))
+  (when (display-graphic-p)
+    (use-package vi-tilde-fringe
+      :diminish
+      :hook (prog-mode . vi-tilde-fringe-mode)))
 #+END_SRC
 
 * =org-mode=
