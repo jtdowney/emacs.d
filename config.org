@@ -746,7 +746,9 @@
 
 - Delete trailing whitespace
   #+BEGIN_SRC emacs-lisp
-    (add-hook 'before-save-hook 'delete-trailing-whitespace)
+    (add-hook 'before-save-hook (lambda ()
+                                  (when (derived-mode-p 'prog-mode)
+                                    (whitespace-cleanup))))
   #+END_SRC
 
 ** Completion
