@@ -600,7 +600,7 @@
 #+BEGIN_SRC emacs-lisp
   (use-package org-pomodoro
     :general
-    (jtdowney/leader-define-key "op" #'org-pomodoro)
+    (jtdowney/leader-define-key "oP" #'org-pomodoro)
     (jtdowney/local-leader-define-key org-mode-map "p" #'org-pomodoro)
     (jtdowney/local-leader-define-key org-agenda-mode-map "p" #'org-pomodoro))
 #+END_SRC
