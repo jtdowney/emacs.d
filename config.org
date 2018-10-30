@@ -100,6 +100,7 @@
       :init
       (setq evil-want-abbrev-expand-on-insert-exit nil
             evil-want-keybinding nil
+            evil-respect-visual-line-mode t
             evil-want-C-i-jump nil
             evil-want-C-d-scroll t
             evil-want-C-u-scroll t)
