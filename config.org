@@ -1023,15 +1023,23 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package deft
-    :general
-    (jtdowney/leader-define-key
-      "nv" #'deft
-      "nf" #'deft-find-file)
     :init
     (setq deft-directory "~/Dropbox/Notes"
           deft-default-extension "org"
           deft-use-filename-as-title nil
           deft-use-filter-string-for-filename t)
-    :config
-    (evil-set-initial-state 'deft-mode 'emacs))
+    (defun jtdowney/deft ()
+      "Start deft already in evil insert mode"
+      (interactive)
+      (deft)
+      (evil-insert-state nil))
+    :general
+    (jtdowney/leader-define-key
+      "nv" #'jtdowney/deft
+      "nf" #'deft-find-file)
+    (jtdowney/local-leader-define-key deft-mode-map
+      "d" #'deft-delete-file
+      "i" #'deft-toggle-incremental-search
+      "n" #'deft-new-file
+      "r" #'deft-rename-file))
 #+END_SRC
