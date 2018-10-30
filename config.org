@@ -20,6 +20,7 @@
 - Set load path
   #+BEGIN_SRC emacs-lisp
     (defun jtdowney/add-exec-path (path)
+      "Add a path to both the environment PATH and the emacs exec-path"
       (setenv "PATH" (concat path ":" (getenv "PATH")))
       (add-to-list 'exec-path path))
 
@@ -169,6 +170,7 @@
 - Bind a simple file rename function
   #+BEGIN_SRC emacs-lisp
     (defun jtdowney/rename-file (new-name)
+      "Rename a file"
       (interactive "FNew name: ")
       (let ((filename (buffer-file-name)))
         (if filename
@@ -698,6 +700,7 @@
     (evil-set-initial-state 'term-mode 'emacs))
 
   (defun jtdowney/term-paste (&optional string)
+    "Paste into the terminal"
     (interactive)
     (process-send-string
      (get-buffer-process (current-buffer))
