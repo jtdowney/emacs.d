@@ -92,6 +92,14 @@
       :diminish)
   #+END_SRC
 
+- Use =editorconfig=
+  #+BEGIN_SRC emacs-lisp
+    (use-package editorconfig
+      :diminish
+      :config
+      (editorconfig-mode t))
+  #+END_SRC
+
 * =evil-mode=
 
 - I've used vim for so long that anything else is hard to switch to.
