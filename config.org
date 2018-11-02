@@ -256,6 +256,17 @@
         "jw" #'evil-avy-goto-word-or-subword-1))
 #+END_SRC
 
+* =dired=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dired
+    :ensure f
+    :init
+    (require 'dired-x)
+    (evil-global-set-key 'motion (kbd "_") #'projectile-dired)
+    (evil-global-set-key 'motion (kbd "-") #'dired-jump))
+#+END_SRC
+
 * macOS settings
 
 #+BEGIN_SRC emacs-lisp
