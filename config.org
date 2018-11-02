@@ -147,11 +147,12 @@
   #+BEGIN_SRC emacs-lisp
     (use-package general)
 
+    (general-def :states '(normal motion) "SPC" nil)
     (general-create-definer jtdowney/leader-define-key
-      :states 'normal
+      :states '(normal motion)
       :prefix "SPC")
     (general-create-definer jtdowney/local-leader-define-key
-      :states 'normal
+      :states '(normal motion)
       :prefix ",")
   #+END_SRC
 
