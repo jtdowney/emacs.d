@@ -1063,6 +1063,7 @@
       "nv" #'jtdowney/deft
       "nf" #'deft-find-file)
     (jtdowney/local-leader-define-key deft-mode-map
+      "c" #'deft-filter-clear
       "d" #'deft-delete-file
       "i" #'deft-toggle-incremental-search
       "n" #'deft-new-file
