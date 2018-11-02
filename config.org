@@ -150,9 +150,11 @@
     (general-def :states '(normal motion) "SPC" nil)
     (general-create-definer jtdowney/leader-define-key
       :states '(normal motion)
+      :keymaps 'override
       :prefix "SPC")
     (general-create-definer jtdowney/local-leader-define-key
       :states '(normal motion)
+      :keymaps 'override
       :prefix ",")
   #+END_SRC
 
