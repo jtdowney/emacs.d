@@ -844,6 +844,9 @@
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :diminish yas-minor-mode
+    :general (:states 'insert
+              :keymaps 'override
+              "C-e" #'yas-expand)
     :config
     (yas-global-mode t))
 
