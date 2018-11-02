@@ -1016,6 +1016,48 @@
     :hook (cider-mode . clj-refactor-mode))
 #+END_SRC
 
+** Go
+
+#+BEGIN_SRC emacs-lisp
+  (use-package go-mode
+    :mode "\\.go\\'"
+    :general
+    (jtdowney/local-leader-define-key go-mode-map
+      "hh" #'godoc-at-point
+      "ig" #'go-goto-imports
+      "ia" #'go-import-add
+      "ir" #'go-remove-unused-imports
+      "eb" #'go-play-buffer
+      "er" #'go-play-region
+      "ed" #'go-download-play
+      "gc" #'go-coverage)
+    :init
+    (setq gofmt-command "goimports")
+    :config
+    (add-hook 'before-save-hook #'gofmt-before-save))
+
+  (use-package flycheck-gometalinter
+    :after go-mode
+    :config
+    (flycheck-gometalinter-setup))
+
+  (use-package gotest
+    :after go-mode
+    :general
+    (jtdowney/local-leader-define-key go-mode-map
+      "tt" #'go-test-current-test
+      "tb" #'go-test-current-file
+      "ta" #'go-test-current-project))
+
+  (use-package company-go
+    :after go-mode
+    :config
+    (add-hook 'go-mode-hook (lambda ()
+                              (make-local-variable 'company-backends)
+                              (setq company-backends (copy-tree company-backends))
+                              (add-to-list 'company-backends '(company-go :with company-yasnippet)))))
+#+END_SRC
+
 * Financial
 
 #+BEGIN_SRC emacs-lisp
