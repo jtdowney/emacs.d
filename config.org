@@ -432,10 +432,10 @@
   (setq jtdowney/org-inbox-file (concat org-directory "inbox.org")
         jtdowney/org-projects-file (concat org-directory "projects.org")
         jtdowney/org-someday-file (concat org-directory "someday.org")
-        jtdowney/org-tickler-file (concat org-directory "tickler.org")
+        jtdowney/org-reminders-file (concat org-directory "reminders.org")
         org-agenda-files `(,jtdowney/org-inbox-file
                            ,jtdowney/org-projects-file
-                           ,jtdowney/org-tickler-file))
+                           ,jtdowney/org-reminders-file))
 #+END_SRC
 
 ** Refile
@@ -443,7 +443,7 @@
 #+BEGIN_SRC emacs-lisp
   (setq org-refile-targets `((,jtdowney/org-projects-file :maxlevel . 3)
                              (,jtdowney/org-someday-file :level . 1)
-                             (,jtdowney/org-tickler-file :maxlevel . 2)))
+                             (,jtdowney/org-reminders-file :maxlevel . 2)))
 #+END_SRC
 
 ** =evil-mode= integration
@@ -561,8 +561,8 @@
           ("t" "Todo" entry
            (file ,jtdowney/org-inbox-file)
            "* TODO %i%?\n")
-          ("T" "Tickler" entry
-           (file ,jtdowney/org-tickler-file)
+          ("R" "Reminders" entry
+           (file+headline ,jtdowney/org-reminders-file "Reminders")
            "* %i%?\n %U")))
 #+END_SRC
 
