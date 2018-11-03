@@ -219,7 +219,12 @@
 
 - Install =swiper=
   #+BEGIN_SRC emacs-lisp
-    (use-package swiper)
+    (use-package swiper
+      :bind ("C-s" . #'swiper)
+      :general
+      (jtdowney/leader-define-key
+        "sb" #'swiper-all
+        "ss" #'swiper))
   #+END_SRC
 
 - Install =counsel=
