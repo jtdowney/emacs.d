@@ -246,9 +246,8 @@
       (setq ivy-rich-path-style 'abbrev))
   #+END_SRC
 
-- Some extra packages for friendly interfaces
+- Install =smex= for recent commands list
   #+BEGIN_SRC emacs-lisp
-    (use-package flx)
     (use-package smex)
   #+END_SRC
 
