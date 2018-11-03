@@ -804,12 +804,12 @@
     (evil-collection-init 'company))
 #+END_SRC
 
-** Smartparens
+** Electric pairs
 
 #+BEGIN_SRC emacs-lisp
-  (use-package smartparens
-    :diminish
-    :hook (prog-mode . smartparens-mode))
+  (use-package electric-pair-mode
+    :ensure f
+    :hook prog-mode)
 #+END_SRC
 
 ** Comments
