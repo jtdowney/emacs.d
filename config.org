@@ -171,7 +171,6 @@
              (mark-whole-buffer)
              (kill-ring-save 0 0 t))
       "d" #'dired
-      "ff" #'find-file
       "ha" #'apropos-command
       "hf" #'describe-function
       "hk" #'describe-key
@@ -198,7 +197,7 @@
     (jtdowney/leader-define-key "fR" #'jtdowney/rename-file)
   #+END_SRC
 
-* =ivy=
+* Completion
 
 - Install =ivy=
   #+BEGIN_SRC emacs-lisp
@@ -206,15 +205,23 @@
       :diminish
       :after evil-collection
       :general
-      (jtdowney/leader-define-key "bb" #'ivy-switch-buffer)
+      (jtdowney/leader-define-key
+        "bb" #'ivy-switch-buffer
+        "rl" #'ivy-resume)
       :config
       (ivy-mode t)
       (evil-collection-init 'ivy)
-      (setq ivy-use-virtual-buffers t
+      (setq enable-recursive-minibuffers t
             ivy-count-format "(%d/%d) "
-            enable-recursive-minibuffers t
             ivy-re-builders-alist '((swiper . ivy--regex-plus)
-                                    (t . ivy--regex-fuzzy))))
+                                    (t . ivy--regex-fuzzy))
+            ivy-use-selectable-prompt t
+            ivy-use-virtual-buffers t))
+  #+END_SRC
+
+- Install =ivy-hydra=
+  #+BEGIN_SRC emacs-lisp
+    (use-package ivy-hydra)
   #+END_SRC
 
 - Install =swiper=
@@ -234,8 +241,28 @@
       :general
       (jtdowney/leader-define-key
         "/" #'counsel-ag
+        ":" #'counsel-M-x
+        "?" #'counsel-descbinds
+        "fL" #'counsel-locate
+        "ff" #'counsel-find-file
         "fr" #'counsel-recentf
-        "ji" #'counsel-imenu))
+        "ry" #'counsel-yank-pop
+        "sj" #'counsel-imenu))
+  #+END_SRC
+
+- Install =counsel-projectile=
+  #+BEGIN_SRC emacs-lisp
+    (use-package counsel-projectile
+      :general
+      (jtdowney/leader-define-key
+        "pb" #'counsel-projectile-switch-to-buffer
+        "pd" #'counsel-projectile-find-dir
+        "pp" #'counsel-projectile-switch-project
+        "pf" #'counsel-projectile-find-file
+        "saf" #'counsel-ag
+        "sap" #'counsel-projectile-ag
+        "sgf" #'counsel-grep
+        "sgp" #'counsel-projectile-git-grep))
   #+END_SRC
 
 - Install =ivy-rich=
@@ -667,9 +694,12 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
+    :general
+    (jtdowney/leader-define-key
+      "pr" 'projectile-recentf
+      "pv" 'projectile-vc)
     :config
     (projectile-global-mode t)
-    (jtdowney/leader-define-key "p" 'projectile-command-map)
     (setq projectile-completion-system 'ivy))
 #+END_SRC
 
