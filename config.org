@@ -992,6 +992,13 @@
           enh-ruby-hanging-paren-deep-indent-level 2))
 #+END_SRC
 
+*** =ruby-end=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ruby-end
+    :diminish)
+#+END_SRC
+
 *** =bundler=
 
 #+BEGIN_SRC emacs-lisp
@@ -1003,6 +1010,26 @@
       "bs" #'bundle-console
       "bu" #'bundle-update
       "bx" #'bundle-exec))
+#+END_SRC
+
+*** =robe=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package robe
+    :hook (enh-ruby-mode . robe-mode)
+    :general
+    (jtdowney/local-leader-define-key enh-ruby-mode-map
+      "'" #'robe-start
+      "hd" #'robe-doc
+      "rsr" #'robe-rails-refresh
+      "sF" #'ruby-send-definition-and-go
+      "sR" #'ruby-send-region-and-go
+      "sf" #'ruby-send-definition
+      "si" #'robe-start
+      "sr" #'ruby-send-region
+      "ss" #'ruby-switch-to-inf)
+    :config
+    (push '(company-robe :with company-yasnippet) company-backends))
 #+END_SRC
 
 ** YAML
