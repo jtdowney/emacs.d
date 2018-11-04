@@ -1084,6 +1084,7 @@
 #+END_SRC
 
 ** Go
+*** =go-mode=
 
 #+BEGIN_SRC emacs-lisp
   (use-package go-mode
@@ -1102,12 +1103,20 @@
     (setq gofmt-command "goimports")
     :config
     (add-hook 'before-save-hook #'gofmt-before-save))
+#+END_SRC
 
+*** =flycheck-gometalinter=
+
+#+BEGIN_SRC emacs-lisp
   (use-package flycheck-gometalinter
     :after go-mode
     :config
     (flycheck-gometalinter-setup))
+#+END_SRC
 
+*** =gotest=
+
+#+BEGIN_SRC emacs-lisp
   (use-package gotest
     :after go-mode
     :general
@@ -1115,14 +1124,18 @@
       "tt" #'go-test-current-test
       "tb" #'go-test-current-file
       "ta" #'go-test-current-project))
+#+END_SRC
 
+*** =company-go=
+
+#+BEGIN_SRC emacs-lisp
   (use-package company-go
     :after go-mode
     :config
     (add-hook 'go-mode-hook (lambda ()
                               (make-local-variable 'company-backends)
                               (setq company-backends (copy-tree company-backends))
-                              (add-to-list 'company-backends '(company-go :with company-yasnippet)))))
+                              (push '(company-go :with company-yasnippet) company-backends))))
 #+END_SRC
 
 * Financial
