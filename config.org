@@ -953,11 +953,14 @@
       "c." #'cargo-process-repeat
       "cC" #'cargo-process-clean
       "cK" #'cargo-process-clippy
+      "cU" #'cargo-process-upgrade
       "cX" #'cargo-process-run-example
+      "ca" #'cargo-process-add
       "cc" #'cargo-process-build
       "cd" #'cargo-process-doc
       "cf" #'cargo-process-fmt
       "ck" #'cargo-process-check
+      "cr" #'cargo-process-rm
       "cu" #'cargo-process-update
       "cx" #'cargo-process-run
       "ta" #'cargo-process-test
