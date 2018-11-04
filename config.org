@@ -619,11 +619,6 @@
       (add-hook 'org-mode-hook #'org-bullets-mode))
   #+END_SRC
 
-- Show a downward arrow instead of the ellipsis.
-  #+BEGIN_SRC emacs-lisp
-    (setq org-ellipsis "⤵")
-  #+END_SRC
-
 - Use syntax highlighting in source blocks while editing.
   #+BEGIN_SRC emacs-lisp
     (setq org-src-fontify-natively t)
