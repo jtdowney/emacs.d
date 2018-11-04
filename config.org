@@ -85,13 +85,6 @@
     (global-visual-line-mode t)
   #+END_SRC
 
-- Use =undo-tree=
-  #+BEGIN_SRC emacs-lisp
-    (use-package undo-tree
-      :ensure f
-      :diminish)
-  #+END_SRC
-
 - Use =editorconfig=
   #+BEGIN_SRC emacs-lisp
     (use-package editorconfig
@@ -443,6 +436,23 @@
       :hook (prog-mode . vi-tilde-fringe-mode)))
 #+END_SRC
 
+** Hide some minor modes
+
+#+BEGIN_SRC emacs-lisp
+  (defmacro diminish-minor-mode (filename mode &optional abbrev)
+    `(eval-after-load (symbol-name ,filename)
+       '(diminish ,mode ,abbrev)))
+
+  (diminish-minor-mode 'abbrev 'abbrev-mode)
+  (diminish-minor-mode 'eldoc 'eldoc-mode)
+  (diminish-minor-mode 'flycheck 'flycheck-mode)
+  (diminish-minor-mode 'flyspell 'flyspell-mode)
+  (diminish-minor-mode 'org-indent 'org-indent-mode)
+  (diminish-minor-mode 'simple 'visual-line-mode)
+  (diminish-minor-mode 'subword 'subword-mode)
+  (diminish-minor-mode 'undo-tree 'undo-tree-mode)
+#+END_SRC
+
 * =org-mode=
 ** Basics
 
@@ -484,6 +494,7 @@
 #+BEGIN_SRC emacs-lisp
   (use-package evil-org
     :after org
+    :diminish
     :hook (org-mode . evil-org-mode)
     :config
     (add-hook 'evil-org-mode-hook
@@ -816,6 +827,7 @@
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :after evil-collection
+    :diminish
     :init
     (setq company-idle-delay 0.1
           company-minimum-prefix-length 1
@@ -884,8 +896,7 @@
     :config
     (yas-global-mode t))
 
-  (use-package yasnippet-snippets
-    :after yasnippet)
+  (use-package yasnippet-snippets)
 #+END_SRC
 
 ** Lisps
