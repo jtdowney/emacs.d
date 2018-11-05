@@ -817,6 +817,15 @@
                                     (whitespace-cleanup))))
   #+END_SRC
 
+- Don't use show-paren-mode except when enabled
+  #+BEGIN_SRC emacs-lisp
+    (show-paren-mode t)
+    (setq-default show-paren-mode nil)
+    (setq show-paren-style 'expression
+          show-paren-delay 0
+          show-paren-when-point-in-periphery t)
+  #+END_SRC
+
 ** Completion
 
 #+BEGIN_SRC emacs-lisp
@@ -908,7 +917,7 @@
 
   (dolist (hook lispy-mode-hooks)
     (add-hook hook (lambda ()
-                     (setq show-paren-style 'expression)
+                     (setq-local show-paren-mode t)
                      (paredit-mode t)
                      (rainbow-delimiters-mode t))))
 
