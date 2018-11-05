@@ -1150,6 +1150,47 @@
                               (push '(company-go :with company-yasnippet) company-backends))))
 #+END_SRC
 
+** Scheme
+*** =geiser=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package geiser
+    :hook (scheme-mode . geiser-mode)
+    :general
+    (jtdowney/local-leader-define-key scheme-mode-map
+      "'" #'geiser-mode-switch-to-repl
+      "cc" #'geiser-compile-current-buffer
+      "cp" #'geiser-add-to-load-path
+      "eb" #'geiser-eval-buffer
+      "ee" #'geiser-eval-last-sexp
+      "ef" #'geiser-eval-definition
+      "er" #'geiser-eval-region
+      "gN" #'previous-error
+      "gb" #'geiser-pop-symbol-stack
+      "gm" #'geiser-edit-module
+      "gn" #'next-error
+      "h<" #'geiser-xref-callers
+      "h>" #'geiser-xref-callees
+      "hd" #'geiser-doc-look-up-manual
+      "hh" #'geiser-doc-symbol-at-point
+      "hm" #'geiser-doc-module
+      "il" #'geiser-insert-lambda
+      "me" #'geiser-expand-last-sexp
+      "mf" #'geiser-expand-definition
+      "mx" #'geiser-expand-region
+      "sB" #'geiser-eval-buffer-and-go
+      "sF" #'geiser-eval-definition-and-go
+      "sR" #'geiser-eval-region-and-go
+      "sb" #'geiser-eval-buffer
+      "se" #'geiser-eval-last-sexp
+      "sf" #'geiser-eval-definition
+      "si" #'geiser-mode-switch-to-repl
+      "sr" #'geiser-eval-region
+      "ss" #'geiser-set-scheme)
+    :config
+    (evil-collection-init 'geiser))
+#+END_SRC
+
 * Financial
 
 #+BEGIN_SRC emacs-lisp
