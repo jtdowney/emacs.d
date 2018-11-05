@@ -302,9 +302,9 @@
           mac-option-modifier 'meta
           mac-right-command-modifier 'super
           mac-right-option-modifier 'nil)
-    (bind-key (kbd "s-c") #'kill-ring-save)
-    (bind-key (kbd "s-v") #'yank)
-    (bind-key (kbd "s-x") #'kill-region))
+    (general-define-key "s-c" #'kill-ring-save
+                        "s-v" #'yank
+                        "s-x" #'kill-region))
 #+END_SRC
 
 * UI preferences
@@ -772,8 +772,8 @@
   (add-hook 'term-mode-hook
             (lambda ()
               (goto-address-mode t)
-              (define-key term-raw-map (kbd "s-v") 'jtdowney/term-paste)
-              (define-key term-raw-map (kbd "<mouse-2>") 'jtdowney/term-paste)
+              (general-define-key :keymap term-raw-map
+                                  "s-v" #'jtdowney/term-paste)
               (setq yas-dont-activate t)))
   #+END_SRC
 
