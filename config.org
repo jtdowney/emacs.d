@@ -388,11 +388,11 @@
                (floor (/ jtdowney/current-font-size jtdowney/font-change-increment))))
     (jtdowney/set-font-size))
 
-  (bind-key (kbd "C-)") #'jtdowney/reset-font-size)
-  (bind-key (kbd "C-+") #'jtdowney/increase-font-size)
-  (bind-key (kbd "C-=") #'jtdowney/increase-font-size)
-  (bind-key (kbd "C-_") #'jtdowney/decrease-font-size)
-  (bind-key (kbd "C--") #'jtdowney/decrease-font-size)
+  (general-define-key "s-0" #'jtdowney/reset-font-size
+                      "s-+" #'jtdowney/increase-font-size
+                      "s-=" #'jtdowney/increase-font-size
+                      "s-_" #'jtdowney/decrease-font-size
+                      "s--" #'jtdowney/decrease-font-size)
 
   (jtdowney/reset-font-size)
 #+END_SRC
