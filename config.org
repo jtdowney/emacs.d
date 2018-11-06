@@ -615,8 +615,7 @@
 - Use pretty bullets instead of asterisks.
   #+BEGIN_SRC emacs-lisp
     (use-package org-bullets
-      :init
-      (add-hook 'org-mode-hook #'org-bullets-mode))
+      :hook (org-mode . org-bullets-mode))
   #+END_SRC
 
 - Use syntax highlighting in source blocks while editing.
@@ -686,11 +685,10 @@
 #+BEGIN_SRC emacs-lisp
   (use-package flyspell
     :ensure f
+    :hook ((text-mode . flyspell-mode)
+           (prog-mode . flyspell-prog-mode))
     :init
-    (setq ispell-program-name "aspell")
-    :config
-    (add-hook 'text-mode-hook #'flyspell-mode)
-    (add-hook 'prog-mode-hook #'flyspell-prog-mode))
+    (setq ispell-program-name "aspell"))
 
   (use-package flyspell-correct)
   (use-package flyspell-correct-popup)
@@ -746,9 +744,7 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package diff-hl
-    :config
-    (add-hook 'prog-mode-hook #'diff-hl-mode)
-    (add-hook 'vc-dir-mode-hook #'diff-hl-mode))
+    :hook ((prog-mode vc-dir-mode) . diff-hl-mode))
 #+END_SRC
 
 * Terminal
@@ -831,6 +827,7 @@
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :after evil-collection
+    :hook (after-init . global-company-mode)
     :diminish
     :init
     (setq company-idle-delay 0.1
@@ -850,7 +847,6 @@
     (setq company-backends (mapcar #'jtdowney/company-mode-with-yasipptet
                                    company-backends))
     :config
-    (add-hook 'after-init-hook #'global-company-mode)
     (evil-collection-init 'company))
 #+END_SRC
 
