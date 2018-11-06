@@ -744,7 +744,7 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package diff-hl
-    :hook ((prog-mode vc-dir-mode) . diff-hl-mode))
+    :hook ((prog-mode text-mode vc-dir-mode) . diff-hl-mode))
 #+END_SRC
 
 * Terminal
