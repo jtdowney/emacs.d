@@ -902,20 +902,25 @@
 ** Lisps
 
 #+BEGIN_SRC emacs-lisp
-  (use-package paredit)
-  (use-package rainbow-delimiters)
+  (setq lispy-modes
+        '(clojure-mode
+          emacs-lisp-mode
+          lisp-mode
+          scheme-mode))
 
-  (setq lispy-mode-hooks
-        '(clojure-mode-hook
-          emacs-lisp-mode-hook
-          lisp-mode-hook
-          scheme-mode-hook))
+  (defvar lispy-mode-hook nil
+    "Hook called after a lispy mode is activated")
 
-  (dolist (hook lispy-mode-hooks)
-    (add-hook hook (lambda ()
-                     (setq-local show-paren-mode t)
-                     (paredit-mode t)
-                     (rainbow-delimiters-mode t))))
+  (use-package paredit
+    :hook (lispy-mode . paredit-mode))
+  (use-package rainbow-delimiters
+    :hook (lispy-mode . rainbow-delimiters-mode))
+
+  (dolist (mode lispy-modes)
+    (add-hook (intern (concat (symbol-name mode) "-hook"))
+              (lambda ()
+                (setq-local show-paren-mode t)
+                (run-hooks 'lispy-mode-hook))))
 
   (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 #+END_SRC
