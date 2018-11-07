@@ -288,10 +288,12 @@
 #+BEGIN_SRC emacs-lisp
   (use-package dired
     :ensure f
+    :general (:states 'motion
+              :keymaps 'override
+              "_" #'projectile-dired
+              "-" #'dired-jump)
     :init
-    (require 'dired-x)
-    (evil-global-set-key 'motion (kbd "_") #'projectile-dired)
-    (evil-global-set-key 'motion (kbd "-") #'dired-jump))
+    (require 'dired-x))
 #+END_SRC
 
 * macOS settings
