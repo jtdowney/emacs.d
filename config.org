@@ -875,13 +875,12 @@
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :diminish
+    :hook (after-init . global-flycheck-mode)
     :general
     (jtdowney/leader-define-key
       "el" #'flycheck-list-errors
       "en" #'flycheck-next-error
       "ep" #'flycheck-previous-error)
-    :init
-    (global-flycheck-mode t)
     :config
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
     (evil-collection-init 'flycheck))
