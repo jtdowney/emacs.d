@@ -693,7 +693,7 @@
     (setq ispell-program-name "aspell"))
 
   (use-package flyspell-correct)
-  (use-package flyspell-correct-popup)
+  (use-package flyspell-correct-ivy)
 #+END_SRC
 
 * Project management
