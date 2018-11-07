@@ -984,8 +984,7 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-rust
-    :after rust-mode
-    :hook (flycheck-mode . flycheck-rust-setup))
+    :hook (rust-mode . flycheck-rust-setup))
 #+END_SRC
 
 ** Ruby
@@ -1078,6 +1077,7 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package cider
+    :hook (clojure-mode . cider-mode)
     :config
     (setq nrepl-log-messages t
           cider-repl-display-in-current-window t
