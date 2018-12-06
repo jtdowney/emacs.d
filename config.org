@@ -859,6 +859,12 @@
     :hook prog-mode)
 #+END_SRC
 
+** Smartparens
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens)
+#+END_SRC
+
 ** Comments
 
 #+BEGIN_SRC emacs-lisp
@@ -1198,6 +1204,79 @@
       "ss" #'geiser-set-scheme)
     :config
     (evil-collection-init 'geiser))
+#+END_SRC
+** Elixir
+*** =elixir-mode=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elixir-mode
+    :mode ("\\.ex\\'" "\\.exs\\'" "\\.elixir\\'")
+    :init
+    (add-hook 'elixir-mode-hook #'smartparens-mode)
+    (add-hook 'before-save-hook 'elixir-format nil t))
+#+END_SRC
+
+*** =alchemist=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package alchemist
+    :hook (elixir-mode . alchemist-mode)
+    :general
+    (jtdowney/local-leader-define-key elixir-mode-map
+        "'"  #'alchemist-iex-run
+        "," #'alchemist-goto-jump-back
+        "c:" #'alchemist-compile
+        "cb" #'alchemist-compile-this-buffer
+        "cf" #'alchemist-compile-file
+        "eB" #'alchemist-eval-print-buffer
+        "eJ" #'alchemist-eval-print-quoted-current-line
+        "eL" #'alchemist-eval-print-current-line
+        "eR" #'alchemist-eval-print-region
+        "eU" #'alchemist-eval-print-quoted-region
+        "eV" #'alchemist-eval-print-quoted-buffer
+        "eb" #'alchemist-eval-buffer
+        "ej" #'alchemist-eval-quoted-current-line
+        "el" #'alchemist-eval-current-line
+        "er" #'alchemist-eval-region
+        "eu" #'alchemist-eval-quoted-region
+        "ev" #'alchemist-eval-quoted-buffer
+        "gT" #'alchemist-project-toggle-file-and-tests-other-window
+        "gt" #'alchemist-project-toggle-file-and-tests
+        "h:" #'alchemist-help
+        "hH" #'alchemist-help-history
+        "hh" #'alchemist-help-search-at-point
+        "hr" #'alchemist-help-search-marked-region
+        "m:" #'alchemist-mix
+        "mc" #'alchemist-mix-compile
+        "mh" #'alchemist-mix-help
+        "mx" #'alchemist-mix-run
+        "pt" #'alchemist-project-find-test
+        "sI" #'alchemist-iex-project-run
+        "sL" #'alchemist-iex-send-current-line-and-go
+        "sR" #'alchemist-iex-send-region-and-go
+        "sc" #'alchemist-iex-compile-this-buffer
+        "si" #'alchemist-iex-run
+        "sl" #'alchemist-iex-send-current-line
+        "sm" #'alchemist-iex-reload-module
+        "sr" #'alchemist-iex-send-region
+        "ta" #'alchemist-mix-test
+        "tb" #'alchemist-mix-test-this-buffer
+        "tf" #'alchemist-test-file
+        "tn" #'alchemist-test-jump-to-next-test
+        "tp" #'alchemist-test-jump-to-previous-test
+        "tr" #'alchemist-mix-rerun-last-test
+        "tt" #'alchemist-mix-test-at-point
+        "x:" #'alchemist-execute
+        "xb" #'alchemist-execute-this-buffer
+        "xf" #'alchemist-execute-file
+      ))
+#+END_SRC
+
+*** =flycheck-mix=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-mix
+    :config (flycheck-mix-setup))
 #+END_SRC
 
 * Financial
