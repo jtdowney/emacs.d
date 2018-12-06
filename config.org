@@ -791,11 +791,6 @@
       (global-evil-matchit-mode t))
   #+END_SRC
 
-- Treat CamelCase as words in programming modes
-  #+BEGIN_SRC emacs-lisp
-    (add-hook 'prog-mode-hook #'subword-mode)
-  #+END_SRC
-
 - Mark scripts as executable
   #+BEGIN_SRC emacs-lisp
     (add-hook 'after-save-hook
