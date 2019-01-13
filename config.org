@@ -92,6 +92,16 @@
       (editorconfig-mode t))
   #+END_SRC
 
+- Create directories if they don't exist
+  #+BEGIN_SRC emacs-lisp
+    (defadvice find-file (before make-directory-maybe (filename &optional wildcards) activate)
+      "Create parent directory if not exists while visiting file."
+      (unless (file-exists-p filename)
+        (let ((dir (file-name-directory filename)))
+          (unless (file-exists-p dir)
+            (make-directory dir)))))
+  #+END_SRC
+
 * =evil-mode=
 
 - I've used vim for so long that anything else is hard to switch to.
