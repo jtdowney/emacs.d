@@ -1300,6 +1300,55 @@
     :config (flycheck-mix-setup))
 #+END_SRC
 
+** Haskell
+*** =haskell-mode=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package haskell-mode
+    :general
+    (jtdowney/local-leader-define-key haskell-mode-map
+      "F"   #'haskell-mode-stylish-buffer
+      "ca"  #'haskell-process-cabal
+      "cb"  #'haskell-process-cabal-build
+      "cc"  #'haskell-compile
+      "cv"  #'haskell-cabal-visit-file
+      "dB"  #'haskell-debug/delete
+      "dN"  #'haskell-debug/previous
+      "da"  #'haskell-debug/abandon
+      "db"  #'haskell-debug/break-on-function
+      "dc"  #'haskell-debug/continue
+      "dd"  #'haskell-debug
+      "dn"  #'haskell-debug/next
+      "dp"  #'haskell-debug/previous
+      "dr"  #'haskell-debug/refresh
+      "ds"  #'haskell-debug/step
+      "dt"  #'haskell-debug/trace
+      "gi"  #'haskell-navigate-imports
+      "hH"  #'haskell-hoogle-lookup-from-local
+      "hd"  #'inferior-haskell-find-haddock
+      "hh"  #'hoogle
+      "hi"  #'haskell-process-do-info
+      "ht"  #'haskell-process-do-type
+      "hy"  #'hayoo
+      "sS"  #'haskell-interactive-switch
+      "sb"  #'haskell-process-load-file
+      "sc"  #'haskell-interactive-mode-clear)
+    :config
+    (setq haskell-process-type 'stack-ghci))
+#+END_SRC
+
+*** =hindent=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package hindent
+    :hook (haskell-mode . hindent-mode)
+    :general
+    (jtdowney/local-leader-define-key haskell-mode-map
+      "f" #'hindent-reformat-decl)
+    :config
+    (setq hindent-reformat-buffer-on-save t))
+#+END_SRC
+
 * Financial
 
 #+BEGIN_SRC emacs-lisp
