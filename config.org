@@ -1081,6 +1081,29 @@
 #+END_SRC
 
 ** Clojure
+*** Display
+
+#+BEGIN_SRC emacs-lisp
+  (defun jtdowney/clojure-fancy-symbols (m)
+    "Makes special symbols show up as a fancy font"
+    (font-lock-add-keywords m
+                            `(("(\\(fn\\)[\[[:space:]]"
+                               (0 (progn (compose-region (match-beginning 1)
+                                                         (match-end 1) "λ"))))
+                              ("(\\(partial\\)[\[[:space:]]"
+                               (0 (progn (compose-region (match-beginning 1)
+                                                         (match-end 1) "Ƥ"))))
+                              ("(\\(comp\\)[\[[:space:]]"
+                               (0 (progn (compose-region (match-beginning 1)
+                                                         (match-end 1) "∘"))))
+                              ("\\(#\\)("
+                               (0 (progn (compose-region (match-beginning 1)
+                                                         (match-end 1) "ƒ"))))
+                              ("\\(#\\){"
+                               (0 (progn (compose-region (match-beginning 1)
+                                                         (match-end 1) "∈")))))))
+#+END_SRC
+
 *** =clojure-mode=
 
 #+BEGIN_SRC emacs-lisp
@@ -1088,7 +1111,10 @@
     :mode (("\\.clj\\'" . clojure-mode)
            ("\\.edn\\'" . clojure-mode)
            ("\\.cljs\\'" . clojurescript-mode)
-           ("\\.cljc\\'" . clojurec-mode)))
+           ("\\.cljc\\'" . clojurec-mode))
+    :config
+    (dolist (m '(clojure-mode clojurescript-mode clojurec-mode))
+            (jtdowney/clojure-fancy-symbols m)))
 #+END_SRC
 
 *** =cider=
@@ -1104,16 +1130,63 @@
           cider-font-lock-dynamically '(macro core function var)
           nrepl-hide-special-buffers t
           cider-overlays-use-font-lock t)
-    (cider-repl-toggle-pretty-printing))
+    (cider-repl-toggle-pretty-printing)
+    (jtdowney/clojure-fancy-symbols 'cider-repl-mode)
+    :general
+    (dolist (m '(clojure-mode
+                 clojurec-mode
+                 clojurescript-mode
+                 cider-repl-mode))
+      (require 'clojure-mode)
+      (let* ((map-name (intern (concat (symbol-name m) "-map")))
+             (map (symbol-value map-name)))
+        (jtdowney/local-leader-define-key ,map
+          "ha" #'cider-apropos
+          "hh" #'cider-doc
+          "hg" #'cider-grimoire
+          "hj" #'cider-javadoc
+          "hn" #'cider-browse-ns
+          "eb" #'cider-eval-buffer
+          "ee" #'cider-eval-last-sexp
+          "ef" #'cider-eval-defun-at-point
+          "em" #'cider-macroexpand-1
+          "eM" #'cider-macroexpand-all
+          "er" #'cider-eval-region
+          "ew" #'cider-eval-last-sexp-and-replace
+          "="  #'cider-format-buffer
+          "fb" #'cider-format-buffer
+          "gb" #'cider-pop-back
+          "gC" #'cider-classpath
+          "ge" #'cider-jump-to-compilation-error
+          "gr" #'cider-jump-to-resource
+          "gn" #'cider-browse-ns
+          "gN" #'cider-browse-ns-all
+          "'"  #'cider-jack-in
+          "\""  #'cider-jack-in-clojurescript
+          "sb" #'cider-load-buffer
+          "sc" (if (eq m 'cider-repl-mode)
+                   #'cider-repl-clear-buffer
+                 #'cider-connect)
+          "sC" #'cider-find-and-clear-repl-output
+          "si" #'cider-jack-in
+          "sI" #'cider-jack-in-clojurescript
+          "so" #'cider-repl-switch-to-other
+          "sq" #'cider-quit
+          "ss" (if (eq m 'cider-repl-mode)
+                   #'cider-switch-to-last-clojure-buffer
+                 #'cider-switch-to-repl-buffer)
+          "sx" #'cider-refresh
+          "Te" #'cider-enlighten-mode
+          "Tt" #'cider-auto-test-mode
+          "db" #'cider-debug-defun-at-point
+          "dv" #'cider-inspect
+          "rc{" #'clojure-convert-collection-to-map
+          "rc(" #'clojure-convert-collection-to-list
+          "rc'" #'clojure-convert-collection-to-quoted-list
+          "rc#" #'clojure-convert-collection-to-set
+          "rc[" #'clojure-convert-collection-to-vector))))
 
   (use-package cider-eval-sexp-fu)
-#+END_SRC
-
-*** =clj-refactor=
-
-#+BEGIN_SRC emacs-lisp
-  (use-package clj-refactor
-    :hook (cider-mode . clj-refactor-mode))
 #+END_SRC
 
 ** Go
