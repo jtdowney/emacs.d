@@ -907,6 +907,7 @@
         '(clojure-mode
           emacs-lisp-mode
           lisp-mode
+          racket-mode
           scheme-mode))
 
   (defvar lispy-mode-hook nil
@@ -1200,6 +1201,31 @@
     :config
     (evil-collection-init 'geiser))
 #+END_SRC
+
+** Racket
+*** =racket-mode=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package racket-mode
+    :mode ("\\.rkt\\'" "\\.pie\\'")
+    :general
+    (jtdowney/local-leader-define-key racket-mode-map
+      "g`" #'racket-unvisit
+      "gm" #'racket-visit-module
+      "gr" #'racket-open-require-path
+      "hd" #'racket-describe
+      "hh" #'racket-doc
+      "il" #'racket-insert-lambda
+      "'"  #'racket-repl
+      "sb" #'racket-run
+      "se" #'racket-send-last-sexp
+      "sf" #'racket-send-definition
+      "si" #'racket-repl
+      "sr" #'racket-send-region
+      "ss" #'racket-repl
+      "tb" #'racket-test))
+#+END_SRC
+
 ** Elixir
 *** =elixir-mode=
 
