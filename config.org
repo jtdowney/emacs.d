@@ -475,6 +475,7 @@
         org-M-RET-may-split-line nil
         org-agenda-skip-scheduled-if-done t
         org-directory (file-name-as-directory "~/org")
+        org-todo-keywords '((sequence "TODO(t)" "WAITING(w@)" "|" "DONE(d)" "CANCELED(c@)))"))
         org-archive-location (concat (file-name-as-directory org-directory)
                                      "archive.org"
                                      "::* From %s"))
@@ -483,21 +484,15 @@
 ** Agenda
 
 #+BEGIN_SRC emacs-lisp
+  (require 'find-lisp)
   (setq jtdowney/org-inbox-file (concat org-directory "inbox.org")
-        jtdowney/org-projects-file (concat org-directory "projects.org")
-        jtdowney/org-someday-file (concat org-directory "someday.org")
-        jtdowney/org-reminders-file (concat org-directory "reminders.org")
-        org-agenda-files `(,jtdowney/org-inbox-file
-                           ,jtdowney/org-projects-file
-                           ,jtdowney/org-reminders-file))
+        org-agenda-files (find-lisp-find-files org-directory "\.org$"))
 #+END_SRC
 
 ** Refile
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-refile-targets `((,jtdowney/org-projects-file :maxlevel . 3)
-                             (,jtdowney/org-someday-file :level . 1)
-                             (,jtdowney/org-reminders-file :maxlevel . 2)))
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
 #+END_SRC
 
 ** =evil-mode= integration
@@ -615,10 +610,7 @@
            "* %i%?\n")
           ("t" "Todo" entry
            (file ,jtdowney/org-inbox-file)
-           "* TODO %i%?\n")
-          ("R" "Reminders" entry
-           (file+headline ,jtdowney/org-reminders-file "Reminders")
-           "* %i%?\n %U")))
+           "* TODO %i%?\n")))
 #+END_SRC
 
 ** Display preferences
