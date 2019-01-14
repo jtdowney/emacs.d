@@ -1479,3 +1479,9 @@
       "n" #'deft-new-file
       "r" #'deft-rename-file))
 #+END_SRC
+
+* Writing
+
+#+BEGIN_SRC emacs-lisp
+  (use-package writeroom-mode)
+#+END_SRC
