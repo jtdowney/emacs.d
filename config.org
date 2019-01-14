@@ -1135,8 +1135,7 @@
     :general
     (dolist (m '(clojure-mode
                  clojurec-mode
-                 clojurescript-mode
-                 cider-repl-mode))
+                 clojurescript-mode))
       (require 'clojure-mode)
       (let* ((map-name (intern (concat (symbol-name m) "-map")))
              (map (symbol-value map-name)))
