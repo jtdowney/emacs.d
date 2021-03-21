@@ -61,9 +61,13 @@ flycheck_*.el
 
 # End of https://www.gitignore.io/api/elisp,emacs
 
+/.cache
+/.lsp-session-v1
 /bookmarks
-/custom.el
 /config.el
+/custom.el
 /projectile-bookmarks.eld
 /recentf
 /smex-items
+/straight
+/transient
