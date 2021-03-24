@@ -749,6 +749,14 @@
          (kbd "<leader>ep") 'flycheck-previous-error))
    #+end_src
 
+** Docker
+
+   #+begin_src emacs-lisp
+     (use-package dockerfile-mode
+       :straight t
+       :mode ("Dockerfile\\'"))
+   #+end_src
+
 ** Rust
 
 *** rust-mode
