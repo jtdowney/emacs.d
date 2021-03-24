@@ -90,11 +90,11 @@
         (editorconfig-mode t))
     #+end_src
 
-   - Don’t bother with auto save or backups.
-     #+begin_src emacs-lisp
-       (setq auto-save-default nil
-             make-backup-files nil)
-     #+end_src
+  - Don’t bother with auto save or backups.
+    #+begin_src emacs-lisp
+      (setq auto-save-default nil
+            make-backup-files nil)
+    #+end_src
 
 * =evil=
 
