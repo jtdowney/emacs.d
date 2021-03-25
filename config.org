@@ -283,6 +283,8 @@
       (evil-define-key 'normal 'global
         (kbd "_") 'projectile-dired
         (kbd "-") 'dired-jump)
+      (evil-define-key 'normal dired-mode-map (kbd "SPC") nil)
+      (evil-define-key 'normal dired-mode-map "c" 'find-file)
     #+end_src
 
   - Use =treemacs=
