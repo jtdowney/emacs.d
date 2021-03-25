@@ -141,6 +141,9 @@
 
   - Define initial key bindings
     #+begin_src emacs-lisp
+      (evil-set-leader 'normal (kbd "SPC"))
+      (evil-set-leader 'normal (kbd ",") t)
+
       (evil-define-key 'normal 'global
         (kbd "<leader>bk") 'kill-buffer
         (kbd "<leader>bK") 'kill-buffer-and-window
@@ -352,9 +355,6 @@
 ** Key bindings
 
     #+begin_src emacs-lisp
-      (evil-set-leader 'normal (kbd "SPC"))
-      (evil-set-leader 'normal (kbd ",") t)
-
       (evil-define-key 'normal 'global
         (kbd "<leader>oa") 'org-agenda-list
         (kbd "<leader>oc") 'counsel-org-capture
