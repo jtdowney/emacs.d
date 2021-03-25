@@ -34,11 +34,6 @@
 
 * Common
 
-  - Bump up the GC threshold
-    #+begin_src emacs-lisp
-      (setq gc-cons-threshold 20000000)
-    #+end_src
-
   - Basic settings
     #+begin_src emacs-lisp
       (setq confirm-kill-emacs #'yes-or-no-p
