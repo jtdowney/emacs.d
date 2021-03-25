@@ -739,6 +739,17 @@
        (evil-collection-init 'company))
    #+end_src
 
+** Smartparens
+
+   #+begin_src emacs-lisp
+     (use-package smartparens
+       :straight t
+       :diminish
+       :config
+       (require 'smartparens-config)
+       (smartparens-global-mode t))
+   #+end_src
+
 ** Comments
 
    #+begin_src emacs-lisp
