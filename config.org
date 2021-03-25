@@ -59,7 +59,7 @@
   - Highlight whitespace
     #+begin_src emacs-lisp
       (setq jtdowney/whitespace-hooks '(prog-mode-hook
-                                       text-mode-hook))
+                                        text-mode-hook))
       (dolist (hook jtdowney/whitespace-hooks)
         (add-hook hook (lambda ()
                          (setq-local show-trailing-whitespace t))))
@@ -422,19 +422,19 @@
         (kbd "<localleader>k") 'org-edit-src-abort)
     #+end_src
 
-  ** Display preferences
+** Display preferences
 
-    - Use pretty bullets instead of asterisks.
-      #+begin_src emacs-lisp
-        (use-package org-bullets
-          :straight t
-          :hook (org-mode . org-bullets-mode))
-      #+end_src
+   - Use pretty bullets instead of asterisks.
+     #+begin_src emacs-lisp
+       (use-package org-bullets
+         :straight t
+         :hook (org-mode . org-bullets-mode))
+     #+end_src
 
-    - Use syntax highlighting in source blocks while editing.
-      #+begin_src emacs-lisp
-        (setq org-src-fontify-natively t)
-      #+end_src
+   - Use syntax highlighting in source blocks while editing.
+     #+begin_src emacs-lisp
+       (setq org-src-fontify-natively t)
+     #+end_src
 
 * UI
 
@@ -490,28 +490,28 @@
 
 ** Load a theme
 
-  #+begin_src emacs-lisp
-    (use-package zenburn-theme
-      :straight t
-      :init
-      (setq zenburn-height-minus-1 1.0
-            zenburn-height-plus-1 1.0
-            zenburn-height-plus-2 1.0
-            zenburn-height-plus-3 1.0
-            zenburn-height-plus-4 1.0
-            zenburn-use-variable-pitch nil
-            zenburn-scale-org-headlines nil)
-      (load-theme 'zenburn t))
-  #+end_src
+   #+begin_src emacs-lisp
+     (use-package zenburn-theme
+       :straight t
+       :init
+       (setq zenburn-height-minus-1 1.0
+             zenburn-height-plus-1 1.0
+             zenburn-height-plus-2 1.0
+             zenburn-height-plus-3 1.0
+             zenburn-height-plus-4 1.0
+             zenburn-use-variable-pitch nil
+             zenburn-scale-org-headlines nil)
+       (load-theme 'zenburn t))
+   #+end_src
 
 ** Setup powerline
 
-  #+begin_src emacs-lisp
-    (use-package spaceline
-      :straight t
-      :config
-      (spaceline-spacemacs-theme))
-  #+end_src
+   #+begin_src emacs-lisp
+     (use-package spaceline
+       :straight t
+       :config
+       (spaceline-spacemacs-theme))
+   #+end_src
 
 ** Set font and configure font resizing
 
@@ -593,22 +593,22 @@
 
 ** =magit=
 
-  #+begin_src emacs-lisp
-    (use-package magit
-      :straight t
-      :after evil-collection
-      :config
-      (setq magit-push-always-verify nil
-            git-commit-summary-max-length 50)
-      (evil-collection-init 'magit)
-      (evil-define-key 'normal 'global
-        (kbd "<leader>gS") 'magit-stage-file
-        (kbd "<leader>gU") 'magit-unstage-file
-        (kbd "<leader>gb") 'magit-blame
-        (kbd "<leader>gfh") 'magit-log-buffer-file
-        (kbd "<leader>gm") 'magit-dispatch-popup
-        (kbd "<leader>gs") 'magit-status))
-  #+end_src
+   #+begin_src emacs-lisp
+     (use-package magit
+       :straight t
+       :after evil-collection
+       :config
+       (setq magit-push-always-verify nil
+             git-commit-summary-max-length 50)
+       (evil-collection-init 'magit)
+       (evil-define-key 'normal 'global
+         (kbd "<leader>gS") 'magit-stage-file
+         (kbd "<leader>gU") 'magit-unstage-file
+         (kbd "<leader>gb") 'magit-blame
+         (kbd "<leader>gfh") 'magit-log-buffer-file
+         (kbd "<leader>gm") 'magit-dispatch-popup
+         (kbd "<leader>gs") 'magit-status))
+   #+end_src
 
 ** =git-timemachine=
 
@@ -632,37 +632,37 @@
 
 ** General
 
-  - Set tabs to display as 2 spaces instead of 8.
-    #+begin_src emacs-lisp
-      (setq-default tab-width 2)
-      (setq-default indent-tabs-mode nil)
-    #+end_src
+   - Set tabs to display as 2 spaces instead of 8.
+     #+begin_src emacs-lisp
+       (setq-default tab-width 2)
+       (setq-default indent-tabs-mode nil)
+     #+end_src
 
-  - Use matchit
-    #+begin_src emacs-lisp
-      (use-package evil-matchit
-        :straight t
-        :after evil
-        :config
-        (global-evil-matchit-mode t))
-    #+end_src
+   - Use matchit
+     #+begin_src emacs-lisp
+       (use-package evil-matchit
+         :straight t
+         :after evil
+         :config
+         (global-evil-matchit-mode t))
+     #+end_src
 
-  - Treat =_= as part of a word like vim
-    #+begin_src emacs-lisp
-      (add-hook 'prog-mode-hook (lambda () (modify-syntax-entry ?_ "w")))
-    #+end_src
+   - Treat =_= as part of a word like vim
+     #+begin_src emacs-lisp
+       (add-hook 'prog-mode-hook (lambda () (modify-syntax-entry ?_ "w")))
+     #+end_src
 
-  - Delete trailing whitespace
-    #+begin_src emacs-lisp
-      (add-hook 'before-save-hook (lambda ()
-                                    (when (derived-mode-p 'prog-mode)
-                                      (whitespace-cleanup))))
-    #+end_src
+   - Delete trailing whitespace
+     #+begin_src emacs-lisp
+       (add-hook 'before-save-hook (lambda ()
+                                     (when (derived-mode-p 'prog-mode)
+                                       (whitespace-cleanup))))
+     #+end_src
 
-  - Diminish minor modes
-    #+begin_src emacs-lisp
-      (diminish 'eldoc-mode)
-    #+end_src
+   - Diminish minor modes
+     #+begin_src emacs-lisp
+       (diminish 'eldoc-mode)
+     #+end_src
 
 ** LSP
 
