@@ -309,6 +309,24 @@
         :after (treemacs magit))
     #+end_src
 
+* Spell checking
+
+  #+begin_src emacs-lisp
+    (use-package flyspell
+      :straight t
+      :diminish
+      :hook ((text-mode . flyspell-mode)
+             (prog-mode . flyspell-prog-mode))
+      :init
+      (setq ispell-program-name "aspell"))
+
+    (use-package flyspell-correct
+      :straight t)
+
+    (use-package flyspell-correct-ivy
+      :straight t)
+  #+end_src
+
 * =org=
 
 ** =org-tempo=
