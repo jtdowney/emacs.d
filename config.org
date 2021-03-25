@@ -759,7 +759,7 @@
 
 ** Rust
 
-*** rust-mode
+*** =rust-mode=
 
     #+begin_src emacs-lisp
       (use-package rust-mode
@@ -769,7 +769,7 @@
         (setq rust-format-on-save t))
     #+end_src
 
-*** cargo
+*** =cargo=
 
     #+begin_src emacs-lisp
       (use-package cargo
@@ -796,7 +796,7 @@
           (kbd "<localleader>tt") 'cargo-process-current-test))
     #+end_src
 
-*** flycheck-rust
+*** =flycheck-rust=
 
     #+begin_src emacs-lisp
       (use-package flycheck-rust
