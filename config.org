@@ -690,7 +690,7 @@
      (use-package lsp-mode
        :straight t
        :hook (lsp-mode . lsp-enable-which-key-integration)
-       :config
+       :init
        (add-hook 'hack-local-variables-hook
                  (lambda ()
                    (when (member major-mode jtdowney/lsp-modes)
