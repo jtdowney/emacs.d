@@ -110,9 +110,7 @@
               evil-want-C-d-scroll t
               evil-want-C-u-scroll t)
         :config
-        (evil-mode t)
-        (evil-set-leader 'normal (kbd "SPC"))
-        (evil-set-leader 'normal (kbd ",") t))
+        (evil-mode t))
     #+end_src
 
   - Add some extra evil integrations
@@ -338,6 +336,9 @@
 ** Key bindings
 
     #+begin_src emacs-lisp
+      (evil-set-leader 'normal (kbd "SPC"))
+      (evil-set-leader 'normal (kbd ",") t)
+
       (evil-define-key 'normal 'global
         (kbd "<leader>oa") 'org-agenda-list
         (kbd "<leader>oc") 'counsel-org-capture
