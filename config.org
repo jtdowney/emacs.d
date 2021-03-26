@@ -77,6 +77,16 @@
       (load custom-file 'noerror)
     #+end_src
 
+  - Allow local overrides of settings
+    #+begin_src emacs-lisp
+      (add-hook
+       'after-init-hook
+       (lambda ()
+         (let ((private-file (concat user-emacs-directory "private.el")))
+           (when (file-exists-p private-file)
+             (load-file private-file)))))
+    #+end_src
+
   - Automatically reload files if it changes on disk
     #+begin_src emacs-lisp
       (global-auto-revert-mode t)
