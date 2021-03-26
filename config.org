@@ -781,6 +781,45 @@
          (kbd "<leader>ep") 'flycheck-previous-error))
    #+end_src
 
+** Docker
+
+   #+begin_src emacs-lisp
+     (use-package dockerfile-mode
+       :straight t
+       :mode ("Dockerfile\\'"))
+   #+end_src
+
+** Just
+
+   #+begin_src emacs-lisp
+     (use-package just-mode
+       :straight t)
+   #+end_src
+
+** Markdown
+
+   #+begin_src emacs-lisp
+     (use-package markdown-mode
+       :straight t
+       :commands (markdown-mode gfm-mode)
+       :mode (("README\\.md\\'" . gfm-mode)
+              ("\\.md\\'" . markdown-mode)))
+   #+end_src
+
+** YAML
+
+   #+begin_src emacs-lisp
+     (use-package yaml-mode
+       :straight t)
+   #+end_src
+
+** TOML
+
+   #+begin_src emacs-lisp
+     (use-package toml-mode
+       :straight t)
+   #+end_src
+
 ** Lisps
 
    #+begin_src emacs-lisp
@@ -805,14 +844,6 @@
                    (run-hooks 'lispy-mode-hook))))
 
      (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-   #+end_src
-
-** Docker
-
-   #+begin_src emacs-lisp
-     (use-package dockerfile-mode
-       :straight t
-       :mode ("Dockerfile\\'"))
    #+end_src
 
 ** Rust
@@ -883,27 +914,6 @@
         :config
         (flycheck-mix-setup))
     #+end_src
-
-** YAML
-
-   #+begin_src emacs-lisp
-     (use-package yaml-mode
-       :straight t)
-   #+end_src
-
-** TOML
-
-   #+begin_src emacs-lisp
-     (use-package toml-mode
-       :straight t)
-   #+end_src
-
-** Just
-
-   #+begin_src emacs-lisp
-     (use-package just-mode
-       :straight t)
-   #+end_src
 
 ** Gleam
 
