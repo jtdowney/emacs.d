@@ -687,6 +687,7 @@
    #+begin_src emacs-lisp
      (setq jtdowney/lsp-modes '(elixir-mode
                                 dockerfile-mode
+                                enh-ruby-mode
                                 rust-mode))
 
      (use-package lsp-mode
@@ -913,3 +914,33 @@
                   :repo "gleam-lang/gleam-mode")
        :mode "\\.gleam\\'")
    #+end_src
+
+** Ruby
+
+*** =enh-ruby-mode=
+
+    #+begin_src emacs-lisp
+      (use-package enh-ruby-mode
+        :straight t
+        :mode (("Appraisals\\'" . enh-ruby-mode)
+               ("\\(Rake\\|Thor\\|Guard\\|Gem\\|Cap\\|Vagrant\\|Berks\\|Pod\\|Puppet\\)file\\'" . enh-ruby-mode)
+               ("\\.\\(rb\\|rabl\\|ru\\|builder\\|rake\\|thor\\|gemspec\\|jbuilder\\)\\'" . enh-ruby-mode))
+        :interpreter "ruby"
+        :init
+        (setq enh-ruby-deep-indent-paren nil
+              enh-ruby-hanging-paren-deep-indent-level 2))
+    #+end_src
+
+*** =bundler=
+
+    #+begin_src emacs-lisp
+      (use-package bundler
+        :straight t
+        :after enh-ruby-mode
+        :config
+        (evil-define-key 'normal enh-ruby-mode-map
+          (kbd "<leader>bi") 'bundle-install
+          (kbd "<leader>bs") 'bundle-console
+          (kbd "<leader>bu") 'bundle-update
+          (kbd "<leader>bx") 'bundle-exec))
+    #+end_src
