@@ -646,6 +646,34 @@
        :hook ((prog-mode text-mode vc-dir-mode) . diff-hl-mode))
    #+end_src
 
+* Notes
+
+  #+begin_src emacs-lisp
+    (defun jtdowney/deft ()
+      "Start deft already in evil insert mode"
+      (interactive)
+      (deft)
+      (evil-insert-state nil))
+
+    (use-package deft
+      :straight t
+      :init
+      (setq deft-directory "~/Dropbox/Notes"
+            deft-default-extension "org"
+            deft-use-filename-as-title nil
+            deft-use-filter-string-for-filename t)
+      :config
+      (evil-define-key 'normal 'global
+        (kbd "<leader>nv") 'jtdowney/deft
+        (kbd "<leader>nf") 'deft-find-file)
+      (evil-define-key 'normal deft-mode-map
+        (kbd "<localleader>c") 'deft-filter-clear
+        (kbd "<localleader>d") 'deft-delete-file
+        (kbd "<localleader>i") 'deft-toggle-incremental-search
+        (kbd "<localleader>n") 'deft-new-file
+        (kbd "<localleader>r") 'deft-rename-file))
+  #+end_src
+
 * Programming environments
 
 ** General
