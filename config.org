@@ -34,6 +34,12 @@
 
 * Common
 
+  - Bump up the GC threshold. This is needed for =emacs-lsp=.
+
+    #+begin_src emacs-lisp
+      (setq gc-cons-threshold 20000000)
+    #+end_src
+
   - Basic settings
     #+begin_src emacs-lisp
       (setq confirm-kill-emacs #'yes-or-no-p
