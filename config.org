@@ -314,7 +314,16 @@
         :after (treemacs magit))
     #+end_src
 
-* Spell checking
+* Writing
+
+** =writeroom-mode=
+
+   #+begin_src emacs-lisp
+     (use-package writeroom-mode
+       :straight t)
+   #+end_src
+
+** =flyspell=
 
   #+begin_src emacs-lisp
     (use-package flyspell
