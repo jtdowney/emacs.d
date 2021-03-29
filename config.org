@@ -783,14 +783,6 @@
                                 company-files
                                 company-keywords)
              company-global-modes '(not org-mode))
-       ;; (defun jtdowney/company-mode-with-yasipptet (backend)
-       ;;   "Make yasnippet show up with any company-mode backend"
-       ;;   (append (if (consp backend)
-       ;;               backend
-       ;;             (list backend))
-       ;;           '(:with company-yasnippet)))
-       ;; (setq company-backends (mapcar #'jtdowney/company-mode-with-yasipptet
-       ;;                                company-backends))
        :config
        (evil-collection-init 'company))
    #+end_src
@@ -955,7 +947,6 @@
         :straight t
         :mode ("\\.ex\\'" "\\.exs\\'")
         :config
-        ;; (add-hook 'elixir-mode-hook #'smartparens-mode)
         (add-hook 'before-save-hook 'elixir-format nil t))
     #+end_src
 
