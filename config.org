@@ -288,7 +288,8 @@
          (kbd "<leader>jJ") 'evil-avy-goto-char-2
          (kbd "<leader>jj") 'evil-avy-goto-char
          (kbd "<leader>jl") 'evil-avy-goto-line
-         (kbd "<leader>jw") 'evil-avy-goto-word-or-subword-1))
+         (kbd "<leader>jw") 'evil-avy-goto-word-or-subword-1
+         (kbd "<leader> SPC") 'evil-avy-goto-word-or-subword-1))
    #+end_src
 
 * Navigation
