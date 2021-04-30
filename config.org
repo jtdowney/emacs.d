@@ -736,6 +736,20 @@
        (diminish 'eldoc-mode)
      #+end_src
 
+** Snippets
+
+   #+begin_src emacs-lisp
+     (use-package yasnippet
+       :straight t
+       :diminish yas-minor-mode
+       :config
+       (evil-define-key 'insert 'global (kbd "C-e") 'yas-expand)
+       (yas-global-mode t))
+
+     (use-package yasnippet-snippets
+       :straight t)
+   #+end_src
+
 ** LSP
 
    #+begin_src emacs-lisp
@@ -910,25 +924,27 @@
       (use-package cargo
         :straight t
         :diminish cargo-minor-mode
-        :hook (rust-mode . cargo-minor-mode)
         :config
-        (evil-define-key 'normal rust-mode-map
-          (kbd "<localleader>c.") 'cargo-process-repeat
-          (kbd "<localleader>cC") 'cargo-process-clean
-          (kbd "<localleader>cK") 'cargo-process-clippy
-          (kbd "<localleader>cU") 'cargo-process-upgrade
-          (kbd "<localleader>cX") 'cargo-process-run-example
-          (kbd "<localleader>ca") 'cargo-process-add
-          (kbd "<localleader>cc") 'cargo-process-build
-          (kbd "<localleader>cd") 'cargo-process-doc
-          (kbd "<localleader>cf") 'cargo-process-fmt
-          (kbd "<localleader>ck") 'cargo-process-check
-          (kbd "<localleader>cr") 'cargo-process-rm
-          (kbd "<localleader>cu") 'cargo-process-update
-          (kbd "<localleader>cx") 'cargo-process-run
-          (kbd "<localleader>ta") 'cargo-process-test
-          (kbd "<localleader>tb") 'cargo-process-current-file-tests
-          (kbd "<localleader>tt") 'cargo-process-current-test))
+        (add-hook 'rust-mode-hook
+                  (lambda ()
+                    (cargo-minor-mode t)
+                    (evil-define-key 'normal rust-mode-map
+                      (kbd "<localleader>c.") 'cargo-process-repeat
+                      (kbd "<localleader>cC") 'cargo-process-clean
+                      (kbd "<localleader>cK") 'cargo-process-clippy
+                      (kbd "<localleader>cU") 'cargo-process-upgrade
+                      (kbd "<localleader>cX") 'cargo-process-run-example
+                      (kbd "<localleader>ca") 'cargo-process-add
+                      (kbd "<localleader>cc") 'cargo-process-build
+                      (kbd "<localleader>cd") 'cargo-process-doc
+                      (kbd "<localleader>cf") 'cargo-process-fmt
+                      (kbd "<localleader>ck") 'cargo-process-check
+                      (kbd "<localleader>cr") 'cargo-process-rm
+                      (kbd "<localleader>cu") 'cargo-process-update
+                      (kbd "<localleader>cx") 'cargo-process-run
+                      (kbd "<localleader>ta") 'cargo-process-test
+                      (kbd "<localleader>tb") 'cargo-process-current-file-tests
+                      (kbd "<localleader>tt") 'cargo-process-current-test))))
     #+end_src
 
 *** =flycheck-rust=
