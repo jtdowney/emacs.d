@@ -1049,3 +1049,21 @@
        :straight (mu4e-dashboard :type git :host github
                                  :repo "rougier/mu4e-dashboard"))
    #+end_src
+
+* RSS
+
+** =elfeed=
+
+   #+begin_src emacs-lisp
+     (use-package elfeed
+       :straight t)
+   #+end_src
+
+** =elfeed-protocol=
+
+   #+begin_src emacs-lisp
+     (use-package elfeed-protocol
+       :straight t
+       :init
+       (elfeed-protocol-enable))
+   #+end_src
