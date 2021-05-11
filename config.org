@@ -1053,7 +1053,10 @@
            (erase-buffer)
            (shr-insert-document dom)
            (goto-char (point-min))))
-       (setq mu4e-html2text-command 'jtdowney/render-html-message))
+       (setq mu4e-html2text-command 'jtdowney/render-html-message)
+       :init
+       (evil-define-key 'normal 'global
+         (kbd "<leader>ae") 'mu4e))
    #+end_src
 
 ** =mu4e-dashboard=
@@ -1070,7 +1073,10 @@
 
    #+begin_src emacs-lisp
      (use-package elfeed
-       :straight t)
+       :straight t
+       :init
+       (evil-define-key 'normal 'global
+         (kbd "<leader>af") 'elfeed))
    #+end_src
 
 ** =elfeed-protocol=
