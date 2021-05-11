@@ -294,6 +294,15 @@
 
 * Navigation
 
+  - Ranger
+    #+begin_src emacs-lisp
+      (use-package ranger
+        :straight t
+        :init
+        (evil-define-key 'normal 'global
+          (kbd "<leader>ar") 'ranger))
+    #+end_src
+
   - Use =dired=
     #+begin_src emacs-lisp
       (require 'dired-x)
