@@ -1128,3 +1128,14 @@
        :init
        (elfeed-protocol-enable))
    #+end_src
+
+* IRC
+
+** =circe=
+
+   #+begin_src emacs-lisp
+     (use-package circe
+       :straight t
+       :config
+       (setq circe-reduce-lurker-spam t))
+   #+end_src
