@@ -1137,5 +1137,9 @@
      (use-package circe
        :straight t
        :config
-       (setq circe-reduce-lurker-spam t))
+       (setq circe-reduce-lurker-spam t)
+       :init
+       (evil-define-key 'normal 'global
+         (kbd "<leader>ai") 'circe))
+   #+end_src
    #+end_src
