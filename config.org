@@ -1142,4 +1142,63 @@
        (evil-define-key 'normal 'global
          (kbd "<leader>ai") 'circe))
    #+end_src
+
+* Accounting
+
+** =beancount-mode=
+
+   #+begin_src emacs-lisp
+     (defun beancount-format-file ()
+       (interactive)
+       (let ((line-no (line-number-at-pos)))
+           (call-process-region (point-min) (point-max) "bean-format" t (current-buffer))
+           (goto-line line-no)
+           (recenter)))
+
+     (defvar beancount-journal-command
+       (concat
+        "select date, flag, maxwidth(description, 80), position, balance "
+        "where account = '%s'"))
+
+     (defun beancount-query-journal-at-point ()
+       "Run a journal command for the account at point."
+       (interactive)
+       (let* ((account (thing-at-point 'beancount-account))
+              (sql (concat "\"" (format beancount-journal-command account) "\"")))
+         (beancount--run beancount-query-program
+                         (file-relative-name buffer-file-name)
+                         sql)))
+
+     (defun disable-electric-indent ()
+       (setq-local electric-indent-chars nil))
+
+     (use-package beancount
+       :straight (beancount-mode :host github
+                                 :repo "beancount/beancount-mode")
+       :mode ("\\.beancount$" . beancount-mode)
+       :config
+       (setq beancount-outline-regexp "\\(\\*+\\)")
+       :init
+       (add-hook 'beancount-mode-hook #'outline-minor-mode)
+       (add-hook 'beancount-mode-hook #'disable-electric-indent)
+       (put 'beancount-account 'bounds-of-thing-at-point
+            (lambda ()
+              (let ((thing (thing-at-point-looking-at
+                            beancount-account-regexp 500)))
+                (if thing
+                    (let ((beginning (match-beginning 0))
+                          (end (match-end 0)))
+                      (cons beginning end))))))
+       (unless (assq 'python-logging compilation-error-regexp-alist-alist)
+         (add-to-list
+          'compilation-error-regexp-alist-alist
+          '(python-logging "\\(ERROR\\|WARNING\\):\\s-*\\([^:]+\\):\\([0-9]+\\)\\s-*:" 2 3))
+         (add-to-list
+          'compilation-error-regexp-alist 'python-logging))
+       (evil-define-key 'normal beancount-mode-map
+         (kbd "<localleader>=") 'beancount-format-file
+         (kbd "<localleader>j") 'beancount-query-journal-at-point
+         (kbd "<localleader>n") 'outline-next-visible-heading
+         (kbd "<localleader>p") 'outline-previous-visible-heading
+         (kbd "<localleader>u") 'outline-up-heading))
    #+end_src
