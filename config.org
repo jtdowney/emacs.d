@@ -590,17 +590,10 @@
 ** Load a theme
 
    #+begin_src emacs-lisp
-     (use-package zenburn-theme
+     (use-package nord-theme
        :straight t
        :init
-       (setq zenburn-height-minus-1 1.0
-             zenburn-height-plus-1 1.0
-             zenburn-height-plus-2 1.0
-             zenburn-height-plus-3 1.0
-             zenburn-height-plus-4 1.0
-             zenburn-use-variable-pitch nil
-             zenburn-scale-org-headlines nil)
-       (load-theme 'zenburn t))
+       (load-theme 'nord t))
    #+end_src
 
 ** Setup powerline
