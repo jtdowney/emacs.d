@@ -162,6 +162,7 @@
       (evil-set-leader 'normal (kbd ",") t)
 
       (evil-define-key 'normal 'global
+        (kbd "<leader>'") 'ansi-term
         (kbd "<leader>bk") 'kill-buffer
         (kbd "<leader>bK") 'kill-buffer-and-window
         (kbd "<leader>bs") (lambda ()
