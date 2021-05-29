@@ -1102,7 +1102,6 @@
 
    #+begin_src emacs-lisp
      (use-package mu4e
-       :straight t
        :config
        (setq mu4e-sent-messages-behavior 'sent
              mu4e-get-mail-command "mbsync -a"
