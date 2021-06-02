@@ -1163,8 +1163,10 @@
      (use-package circe
        :straight t
        :config
-       (setq circe-reduce-lurker-spam t)
+       (setq circe-reduce-lurker-spam t
+             circe-color-nicks-everywhere t)
        :init
+       (enable-circe-color-nicks)
        (evil-define-key 'normal 'global
          (kbd "<leader>ai") 'circe))
    #+end_src
