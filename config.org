@@ -1124,14 +1124,6 @@
          (kbd "<leader>ae") 'mu4e))
    #+end_src
 
-** =mu4e-dashboard=
-
-   #+begin_src emacs-lisp
-     (use-package mu4e-dashboard
-       :straight (mu4e-dashboard :type git :host github
-                                 :repo "rougier/mu4e-dashboard"))
-   #+end_src
-
 * RSS
 
 ** =elfeed=
