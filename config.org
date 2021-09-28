@@ -700,6 +700,17 @@
        (popper-mode +1))
    #+end_src
 
+** Emoji
+
+   #+begin_src emacs-lisp
+     (use-package emojify
+       :straight t
+       :hook (after-init . global-emojify-mode))
+     
+     (with-eval-after-load "emojify"
+       (delete 'mu4e-headers-mode emojify-inhibit-major-modes))
+   #+end_src
+
 * Version control
 
 ** =magit=
