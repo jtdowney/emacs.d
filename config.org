@@ -1045,15 +1045,6 @@
         (add-hook 'before-save-hook 'elixir-format nil t))
     #+end_src
 
-*** =flycheck-mix=
-
-    #+begin_src emacs-lisp
-      (use-package flycheck-mix
-        :straight t
-        :config
-        (flycheck-mix-setup))
-    #+end_src
-
 ** Gleam
 
    #+begin_src emacs-lisp
