@@ -1,0 +1,16 @@
+/config.el
+/custom.el
+/history
+/private.el
+/recentf
+/straight
+/transient
+/.cache
+/.lsp*
+/forge-database.sqlite
+/projectile-bookmarks.eld
+
+!/straight/versions/default.el
+
+*.elc
+*~

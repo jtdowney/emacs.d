@@ -1,0 +1,911 @@
+#+TITLE: Emacs configuration
+#+AUTHOR: John Downey
+#+EMAIL: jdowney@gmail.com #+OPTIONS: toc:nil num:nil
+
+* Personalization
+
+#+begin_src emacs-lisp
+  (setq user-full-name "John Downey"
+        user-login-name "jtdowney"
+        user-mail-address "jdowney@gmail.com")
+#+end_src
+
+* Keybindings
+
+#+begin_src emacs-lisp
+  (use-package general
+    :config
+    (general-create-definer jtd/leader-key
+      :states '(normal insert visual emacs)
+      :prefix "SPC"
+      :global-prefix "C-SPC")
+    (general-create-definer jtd/local-leader-key
+      :states '(normal insert visual emacs)
+      :prefix ","
+      :global-prefix "C-,"))
+
+  (defun jtd/find-file-in-emacs ()
+    "Find files in the emacs configuration directory"
+    (interactive)
+    (ido-find-file-in-dir user-emacs-directory))
+
+  (defun jtd/switch-to-scratch-buffer ()
+    "Switch to the scratch buffer"
+    (interactive)
+    (switch-to-buffer "*scratch*"))
+
+  (defun jtd/copy-buffer ()
+    "Copy the entire buffer"
+    (interactive)
+    (mark-whole-buffer)
+    (kill-ring-save 0 0 t))
+
+  (jtd/leader-key
+    ":" 'execute-extended-command
+    "a" '(:ignore t :wk "apps")
+    "ad" 'dired
+    "b" '(:ignore t :wk "buffer")
+    "bK" 'kill-buffer-and-window
+    "bs" 'jtd/switch-to-scratch-buffer
+    "bY" 'jtd/copy-buffer
+    "f" '(:ignore t :wk "file")
+    "ff" '(find-file :wk "find file")
+    "fe" '(jtd/find-file-in-emacs :wk "find file in emacs.d")
+    "g" '(:ignore t :wk "git")
+    "h" '(:ignore t :wk "help")
+    "ha" 'apropos-command
+    "hf" 'helpful-function
+    "hk" 'helpful-key
+    "hm" 'helpful-macro
+    "ho" 'helpful-symbol
+    "hv" 'helpful-variable
+    "hx" 'helpful-command
+    "p" '(:ignore t :wk "project")
+    "s" '(:ignore t :wk "search")
+    "sj" '(imenu :wk "jump"))
+
+#+end_src
+
+* General
+
+** Initial buffer
+
+#+begin_src emacs-lisp
+  (setq initial-major-mode 'org-mode
+        initial-scratch-message nil)
+#+end_src
+
+** Highlight trailing white-space
+
+#+begin_src emacs-lisp
+  (dolist (hook '(prog-mode-hook text-mode-hook))
+    (add-hook hook (lambda ())
+        (setq-local show-trailing-whitespace t)))
+#+end_src
+
+** Measure Startup
+
+#+begin_src emacs-lisp
+  (add-hook 'emacs-startup-hook
+      (lambda ()
+        (setq gc-cons-threshold (* 2 1000 1000))))
+
+  (add-hook 'emacs-startup-hook
+      (lambda ()
+        (message "Emacs started in %s with %d garbage collections."
+           (format "%.3f seconds"
+             (float-time
+        (time-subtract after-init-time before-init-time)))
+           gcs-done)))
+#+end_src
+
+** Save recent files
+
+#+begin_src emacs-lisp
+  (use-package recentf
+    :straight nil
+    :init
+    (recentf-mode 1))
+#+end_src
+
+** Put customization in another file
+
+#+begin_src emacs-lisp
+  (setq custom-file (concat user-emacs-directory "custom.el"))
+  (load custom-file 'noerror)
+#+end_src
+
+** Automatically revert
+
+#+begin_src emacs-lisp
+  (global-auto-revert-mode 1)
+#+end_src
+
+** Don't auto-save or backup
+
+#+begin_src emacs-lisp
+  (setq auto-save-default nil
+        make-backup-files nil)
+#+end_src
+
+** Editorconfig
+
+#+begin_src emacs-lisp
+  (use-package editorconfig
+    :diminish
+    :config
+    (editorconfig-mode 1))
+#+end_src
+
+** Private config override
+
+#+begin_src emacs-lisp
+  (add-hook
+   'after-init-hook
+   (lambda ()
+     (let ((private-file (concat user-emacs-directory "private.el")))
+       (when (file-exists-p private-file)
+         (load-file private-file)))))
+#+end_src
+
+* Completion
+
+** Ignore case
+
+#+begin_src emacs-lisp
+  (setq read-buffer-completion-ignore-case t
+        read-file-name-completion-ignore-case t
+        completion-ignore-case t)
+#+end_src
+
+** Vertico
+
+#+begin_src emacs-lisp
+  (use-package vertico
+    :demand t
+    :straight (:files (:defaults "extensions/*"))
+    :bind (:map vertico-map
+                ("C-j" . vertico-next)
+                ("C-k" . vertico-previous)
+                ("C-l" . vertico-insert)
+           :map minibuffer-local-map
+                ("M-h" . backward-kill-word))
+    :custom
+    (vertico-cycle t)
+    :init
+    (vertico-mode 1))
+
+  (use-package vertico-directory
+    :after vertico
+    :straight nil
+    :bind (:map vertico-map
+                ("RET" . vertico-directory-enter)
+                ("DEL" . vertico-directory-delete-char)
+                ("M-DEL" . vertico-directory-delete-word))
+    :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+#+end_src
+
+** Consult
+
+#+begin_src emacs-lisp
+  (use-package consult
+    :general
+    (jtd/leader-key
+      "bB" 'consult-buffer
+      "fr" 'consult-recent-file
+      "pb" 'consult-project-buffer
+      "si" 'consult-outline
+      "sr" 'consult-ripgrep
+      "ss" 'consult-line))
+#+end_src
+
+** Embark
+
+#+begin_src emacs-lisp
+  (use-package embark
+    :bind
+    (("C-." . embark-act)
+     ("C-;" . embark-dwim)
+     ("C-h B" . embark-bindings))
+    :init
+    (setq prefix-help-command #'embark-prefix-help-command)
+    :config
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
+
+  (use-package embark-consult
+    :after (embark consult)
+    :demand t
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+#+end_src
+
+** Save history
+
+#+begin_src emacs-lisp
+  (use-package savehist
+    :init
+    (savehist-mode 1))
+#+end_src
+
+** Extended completion information
+
+#+begin_src emacs-lisp
+  (use-package marginalia
+    :after vertico
+    :init
+    (marginalia-mode 1))
+#+end_src
+
+** Better search matching
+
+#+begin_src emacs-lisp
+  (use-package orderless
+    :after vertico
+    :custom
+    ((completion-styles '(orderless basic))
+     (completion-category-overrides '((file (styles basic partial-completion))))))
+#+end_src
+
+* Vim emulation
+
+** Evil
+
+#+begin_src emacs-lisp
+  (use-package evil
+    :custom
+    ((evil-want-integration t)
+     (evil-want-keybinding nil)
+     (evil-want-abbrev-expand-on-insert-exit nil)
+     (evil-respect-visual-line-mode t)
+     (evil-want-C-i-jump nil)
+     (evil-want-C-d-scroll t)
+     (evil-want-C-u-scroll t)
+     (evil-want-C-w-delete nil)
+     (evil-want-C-w-in-emacs-state t))
+    :config
+    (evil-mode 1)
+    (evil-set-initial-state 'vterm-mode 'emacs)
+    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state))
+#+end_src
+
+** Evil collection
+
+#+begin_src emacs-lisp
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+#+end_src
+
+** Evil surround
+
+#+begin_src emacs-lisp
+  (use-package evil-surround
+    :after evil
+    :config
+    (global-evil-surround-mode 1))
+#+end_src
+
+* Terminal
+
+#+begin_src emacs-lisp
+    (use-package vterm
+      :general
+      (jtd/leader-key
+        "'" 'vterm))
+#+end_src
+
+* Navigation
+
+** Avy
+
+#+begin_src emacs-lisp
+  (use-package avy
+    :general
+    (jtd/leader-key
+      "SPC" 'evil-avy-goto-subword-1
+      "jJ" 'evil-avy-goto-char-2
+      "jj" 'evil-avy-goto-char
+      "jl" 'evil-avy-goto-line
+      "jw" 'evil-avy-goto-subword-1))
+#+end_src
+
+** Ranger
+
+#+begin_src emacs-lisp
+  (use-package ranger
+    :custom
+    (ranger-key "zp")
+    :general
+    (jtd/leader-key
+      "ar" 'ranger))
+#+end_src
+
+** Dired
+
+#+begin_src emacs-lisp
+  (use-package dired-x
+    :straight nil
+    :init
+    (evil-define-key 'normal 'global
+     (kbd "_") 'projectile-dired
+     (kbd "-") 'dired-jump)
+    (evil-define-key 'normal dired-mode-map (kbd "SPC") nil)
+    (evil-define-key 'normal dired-mode-map "c" 'find-file))
+#+end_src
+
+** File tree
+
+#+begin_src emacs-lisp
+  (use-package treemacs
+    :general
+    (jtd/leader-key
+      "fd" 'treemacs-find-file
+      "ft" 'treemacs))
+
+  (use-package treemacs-evil
+    :after treemacs)
+
+  (use-package treemacs-projectile
+    :after treemacs)
+
+  (use-package treemacs-icons-dired
+    :after treemacs
+    :config
+    (treemacs-icons-dired-mode 1))
+
+  (use-package treemacs-magit
+    :after treemacs)
+#+end_src
+
+* Operating systems
+
+** macOS
+
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq mac-command-modifier 'super
+          mac-option-modifier 'meta
+          mac-right-command-modifier 'super
+          mac-right-option-modifier 'nil)
+    (global-set-key (kbd "s-c") #'kill-ring-save)
+    (global-set-key (kbd "s-v") #'yank)
+    (global-set-key (kbd "s-x") #'kill-region))
+#+end_src
+
+* User Interface
+
+** Tweaks
+
+#+begin_src emacs-lisp
+  (setq inhibit-startup-screen t
+        visible-bell t)
+
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (menu-bar-mode -1)
+  (set-fringe-mode 10)
+#+end_src
+
+** Highlight current line
+
+#+begin_src emacs-lisp
+  (global-hl-line-mode t)
+#+end_src
+
+** Display column number
+
+#+begin_src emacs-lisp
+  (column-number-mode 1)
+#+end_src
+
+** Show end of file
+
+#+begin_src emacs-lisp
+  (use-package vi-tilde-fringe
+    :if (display-graphic-p)
+    :diminish vi-tilde-fringe-mode
+    :hook (prog-mode . vi-tilde-fringe-mode))
+#+end_src
+
+** Use fancy symbols
+
+#+begin_src emacs-lisp
+  (global-prettify-symbols-mode 1)
+#+end_src
+
+** Font
+
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil :font "Fira Code Retina" :height 160)
+#+end_src
+
+** Modeline
+
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :init
+    (doom-modeline-mode 1))
+#+end_src
+
+** Icons
+
+#+begin_src emacs-lisp
+  (use-package all-the-icons)
+#+end_src
+
+** Theme
+
+#+begin_src emacs-lisp
+  (load-theme 'modus-vivendi t)
+#+end_src
+
+** Ligatures
+
+#+begin_src emacs-lisp
+  (use-package ligature
+    :straight (ligature :type git :host github :repo "mickeynp/ligature.el")
+    :config
+    (ligature-set-ligatures 't '("www" "ff" "fi" "ffi"))
+    (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+                                         ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                                         "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                                         "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                                         "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                                         "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                                         "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                                         "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                                         ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                                         "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                                         "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                                         "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                                         "\\\\" "://"))
+    (global-ligature-mode t))
+#+end_src
+
+* Window management
+
+** Disable built-in
+
+#+begin_src emacs-lisp
+  (tab-bar-mode -1)
+  (tab-line-mode -1)
+
+  (global-unset-key (kbd "C-<tab>"))
+#+end_src
+
+** Golden ratio
+
+#+begin_src emacs-lisp
+  (use-package golden-ratio
+    :custom
+    (golden-ratio-extra-commands
+     '(windmove-left
+       windmove-right
+       windmove-down
+       windmove-up
+       evil-window-left
+       evil-window-right
+       evil-window-up
+       evil-window-down
+       buf-move-left
+       buf-move-right
+       buf-move-up
+       buf-move-down
+       window-number-select
+       select-window
+       select-window-1
+       select-window-2
+       select-window-3
+       select-window-4
+       select-window-5
+       select-window-6
+       select-window-7
+       select-window-8
+       select-window-9))
+    :init
+    (golden-ratio-mode 1))
+#+end_src
+
+** Perspectives
+
+#+begin_src emacs-lisp
+  (use-package perspective
+    :custom (persp-suppress-no-prefix-key-warning t)
+    :general
+    (jtd/leader-key
+      "bb" 'persp-switch-to-buffer*
+      "bk" 'persp-kill-buffer*
+      "x" '(:keymap perspective-map :wk "perspective"))
+    :init
+    (persp-mode 1))
+#+end_src
+
+* Help
+
+** Keyboard shortcut overlay
+
+#+begin_src emacs-lisp
+  (use-package which-key
+    :diminish
+    :custom
+    (which-key-idle-delay 1)
+    :init
+    (which-key-mode))
+#+end_src
+
+** Better help interface
+
+#+begin_src emacs-lisp
+  (use-package helpful
+    :bind
+    ([remap describe-function] . helpful-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . helpful-variable)
+    ([remap describe-key] . helpful-key))
+#+end_src
+
+* Org
+
+** General
+
+#+begin_src emacs-lisp
+  (defun jtd/org-mode-setup ()
+    (org-indent-mode 1)
+    (variable-pitch-mode 1)
+    (visual-line-mode 1))
+
+  (use-package org
+    :hook (org-mode . jtd/org-mode-setup)
+    :custom
+    (org-src-fontify-natively t))
+#+end_src
+
+** Evil mode integration
+
+#+begin_src emacs-lisp
+  (use-package evil-org
+    :diminish evil-org-mode
+    :after evil
+    :hook (org-mode . evil-org-mode)
+    :config
+    (evil-org-set-key-theme '(textobjects
+                              insert
+                              navigation
+                              additional
+                              shift
+                              todo
+                              heading)))
+#+end_src
+
+** Beautiful bullets
+
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :after org
+    :hook (org-mode . org-bullets-mode))
+#+end_src
+
+** Tempo
+
+#+begin_src emacs-lisp
+  (use-package org-tempo
+    :after org
+    :straight nil)
+#+end_src
+
+** Visual column fill
+
+#+begin_src emacs-lisp
+  (defun jtd/org-mode-visual-fill ()
+    (setq visual-fill-column-width 100
+          visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+
+  (use-package visual-fill-column
+    :hook (org-mode . jtd/org-mode-visual-fill))
+#+end_src
+
+** Key bindings
+
+#+begin_src emacs-lisp
+  (jtd/leader-key
+    "o" '(:ignore t :wk "org")
+    "oa" 'org-agenda-list
+    "oc" 'counsel-org-capture
+    "om" 'org-tags-view
+    "oo" 'org-agenda
+    "ot" 'org-todo-list)
+
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (jtd/local-leader-key
+                :keymaps 'local
+                "!" 'org-time-stamp-inactive
+                "'" 'org-edit-special
+                "*" 'org-ctrl-c-star
+                "," 'org-ctrl-c-ctrl-c
+                "-" 'org-ctrl-c-minus
+                "." 'org-time-stamp
+                "/" 'org-sparse-tree
+                ":" 'org-set-tags
+                "A" 'org-archive-subtree
+                "D" 'org-insert-drawer
+                "H" 'org-shiftleft
+                "I" 'org-clock-in
+                "J" 'org-shiftdown
+                "K" 'org-shiftup
+                "L" 'org-shiftright
+                "N" 'widen
+                "O" 'org-clock-out
+                "P" 'org-set-property
+                "R" 'org-refile
+                "Sh" 'org-promote-subtree
+                "Sj" 'org-move-subtree-down
+                "Sk" 'org-move-subtree-up
+                "Sl" 'org-demote-subtree
+                "T" 'org-show-todo-tree
+                "^" 'org-sort
+                "a" 'org-agenda
+                "b" 'org-tree-to-indirect-buffer
+                "c" 'org-capture
+                "d" 'org-deadline
+                "e" 'org-export-dispatch
+                "f" 'org-set-effort
+                "hI" 'org-insert-heading
+                "hi" 'org-insert-heading-after-current
+                "hs" 'org-insert-subheading
+                "ia" 'org-attach
+                "if" 'org-footnote-new
+                "il" 'org-insert-link
+                "l" 'org-open-at-point
+                "n" 'org-narrow-to-subtree
+                "q" 'org-clock-cancel
+                "s" 'org-schedule
+                "tE" 'org-table-export
+                "tH" 'org-table-move-column-left
+                "tI" 'org-table-import
+                "tJ" 'org-table-move-row-down
+                "tK" 'org-table-move-row-up
+                "tL" 'org-table-move-column-right
+                "tN" 'org-table-create-with-table.el
+                "ta" 'org-table-align
+                "tb" 'org-table-blank-field
+                "tc" 'org-table-convert
+                "tdc" 'org-table-delete-column
+                "tdr" 'org-table-kill-row
+                "te" 'org-table-eval-formula
+                "th" 'org-table-previous-field
+                "tiH" 'org-table-hline-and-move
+                "tic" 'org-table-insert-column
+                "tih" 'org-table-insert-hline
+                "tir" 'org-table-insert-row
+                "tj" 'org-table-next-row
+                "tl" 'org-table-next-field
+                "tn" 'org-table-create
+                "tr" 'org-table-recalculate
+                "ts" 'org-table-sort-lines
+                "ttf" 'org-table-toggle-formula-debugger
+                "tto" 'org-table-toggle-coordinate-overlays
+                "tw" 'org-table-wrap-region
+                "RET" 'org-ctrl-c-ret)))
+
+  (add-hook 'org-src-mode-hook
+            (lambda ()
+              (jtd/local-leader-key
+                :keymaps '(local org-src-mode-map)
+                "c" 'org-edit-src-exit
+                "a" 'org-edit-src-abort
+                "k" 'org-edit-src-abort)))
+#+end_src
+
+* Writing
+
+** Write room mode
+
+#+begin_src emacs-lisp
+  (use-package writeroom-mode
+    :commands writeroom-mode)
+#+end_src
+
+** Spelling
+
+#+begin_src emacs-lisp
+  (use-package flyspell
+    :diminish
+    :custom
+    (ispell-program-name "aspell")
+    :hook ((text-mode . flyspell-mode))
+    (prog-mode . flyspell-prog-mode))
+
+  (use-package flyspell-correct
+    :after flyspell
+    :bind (:map flyspell-mode-map
+                ("C-;" . flyspell-correct-wrapper)))
+#+end_src
+
+* Project management
+
+#+begin_src emacs-lisp
+  (use-package projectile
+    :diminish
+    :general
+    (jtd/leader-key
+      "p" '(:keymap projectile-command-map :wk "projectile"))
+    :custom ((projectile-project-search-path '("~/code"))
+             (projectile-switch-project-action #'projectile-dired))
+    :config
+    (projectile-mode 1))
+#+end_src
+
+* Version control 
+
+** Magit
+
+#+begin_src emacs-lisp
+  (use-package magit
+    :general
+    (jtd/leader-key
+      "gg" 'magit-status))
+#+end_src
+
+** Forge
+
+#+begin_src emacs-lisp
+  (use-package forge
+    :after magit)
+#+end_src
+
+* Programming
+
+** Line numbers
+
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+#+end_src
+
+** Completion
+
+#+begin_src emacs-lisp
+  (use-package company
+    :hook (prog-mode . company-mode))
+#+end_src
+
+** Comments
+
+#+begin_src emacs-lisp
+  (use-package evil-commentary
+    :hook (prog-mode . evil-commentary-mode))
+#+end_src
+
+** Rainbow Delimiters
+
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+#+end_src
+
+** Smartparens
+
+#+begin_src emacs-lisp
+  (use-package smartparens
+    :hook (prog-mode . smartparens-mode))
+#+end_src
+
+** LSP
+
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :hook ((rustic-mode . lsp-deferred)
+           (lsp-mode . lsp-enable-which-key-integration))
+    :commands (lsp lsp-deferred)
+    :custom
+    (lsp-rust-analyzer-server-display-inlay-hints t)
+    :config
+    (add-hook 'lsp-mode-hook
+              (lambda ()
+                (jtd/local-leader-key
+                  :keymaps 'local
+                  "l" '(:keymap lsp-command-map :wk "lsp")))))
+
+  (use-package lsp-ui
+    :after lsp-mode
+    :commands lsp-ui-mode)
+
+  (use-package dap-mode
+    :after lsp-mode)
+#+end_src
+
+** Rust
+
+#+begin_src emacs-lisp
+  (use-package rustic
+    :commands rustic-mode
+    :config
+    (add-hook 'rustic-mode-hook
+              (lambda ()
+                (add-hook 'lsp-after-initialize-hook (lambda () (lsp-rust-analyzer-inlay-hints-mode 1)))
+                (jtd/local-leader-key
+                  :keymaps 'local
+                  "=" 'rustic-cargo-fmt
+                  "c" '(:ignore t :wk "cargo")
+                  "cC" 'rustic-cargo-clippy
+                  "ca" 'rustic-cargo-add
+                  "cb" 'rustic-cargo-build
+                  "cc" 'rustic-cargo-check
+                  "cd" 'rustic-cargo-doc
+                  "cf" 'rustic-cargo-clippy-fix
+                  "co" 'rustic-cargo-outdated
+                  "cu" 'rustic-cargo-upgrade
+                  "cx" 'rustic-cargo-run
+                  "t" '(:ignore t :wk "test")
+                  "ta" 'rustic-cargo-test
+                  "tt" 'rustic-cargo-current-test))))
+#+end_src
+
+** YAML
+
+#+begin_src emacs-lisp
+  (use-package yaml-mode
+   :commands yaml-mode)
+
+  (add-hook 'yaml-mode-hook #'display-line-numbers-mode)
+#+end_src
+
+** TOML
+
+#+begin_src emacs-lisp
+  (use-package toml-mode
+    :commands toml-mode)
+#+end_src
+
+** Ansible
+
+#+begin_src emacs-lisp
+  (use-package ansible
+    :commands ansible
+    :config
+    (add-hook 'ansible-hook
+              (jtd/local-leader-key
+                "d" 'ansible-decrypt-buffer
+                "e" 'ansible-encrypt-buffer)))
+
+  (use-package ansible-doc
+    :after ansible
+    :config
+    (add-hook 'ansible-hook
+              (lambda ()
+                (jtd/local-leader-key
+                  "h" 'ansible-doc))))
+
+  (add-hook 'yaml-mode-hook
+            (lambda ()
+              (if (or (file-exists-p (projectile-expand-root "roles/"))
+                      (file-exists-p (projectile-expand-root "tasks/main.yml")))
+                  (ansible)
+                (ansible-doc-mode))))
+
+#+end_src
+
+* Email
+
+** mu4e
+
+#+begin_src emacs-lisp
+  (use-package mu4e
+    :straight nil
+    :general
+    (jtd/leader-key
+      "am" 'mu4e))
+#+end_src
+
+** org-msg
+
+#+begin_src emacs-lisp
+  (use-package org-msg
+    :after mu4e)
+#+end_src
