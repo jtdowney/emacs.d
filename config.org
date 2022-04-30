@@ -982,3 +982,19 @@
   (use-package org-msg
     :after mu4e)
 #+end_src
+
+* RSS
+
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :custom
+    (elfeed-sort-order 'ascending)
+    :general
+    (jtd/leader-key
+      "af" 'elfeed))
+
+  (use-package elfeed-protocol
+    :after elfeed
+    :init
+    (elfeed-protocol-enable))
+#+end_src

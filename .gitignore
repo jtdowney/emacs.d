@@ -1,14 +1,15 @@
+/.cache
+/.lsp*
 /config.el
 /custom.el
+/forge-database.sqlite
 /history
 /private.el
+/projectile-bookmarks.eld
 /recentf
 /straight
 /transient
-/.cache
-/.lsp*
-/forge-database.sqlite
-/projectile-bookmarks.eld
+/url
 
 !/straight/versions/default.el
 
