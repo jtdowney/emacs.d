@@ -728,6 +728,32 @@
                 ("C-;" . flyspell-correct-wrapper)))
 #+end_src
 
+* Notes
+
+#+begin_src emacs-lisp
+  (use-package deft
+    :custom
+    ((deft-directory "~/notes")
+     (deft-default-extension "org")
+     (deft-use-filename-as-title nil)
+     (deft-use-filter-string-for-filename t))
+    :general
+    (jtd/leader-key
+      "n" '(:ignore t :wk "notes")
+      "nf" 'deft-find-file
+      "nv" 'deft)
+    (add-hook 'deft-mode-hook
+              (lambda ()
+                (jtd/local-leader-key :keymaps 'local
+                  "c" 'deft-filter-clear
+                  "d" 'deft-delete-file
+                  "i" 'deft-toggle-incremental-search
+                  "n" 'deft-new-file
+                  "r" 'deft-rename-file)))
+    :init
+    (evil-set-initial-state 'deft-mode 'insert))
+#+end_src
+
 * Project management
 
 #+begin_src emacs-lisp
