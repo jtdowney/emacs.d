@@ -809,10 +809,34 @@
 
 * Programming
 
-** Line numbers
+** General
+
+*** Line numbers
 
 #+begin_src emacs-lisp
   (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+#+end_src
+
+*** Comments
+
+#+begin_src emacs-lisp
+  (use-package evil-commentary
+    :hook (prog-mode . evil-commentary-mode))
+#+end_src
+
+*** Treat _ as part of a word like vim
+
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook (lambda () (modify-syntax-entry ?_ "w")))
+#+end_src
+
+*** Delete trailing white space
+
+#+begin_src emacs-lisp
+  (add-hook 'before-save-hook
+            (lambda ()
+              (when (derived-mode-p 'prog-mode)
+                (whitespace-cleanup))))
 #+end_src
 
 ** Completion
@@ -820,13 +844,6 @@
 #+begin_src emacs-lisp
   (use-package company
     :hook (prog-mode . company-mode))
-#+end_src
-
-** Comments
-
-#+begin_src emacs-lisp
-  (use-package evil-commentary
-    :hook (prog-mode . evil-commentary-mode))
 #+end_src
 
 ** Rainbow Delimiters
