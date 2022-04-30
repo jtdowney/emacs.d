@@ -750,7 +750,10 @@
   (use-package magit
     :general
     (jtd/leader-key
-      "gg" 'magit-status))
+      "gb" 'magit-blame
+      "gl" 'magit-log-buffer-file
+      "gm" 'magit-dispatch-popup
+      "gs" 'magit-status))
 #+end_src
 
 ** Forge
@@ -758,6 +761,22 @@
 #+begin_src emacs-lisp
   (use-package forge
     :after magit)
+#+end_src
+
+** Time machine
+
+#+begin_src emacs-lisp
+  (use-package git-timemachine
+    :general
+    (jtd/leader-key
+      "gt" 'git-timemachine))
+#+end_src
+
+** Highlight uncommitted changes
+
+#+begin_src emacs-lisp
+  (use-package diff-hl
+    :hook ((prog-mode text-mode vc-dir-mode) . diff-hl-mode))
 #+end_src
 
 * Programming
