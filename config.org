@@ -927,6 +927,15 @@
     :commands toml-mode)
 #+end_src
 
+** Markdown
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)))
+#+end_src
+
 ** Ansible
 
 #+begin_src emacs-lisp
