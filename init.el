@@ -14,7 +14,9 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(setq straight-use-package-by-default t)
+(setq straight-use-package-by-default t
+      straight-check-for-modifications '(watch-files find-when-checking)
+      straight-vc-git-default-clone-depth 1)
 
 (straight-use-package 'use-package)
 (straight-use-package 'diminish)
