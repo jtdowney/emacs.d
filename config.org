@@ -344,24 +344,31 @@
 
 #+begin_src emacs-lisp
   (use-package treemacs
+    :custom
+    ((treemacs-project-follow-mode t)
+     (treemacs-follow-mode t)
+     (treemacs-filewatch-mode t))
     :general
     (jtd/leader-key
       "fd" 'treemacs-find-file
       "ft" 'treemacs))
 
   (use-package treemacs-evil
-    :after treemacs)
+    :after (treemacs evil))
 
   (use-package treemacs-projectile
-    :after treemacs)
+    :after (treemacs projectile))
 
   (use-package treemacs-icons-dired
-    :after treemacs
-    :config
-    (treemacs-icons-dired-mode 1))
+    :hook (dired-mode . treemacs-icons-dired-enable-once))
 
   (use-package treemacs-magit
-    :after treemacs)
+    :after (treemacs magit))
+
+  (use-package treemacs-perspective
+    :after (treemacs perspective)
+    :config
+    (treemacs-set-scope-type 'Perspectives))
 #+end_src
 
 * Operating systems
