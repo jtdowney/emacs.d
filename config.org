@@ -43,7 +43,6 @@
   (jtd/leader-key
     ":" 'execute-extended-command
     "a" '(:ignore t :wk "apps")
-    "ad" 'dired
     "b" '(:ignore t :wk "buffer")
     "bK" 'kill-buffer-and-window
     "bs" 'jtd/switch-to-scratch-buffer
@@ -327,9 +326,13 @@
 ** Dired
 
 #+begin_src emacs-lisp
-  (use-package dired-x
+  (use-package dired
     :straight nil
+    :general
+    (jtd/leader-key
+      "ad" 'dired)
     :init
+    (require 'dired-x)
     (evil-define-key 'normal 'global
      (kbd "_") 'projectile-dired
      (kbd "-") 'dired-jump)
