@@ -905,6 +905,7 @@
     :commands (lsp lsp-deferred)
     :custom
     (lsp-rust-analyzer-server-display-inlay-hints t)
+    (lsp-headerline-breadcrumb-icons-enable (display-graphic-p))
     :config
     (add-hook 'lsp-mode-hook
               (lambda ()
@@ -913,6 +914,7 @@
                   "l" '(:keymap lsp-command-map :wk "lsp")))))
 
   (use-package lsp-ui
+    :if (display-graphic-p)
     :after lsp-mode
     :commands lsp-ui-mode)
 
