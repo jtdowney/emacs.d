@@ -461,6 +461,7 @@
 #+begin_src emacs-lisp
   (use-package ligature
     :straight (ligature :type git :host github :repo "mickeynp/ligature.el")
+    :hook (prog-mode . ligature-mode)
     :config
     (ligature-set-ligatures 't '("www" "ff" "fi" "ffi"))
     (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
@@ -475,8 +476,7 @@
                                          "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
                                          "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
                                          "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                                         "\\\\" "://"))
-    (global-ligature-mode t))
+                                         "\\\\" "://")))
 #+end_src
 
 * Window management
