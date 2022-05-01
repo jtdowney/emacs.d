@@ -24,6 +24,8 @@
       :prefix ","
       :global-prefix "C-,"))
 
+  (general-def '(normal insert visual emacs) "C-@" (general-simulate-key "C-SPC"))
+
   (defun jtd/find-file-in-emacs ()
     "Find files in the emacs configuration directory"
     (interactive)
