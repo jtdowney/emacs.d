@@ -862,6 +862,30 @@
     :hook (prog-mode . smartparens-mode))
 #+end_src
 
+** Lisps
+
+*** Lispy
+
+#+begin_src emacs-lisp
+  (use-package lispy
+    :hook (emacs-lisp-mode . lispy-mode))
+#+end_src
+
+*** Lispyville
+
+#+begin_src emacs-lisp
+  (use-package lispyville
+    :hook (lispy-mode . lispyville-mode)
+    :init
+    (lispyville-set-key-theme '((operators normal)
+                                c-w
+                                (prettify insert)
+                                (atom-movement t)
+                                slurp/barf-lispy
+                                additional
+                                additional-insert)))
+#+end_src
+
 ** LSP
 
 #+begin_src emacs-lisp
