@@ -10,6 +10,46 @@
         user-mail-address "jdowney@gmail.com")
 #+end_src
 
+* Vim emulation
+
+** Evil
+
+#+begin_src emacs-lisp
+  (use-package evil
+    :custom
+    ((evil-want-integration t)
+     (evil-want-keybinding nil)
+     (evil-want-abbrev-expand-on-insert-exit nil)
+     (evil-respect-visual-line-mode t)
+     (evil-want-C-i-jump nil)
+     (evil-want-C-d-scroll t)
+     (evil-want-C-u-scroll t)
+     (evil-want-C-w-delete nil)
+     (evil-want-C-w-in-emacs-state t))
+    :config
+    (evil-mode 1)
+    (evil-set-initial-state 'vterm-mode 'emacs)
+    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state))
+#+end_src
+
+** Evil collection
+
+#+begin_src emacs-lisp
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+#+end_src
+
+** Evil surround
+
+#+begin_src emacs-lisp
+  (use-package evil-surround
+    :after evil
+    :config
+    (global-evil-surround-mode 1))
+#+end_src
+
 * Keybindings
 
 #+begin_src emacs-lisp
@@ -248,46 +288,6 @@
     :custom
     ((completion-styles '(orderless basic))
      (completion-category-overrides '((file (styles basic partial-completion))))))
-#+end_src
-
-* Vim emulation
-
-** Evil
-
-#+begin_src emacs-lisp
-  (use-package evil
-    :custom
-    ((evil-want-integration t)
-     (evil-want-keybinding nil)
-     (evil-want-abbrev-expand-on-insert-exit nil)
-     (evil-respect-visual-line-mode t)
-     (evil-want-C-i-jump nil)
-     (evil-want-C-d-scroll t)
-     (evil-want-C-u-scroll t)
-     (evil-want-C-w-delete nil)
-     (evil-want-C-w-in-emacs-state t))
-    :config
-    (evil-mode 1)
-    (evil-set-initial-state 'vterm-mode 'emacs)
-    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state))
-#+end_src
-
-** Evil collection
-
-#+begin_src emacs-lisp
-  (use-package evil-collection
-    :after evil
-    :config
-    (evil-collection-init))
-#+end_src
-
-** Evil surround
-
-#+begin_src emacs-lisp
-  (use-package evil-surround
-    :after evil
-    :config
-    (global-evil-surround-mode 1))
 #+end_src
 
 * Terminal
