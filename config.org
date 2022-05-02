@@ -146,7 +146,7 @@
 #+begin_src emacs-lisp
   (use-package recentf
     :straight nil
-    :init
+    :config
     (recentf-mode 1))
 #+end_src
 
@@ -214,7 +214,7 @@
                 ("M-h" . backward-kill-word))
     :custom
     (vertico-cycle t)
-    :init
+    :config
     (vertico-mode 1))
 
   (use-package vertico-directory
@@ -268,7 +268,7 @@
 
 #+begin_src emacs-lisp
   (use-package savehist
-    :init
+    :config
     (savehist-mode 1))
 #+end_src
 
@@ -277,7 +277,7 @@
 #+begin_src emacs-lisp
   (use-package marginalia
     :after vertico
-    :init
+    :config
     (marginalia-mode 1))
 #+end_src
 
@@ -334,7 +334,7 @@
     :general
     (jtd/leader-key
       "ad" 'dired)
-    :init
+    :config
     (require 'dired-x)
     (evil-define-key 'normal 'global
      (kbd "_") 'projectile-dired
@@ -444,7 +444,7 @@
 
 #+begin_src emacs-lisp
   (use-package doom-modeline
-    :init
+    :config
     (doom-modeline-mode 1))
 #+end_src
 
@@ -523,7 +523,7 @@
        select-window-7
        select-window-8
        select-window-9))
-    :init
+    :config
     (golden-ratio-mode 1))
 #+end_src
 
@@ -537,7 +537,7 @@
       "bb" 'persp-switch-to-buffer*
       "bk" 'persp-kill-buffer*
       "x" '(:keymap perspective-map :wk "perspective"))
-    :init
+    :config
     (persp-mode 1))
 #+end_src
 
@@ -550,7 +550,7 @@
     :diminish
     :custom
     (which-key-idle-delay 1)
-    :init
+    :config
     (which-key-mode))
 #+end_src
 
@@ -877,7 +877,7 @@
 #+begin_src emacs-lisp
   (use-package lispyville
     :hook (lispy-mode . lispyville-mode)
-    :init
+    :config
     (lispyville-set-key-theme '((operators normal)
                                 c-w
                                 (prettify insert)
@@ -1023,6 +1023,6 @@
 
   (use-package elfeed-protocol
     :after elfeed
-    :init
+    :config
     (elfeed-protocol-enable))
 #+end_src
