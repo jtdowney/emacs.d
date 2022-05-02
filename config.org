@@ -103,7 +103,14 @@
       "hx" 'helpful-command
       "p" '(:ignore t :wk "project")
       "s" '(:ignore t :wk "search")
-      "sj" '(imenu :wk "jump")))
+      "sj" '(imenu :wk "jump"))
+
+    (general-define-key
+     :definer 'minor-mode
+     :states '(normal motion)
+     :keymaps 'outline-minor-mode
+     "]h" 'outline-next-visible-heading
+     "[h" 'outline-prev-visible-heading))
 #+end_src
 
 * General
