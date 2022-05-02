@@ -1,6 +1,6 @@
 #+TITLE: Emacs configuration
 #+AUTHOR: John Downey
-#+EMAIL: jdowney@gmail.com #+OPTIONS: toc:nil num:nil
+#+EMAIL: jdowney@gmail.com
 
 * Personalization
 
