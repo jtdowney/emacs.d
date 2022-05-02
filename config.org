@@ -708,6 +708,21 @@
     :hook (org-mode . jtd/org-mode-visual-fill))
 #+end_src
 
+** Export
+
+*** Pandoc
+
+#+begin_src emacs-lisp
+  (use-package ox-pandoc)
+#+end_src
+
+
+*** Markdown
+
+#+begin_src emacs-lisp
+  (use-package ox-gfm)
+#+end_src
+
 * Writing
 
 ** Write room mode
