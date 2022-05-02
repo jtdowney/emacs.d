@@ -488,6 +488,13 @@
                                          "\\\\" "://")))
 #+end_src
 
+** Hide modeline
+
+#+begin_src emacs-lisp
+  (use-package hide-mode-line
+    :commands hide-mode-line)
+#+end_src
+
 * Window management
 
 ** Disable built-in
