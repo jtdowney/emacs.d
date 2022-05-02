@@ -536,12 +536,30 @@
 
 #+begin_src emacs-lisp
   (use-package perspective
+    :demand t
     :custom (persp-suppress-no-prefix-key-warning t)
     :general
     (jtd/leader-key
       "bb" 'persp-switch-to-buffer*
       "bk" 'persp-kill-buffer*
-      "x" '(:keymap perspective-map :wk "perspective"))
+      "x" '(:ignore t :wk "perspective")
+      "xA" 'persp-set-buffer
+      "xB" 'persp-switch-to-scratch-buffer
+      "x`" 'persp-switch-by-number
+      "xa" 'persp-add-buffer
+      "xb" 'persp-switch-to-buffer
+      "xc" 'persp-kill
+      "xg" 'persp-add-buffer-to-frame-global
+      "xi" 'persp-import
+      "xk" 'persp-remove-buffer
+      "xm" 'persp-merge
+      "xn" 'persp-next
+      "xp" 'persp-prev
+      "xr" 'persp-rename
+      "xs" 'persp-switch
+      "xu" 'persp-unmerge
+      "x <left>" 'persp-prev
+      "x <right>" 'persp-next)
     :config
     (persp-mode 1))
 #+end_src
