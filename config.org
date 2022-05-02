@@ -611,7 +611,7 @@
     (jtd/leader-key
       "o" '(:ignore t :wk "org")
       "oa" 'org-agenda-list
-      "oc" 'counsel-org-capture
+      "oc" 'org-capture
       "om" 'org-tags-view
       "oo" 'org-agenda
       "ot" 'org-todo-list)
