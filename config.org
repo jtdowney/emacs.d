@@ -870,6 +870,15 @@
            (magit-post-refresh . diff-hl-magit-post-refresh)))
 #+end_src
 
+* TRAMP
+
+#+begin_src emacs-lisp
+  (use-package tramp
+    :straight f
+    :config
+    (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+#+end_src
+
 * Programming
 
 ** General
