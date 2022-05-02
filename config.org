@@ -737,11 +737,11 @@
 
 #+begin_src emacs-lisp
   (use-package deft
-    :custom
-    ((deft-directory "~/notes")
-     (deft-default-extension "org")
-     (deft-use-filename-as-title nil)
-     (deft-use-filter-string-for-filename t))
+    :init
+    (setq deft-default-extension "org"
+          deft-directory "~/notes"
+          deft-use-filename-as-title nil
+          deft-use-filter-string-for-filename t)
     :general
     (jtd/leader-key
       "n" '(:ignore t :wk "notes")
