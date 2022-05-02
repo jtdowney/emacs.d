@@ -53,19 +53,6 @@
 * Keybindings
 
 #+begin_src emacs-lisp
-  (use-package general
-    :config
-    (general-create-definer jtd/leader-key
-      :states '(normal insert visual emacs)
-      :prefix "SPC"
-      :global-prefix "C-SPC")
-    (general-create-definer jtd/local-leader-key
-      :states '(normal insert visual emacs)
-      :prefix ","
-      :global-prefix "C-,"))
-
-  (general-def '(normal insert visual emacs) "C-@" (general-simulate-key "C-SPC"))
-
   (defun jtd/find-file-in-emacs ()
     "Find files in the emacs configuration directory"
     (interactive)
@@ -82,29 +69,43 @@
     (mark-whole-buffer)
     (kill-ring-save 0 0 t))
 
-  (jtd/leader-key
-    ":" 'execute-extended-command
-    "a" '(:ignore t :wk "apps")
-    "b" '(:ignore t :wk "buffer")
-    "bK" 'kill-buffer-and-window
-    "bs" 'jtd/switch-to-scratch-buffer
-    "bY" 'jtd/copy-buffer
-    "f" '(:ignore t :wk "file")
-    "ff" '(find-file :wk "find file")
-    "fe" '(jtd/find-file-in-emacs :wk "find file in emacs.d")
-    "g" '(:ignore t :wk "git")
-    "h" '(:ignore t :wk "help")
-    "ha" 'apropos-command
-    "hf" 'helpful-function
-    "hk" 'helpful-key
-    "hm" 'helpful-macro
-    "ho" 'helpful-symbol
-    "hv" 'helpful-variable
-    "hx" 'helpful-command
-    "p" '(:ignore t :wk "project")
-    "s" '(:ignore t :wk "search")
-    "sj" '(imenu :wk "jump"))
+  (use-package general
+    :config
+    (general-create-definer jtd/leader-key
+      :states '(normal visual)
+      :prefix "SPC"
+      :keymaps 'override
+      :global-prefix "C-SPC")
+    (general-create-definer jtd/local-leader-key
+      :states '(normal visual motion)
+      :prefix ","
+      :keymaps 'override
+      :global-prefix "C-,")
 
+    (general-def '(normal insert visual emacs) "C-@" (general-simulate-key "C-SPC"))
+
+    (jtd/leader-key
+      ":" 'execute-extended-command
+      "a" '(:ignore t :wk "apps")
+      "b" '(:ignore t :wk "buffer")
+      "bK" 'kill-buffer-and-window
+      "bs" 'jtd/switch-to-scratch-buffer
+      "bY" 'jtd/copy-buffer
+      "f" '(:ignore t :wk "file")
+      "ff" '(find-file :wk "find file")
+      "fe" '(jtd/find-file-in-emacs :wk "find file in emacs.d")
+      "g" '(:ignore t :wk "git")
+      "h" '(:ignore t :wk "help")
+      "ha" 'apropos-command
+      "hf" 'helpful-function
+      "hk" 'helpful-key
+      "hm" 'helpful-macro
+      "ho" 'helpful-symbol
+      "hv" 'helpful-variable
+      "hx" 'helpful-command
+      "p" '(:ignore t :wk "project")
+      "s" '(:ignore t :wk "search")
+      "sj" '(imenu :wk "jump")))
 #+end_src
 
 * General
@@ -576,8 +577,90 @@
 
   (use-package org
     :hook (org-mode . jtd/org-mode-setup)
-    :custom
-    (org-src-fontify-natively t))
+    :general
+    (jtd/leader-key
+      "o" '(:ignore t :wk "org")
+      "oa" 'org-agenda-list
+      "oc" 'counsel-org-capture
+      "om" 'org-tags-view
+      "oo" 'org-agenda
+      "ot" 'org-todo-list)
+    :config
+    (jtd/local-leader-key :keymaps 'org-mode-map
+      "!" 'org-time-stamp-inactive
+      "'" 'org-edit-special
+      "*" 'org-ctrl-c-star
+      "," 'org-ctrl-c-ctrl-c
+      "-" 'org-ctrl-c-minus
+      "." 'org-time-stamp
+      "/" 'org-sparse-tree
+      ":" 'org-set-tags
+      "A" 'org-archive-subtree
+      "D" 'org-insert-drawer
+      "H" 'org-shiftleft
+      "I" 'org-clock-in
+      "J" 'org-shiftdown
+      "K" 'org-shiftup
+      "L" 'org-shiftright
+      "N" 'widen
+      "O" 'org-clock-out
+      "P" 'org-set-property
+      "R" 'org-refile
+      "Sh" 'org-promote-subtree
+      "Sj" 'org-move-subtree-down
+      "Sk" 'org-move-subtree-up
+      "Sl" 'org-demote-subtree
+      "T" 'org-show-todo-tree
+      "^" 'org-sort
+      "a" 'org-agenda
+      "b" 'org-tree-to-indirect-buffer
+      "c" 'org-capture
+      "d" 'org-deadline
+      "e" 'org-export-dispatch
+      "f" 'org-set-effort
+      "hI" 'org-insert-heading
+      "hi" 'org-insert-heading-after-current
+      "hs" 'org-insert-subheading
+      "ia" 'org-attach
+      "if" 'org-footnote-new
+      "il" 'org-insert-link
+      "l" 'org-open-at-point
+      "n" 'org-narrow-to-subtree
+      "q" 'org-clock-cancel
+      "s" 'org-schedule
+      "tE" 'org-table-export
+      "tH" 'org-table-move-column-left
+      "tI" 'org-table-import
+      "tJ" 'org-table-move-row-down
+      "tK" 'org-table-move-row-up
+      "tL" 'org-table-move-column-right
+      "tN" 'org-table-create-with-table.el
+      "ta" 'org-table-align
+      "tb" 'org-table-blank-field
+      "tc" 'org-table-convert
+      "tdc" 'org-table-delete-column
+      "tdr" 'org-table-kill-row
+      "te" 'org-table-eval-formula
+      "th" 'org-table-previous-field
+      "tiH" 'org-table-hline-and-move
+      "tic" 'org-table-insert-column
+      "tih" 'org-table-insert-hline
+      "tir" 'org-table-insert-row
+      "tj" 'org-table-next-row
+      "tl" 'org-table-next-field
+      "tn" 'org-table-create
+      "tr" 'org-table-recalculate
+      "ts" 'org-table-sort-lines
+      "ttf" 'org-table-toggle-formula-debugger
+      "tto" 'org-table-toggle-coordinate-overlays
+      "tw" 'org-table-wrap-region
+      "RET" 'org-ctrl-c-ret)
+    (jtd/local-leader-key
+      :definer 'minor-mode
+      :keymaps 'org-src-mode
+      "c" 'org-edit-src-exit
+      "a" 'org-edit-src-abort
+      "k" 'org-edit-src-abort))
 #+end_src
 
 ** Evil mode integration
@@ -625,99 +708,6 @@
     :hook (org-mode . jtd/org-mode-visual-fill))
 #+end_src
 
-** Key bindings
-
-#+begin_src emacs-lisp
-  (jtd/leader-key
-    "o" '(:ignore t :wk "org")
-    "oa" 'org-agenda-list
-    "oc" 'counsel-org-capture
-    "om" 'org-tags-view
-    "oo" 'org-agenda
-    "ot" 'org-todo-list)
-
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (jtd/local-leader-key
-                :keymaps 'local
-                "!" 'org-time-stamp-inactive
-                "'" 'org-edit-special
-                "*" 'org-ctrl-c-star
-                "," 'org-ctrl-c-ctrl-c
-                "-" 'org-ctrl-c-minus
-                "." 'org-time-stamp
-                "/" 'org-sparse-tree
-                ":" 'org-set-tags
-                "A" 'org-archive-subtree
-                "D" 'org-insert-drawer
-                "H" 'org-shiftleft
-                "I" 'org-clock-in
-                "J" 'org-shiftdown
-                "K" 'org-shiftup
-                "L" 'org-shiftright
-                "N" 'widen
-                "O" 'org-clock-out
-                "P" 'org-set-property
-                "R" 'org-refile
-                "Sh" 'org-promote-subtree
-                "Sj" 'org-move-subtree-down
-                "Sk" 'org-move-subtree-up
-                "Sl" 'org-demote-subtree
-                "T" 'org-show-todo-tree
-                "^" 'org-sort
-                "a" 'org-agenda
-                "b" 'org-tree-to-indirect-buffer
-                "c" 'org-capture
-                "d" 'org-deadline
-                "e" 'org-export-dispatch
-                "f" 'org-set-effort
-                "hI" 'org-insert-heading
-                "hi" 'org-insert-heading-after-current
-                "hs" 'org-insert-subheading
-                "ia" 'org-attach
-                "if" 'org-footnote-new
-                "il" 'org-insert-link
-                "l" 'org-open-at-point
-                "n" 'org-narrow-to-subtree
-                "q" 'org-clock-cancel
-                "s" 'org-schedule
-                "tE" 'org-table-export
-                "tH" 'org-table-move-column-left
-                "tI" 'org-table-import
-                "tJ" 'org-table-move-row-down
-                "tK" 'org-table-move-row-up
-                "tL" 'org-table-move-column-right
-                "tN" 'org-table-create-with-table.el
-                "ta" 'org-table-align
-                "tb" 'org-table-blank-field
-                "tc" 'org-table-convert
-                "tdc" 'org-table-delete-column
-                "tdr" 'org-table-kill-row
-                "te" 'org-table-eval-formula
-                "th" 'org-table-previous-field
-                "tiH" 'org-table-hline-and-move
-                "tic" 'org-table-insert-column
-                "tih" 'org-table-insert-hline
-                "tir" 'org-table-insert-row
-                "tj" 'org-table-next-row
-                "tl" 'org-table-next-field
-                "tn" 'org-table-create
-                "tr" 'org-table-recalculate
-                "ts" 'org-table-sort-lines
-                "ttf" 'org-table-toggle-formula-debugger
-                "tto" 'org-table-toggle-coordinate-overlays
-                "tw" 'org-table-wrap-region
-                "RET" 'org-ctrl-c-ret)))
-
-  (add-hook 'org-src-mode-hook
-            (lambda ()
-              (jtd/local-leader-key
-                :keymaps '(local org-src-mode-map)
-                "c" 'org-edit-src-exit
-                "a" 'org-edit-src-abort
-                "k" 'org-edit-src-abort)))
-#+end_src
-
 * Writing
 
 ** Write room mode
@@ -757,16 +747,14 @@
       "n" '(:ignore t :wk "notes")
       "nf" 'deft-find-file
       "nv" 'deft)
-    (add-hook 'deft-mode-hook
-              (lambda ()
-                (jtd/local-leader-key :keymaps 'local
-                  "c" 'deft-filter-clear
-                  "d" 'deft-delete-file
-                  "i" 'deft-toggle-incremental-search
-                  "n" 'deft-new-file
-                  "r" 'deft-rename-file)))
-    :init
-    (evil-set-initial-state 'deft-mode 'insert))
+    :config
+    (evil-set-initial-state 'deft-mode 'insert)
+    (jtd/local-leader-key :keymaps 'deft-mode-map
+      "c" 'deft-filter-clear
+      "d" 'deft-delete-file
+      "i" 'deft-toggle-incremental-search
+      "n" 'deft-new-file
+      "r" 'deft-rename-file))
 #+end_src
 
 * Project management
@@ -910,11 +898,12 @@
     (lsp-rust-analyzer-server-display-inlay-hints t)
     (lsp-headerline-breadcrumb-icons-enable (display-graphic-p))
     :config
-    (add-hook 'lsp-mode-hook
-              (lambda ()
-                (jtd/local-leader-key
-                  :keymaps 'local
-                  "l" '(:keymap lsp-command-map :wk "lsp")))))
+    (jtd/local-leader-key
+      :definer 'minor-mode
+      :keymaps 'lsp-mode
+      "a" 'lsp-execute-code-action
+      "l" '(:keymap lsp-command-map :wk "lsp")
+      "r" 'lsp-rename))
 
   (use-package lsp-ui
     :if (display-graphic-p)
@@ -931,25 +920,22 @@
   (use-package rustic
     :commands rustic-mode
     :config
-    (add-hook 'rustic-mode-hook
-              (lambda ()
-                (add-hook 'lsp-after-initialize-hook (lambda () (lsp-rust-analyzer-inlay-hints-mode 1)))
-                (jtd/local-leader-key
-                  :keymaps 'local
-                  "=" 'rustic-cargo-fmt
-                  "c" '(:ignore t :wk "cargo")
-                  "cC" 'rustic-cargo-clippy
-                  "ca" 'rustic-cargo-add
-                  "cb" 'rustic-cargo-build
-                  "cc" 'rustic-cargo-check
-                  "cd" 'rustic-cargo-doc
-                  "cf" 'rustic-cargo-clippy-fix
-                  "co" 'rustic-cargo-outdated
-                  "cu" 'rustic-cargo-upgrade
-                  "cx" 'rustic-cargo-run
-                  "t" '(:ignore t :wk "test")
-                  "ta" 'rustic-cargo-test
-                  "tt" 'rustic-cargo-current-test))))
+    (jtd/local-leader-key
+      :keymaps 'rustic-mode-map
+      "=" 'rustic-cargo-fmt
+      "c" '(:ignore t :wk "cargo")
+      "cC" 'rustic-cargo-clippy
+      "ca" 'rustic-cargo-add
+      "cb" 'rustic-cargo-build
+      "cc" 'rustic-cargo-check
+      "cd" 'rustic-cargo-doc
+      "cf" 'rustic-cargo-clippy-fix
+      "co" 'rustic-cargo-outdated
+      "cu" 'rustic-cargo-upgrade
+      "cx" 'rustic-cargo-run
+      "t" '(:ignore t :wk "test")
+      "ta" 'rustic-cargo-test
+      "tt" 'rustic-cargo-current-test))
 #+end_src
 
 ** YAML
@@ -983,18 +969,19 @@
   (use-package ansible
     :commands ansible
     :config
-    (add-hook 'ansible-hook
-              (jtd/local-leader-key
-                "d" 'ansible-decrypt-buffer
-                "e" 'ansible-encrypt-buffer)))
+    (jtd/local-leader-key
+      :definer 'minor-mode
+      :keymaps 'ansible
+      "d" 'ansible-decrypt-buffer
+      "e" 'ansible-encrypt-buffer))
 
   (use-package ansible-doc
-    :after ansible
+    :hook (ansible . ansible-doc-mode)
     :config
-    (add-hook 'ansible-hook
-              (lambda ()
-                (jtd/local-leader-key
-                  "h" 'ansible-doc))))
+    (jtd/local-leader-key
+      :definer 'minor-mode
+      :keymaps 'ansible-doc-mode
+      "h" 'ansible-doc))
 
   (add-hook 'yaml-mode-hook
             (lambda ()
