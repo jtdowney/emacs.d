@@ -877,6 +877,7 @@
     :general
     (jtd/leader-key
       "gb" 'magit-blame
+      "gf" 'forge-dispatch
       "gl" 'magit-log-buffer-file
       "gm" 'magit-dispatch-popup
       "gs" 'magit-status))
