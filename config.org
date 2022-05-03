@@ -872,6 +872,8 @@
 
 #+begin_src emacs-lisp
   (use-package magit
+    :init
+    (setq forge-add-default-bindings nil)
     :general
     (jtd/leader-key
       "gb" 'magit-blame
