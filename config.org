@@ -1043,6 +1043,13 @@
       "tt" 'rustic-cargo-current-test))
 #+end_src
 
+** PHP
+
+#+begin_src emacs-lisp
+  (use-package php-mode
+    :commands php-mode)
+#+end_src
+
 ** YAML
 
 #+begin_src emacs-lisp
