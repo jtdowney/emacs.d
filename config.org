@@ -1011,7 +1011,8 @@
 
 #+begin_src emacs-lisp
   (use-package lsp-mode
-    :hook (rustic-mode . lsp)
+    :hook ((rustic-mode . lsp)
+           (before-save . lsp-format-buffer))
     :custom
     ((lsp-rust-analyzer-server-display-inlay-hints t)
      (lsp-headerline-breadcrumb-icons-enable t))
