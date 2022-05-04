@@ -179,7 +179,6 @@
 
 #+begin_src emacs-lisp
   (use-package editorconfig
-    :diminish
     :config
     (editorconfig-mode 1))
 #+end_src
@@ -428,7 +427,6 @@
 #+begin_src emacs-lisp
   (use-package vi-tilde-fringe
     :if (display-graphic-p)
-    :diminish vi-tilde-fringe-mode
     :hook (prog-mode . vi-tilde-fringe-mode))
 #+end_src
 
@@ -614,7 +612,6 @@
 
 #+begin_src emacs-lisp
   (use-package which-key
-    :diminish
     :custom
     (which-key-idle-delay 1)
     :config
@@ -734,7 +731,6 @@
 
 #+begin_src emacs-lisp
   (use-package evil-org
-    :diminish evil-org-mode
     :after evil
     :hook (org-mode . evil-org-mode)
     :config
@@ -816,7 +812,6 @@
 
 #+begin_src emacs-lisp
   (use-package flyspell
-    :diminish
     :custom
     (ispell-program-name "aspell")
     :hook ((text-mode . flyspell-mode))
@@ -856,7 +851,6 @@
 
 #+begin_src emacs-lisp
   (use-package projectile
-    :diminish
     :general
     (jtd/leader-key
       "p" '(:keymap projectile-command-map :wk "projectile"))

@@ -19,7 +19,6 @@
       straight-vc-git-default-clone-depth 1)
 
 (straight-use-package 'use-package)
-(straight-use-package 'diminish)
 (straight-use-package 'org)
 
 (org-babel-load-file (concat user-emacs-directory "config.org"))
