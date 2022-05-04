@@ -1011,7 +1011,8 @@
 
 #+begin_src emacs-lisp
   (use-package lsp-mode
-    :hook ((rustic-mode . lsp)
+    :hook ((elixir-mode . lsp)
+           (rustic-mode . lsp)
            (before-save . lsp-format-buffer))
     :custom
     ((lsp-rust-analyzer-server-display-inlay-hints t)
@@ -1129,6 +1130,13 @@
 #+begin_src emacs-lisp
   (use-package dockerfile-mode
     :commands dockerfile-mode)
+#+end_src
+
+** Elixir
+
+#+begin_src emacs-lisp
+  (use-package elixir-mode
+    :commands elixir-mode)
 #+end_src
 
 * Email
