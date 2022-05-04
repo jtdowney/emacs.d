@@ -943,6 +943,25 @@
                 (whitespace-cleanup))))
 #+end_src
 
+*** Flycheck
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :init (global-flycheck-mode))
+
+  (use-package flycheck-pos-tip
+    :if (display-graphic-p)
+    :hook (flycheck-mode . flycheck-pos-tip-mode))
+
+  (use-package flycheck-popup-tip
+    :if (not (display-graphic-p))
+    :hook (flycheck-mode . flycheck-popup-tip-mode))
+
+  (add-hook 'org-src-mode-hook
+            (lambda ()
+              (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc))))
+#+end_src
+
 ** Completion
 
 #+begin_src emacs-lisp
