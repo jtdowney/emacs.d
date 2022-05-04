@@ -1117,6 +1117,13 @@
 
 #+end_src
 
+** Just
+
+#+begin_src emacs-lisp
+  (use-package just-mode
+    :commands just-mode)
+#+end_src
+
 * Email
 
 ** mu4e
