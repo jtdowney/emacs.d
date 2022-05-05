@@ -789,15 +789,18 @@
 
 #+begin_src emacs-lisp
   (setq org-capture-templates
-        `(("b" "Blog idea" entry
-           (file ,(concat org-directory "/blog-ideas.org"))
-           "* %?\n")
-          ("f" "Finished book" table-line
+        `(("b" "Books")
+          ("bf" "Finished book" table-line
            (file+headline ,(concat org-directory "/books.org") "Finished")
            "| %^{Title} | %^{Author} | %u |")
-          ("r" "Book to read" entry
+          ("br" "Book to read" entry
            (file+headline ,(concat org-directory "/books.org") "To Read")
-           "* %i%?\n")))
+           "* %i%?\n")
+          ("i" "Ideas")
+          ("ib" "Blog idea" entry
+           (file ,(concat org-directory "/blog-ideas.org"))
+           "* %?\n")
+          ))
 #+end_src
 
 * Writing
