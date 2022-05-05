@@ -985,6 +985,19 @@
     (company-minimum-prefix-length 1))
 #+end_src
 
+** Snippets
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :after company
+    :hook (prog-mode . yas-minor-mode)
+    :config
+    (setq company-backends '((company-capf company-yasnippet))))
+
+  (use-package yasnippet-snippets
+    :after yasnippet)
+#+end_src
+
 ** Rainbow Delimiters
 
 #+begin_src emacs-lisp
