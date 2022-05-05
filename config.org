@@ -240,7 +240,8 @@
       "bB" 'consult-buffer
       "fr" 'consult-recent-file
       "pb" 'consult-project-buffer
-      "si" 'consult-outline
+      "so" 'consult-outline
+      "si" 'consult-imenu
       "sr" 'consult-ripgrep
       "ss" 'consult-line))
 #+end_src
