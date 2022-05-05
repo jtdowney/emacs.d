@@ -948,7 +948,20 @@
 
 #+begin_src emacs-lisp
   (use-package flycheck
-    :init (global-flycheck-mode))
+    :demand t
+    :general
+    (jtd/leader-key
+      "e" '(:ignore t :wk "errors")
+      "ed" 'flycheck-disable-checker
+      "el" 'flycheck-list-errors
+      "es" 'flycheck-select-checker)
+    :config
+    (global-flycheck-mode)
+    (general-define-key
+     :states '(normal motion)
+     :keymaps 'override
+     "]e" 'flycheck-next-error
+     "[e" 'flycheck-previous-error))
 
   (use-package flycheck-pos-tip
     :if (display-graphic-p)
