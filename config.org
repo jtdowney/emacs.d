@@ -398,6 +398,17 @@
     (treemacs-set-scope-type 'Perspectives))
 #+end_src
 
+** IMenu list
+
+#+begin_src emacs-lisp
+  (use-package imenu-list
+    :custom
+    (imenu-list-size 0.15)
+    :general
+    (jtd/leader-key
+      "bi" 'imenu-list-smart-toggle))
+#+end_src
+
 * Operating systems
 
 ** macOS
