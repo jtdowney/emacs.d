@@ -1279,15 +1279,13 @@
   (defun disable-electric-indent ()
     (setq-local electric-indent-chars nil))
 
-  (use-package beancount
-    :straight (beancount-mode :host github
-                              :repo "beancount/beancount-mode")
-    :mode ("\\.beancount$" . beancount-mode)
+  (use-package beancount-mode
+    :straight (:host github :repo "beancount/beancount-mode")
+    :mode ("\\.beancount\\'" . beancount-mode)
     :hook ((beancount-mode . outline-minor-mode)
            (beancount-mode . disable-electric-indent))
     :config
     (setq beancount-outline-regexp "\\(\\*+\\)")
-    :init
     (put 'beancount-account 'bounds-of-thing-at-point
          (lambda ()
            (let ((thing (thing-at-point-looking-at
