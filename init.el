@@ -18,7 +18,6 @@
       straight-check-for-modifications '(watch-files find-when-checking)
       straight-vc-git-default-clone-depth 1)
 
-(straight-use-package 'use-package)
 (straight-use-package 'org)
 
 (org-babel-load-file (concat user-emacs-directory "config.org"))

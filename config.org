@@ -10,6 +10,21 @@
         user-mail-address "jdowney@gmail.com")
 #+end_src
 
+* Early config
+
+** Use package
+
+#+begin_src emacs-lisp
+(straight-use-package 'use-package)
+#+end_src
+
+** On hooks
+
+#+begin_src emacs-lisp
+  (use-package on
+    :straight (:host github :repo "ajgrf/on.el"))
+#+end_src
+
 * Vim emulation
 
 ** Evil
@@ -151,6 +166,7 @@
 #+begin_src emacs-lisp
   (use-package recentf
     :straight nil
+    :defer 1
     :config
     (recentf-mode 1))
 #+end_src
@@ -165,7 +181,10 @@
 ** Automatically revert
 
 #+begin_src emacs-lisp
-  (global-auto-revert-mode 1)
+  (use-package autorevert
+    :defer 1
+    :config
+    (global-auto-revert-mode 1))
 #+end_src
 
 ** Don't auto-save or backup
@@ -179,8 +198,7 @@
 
 #+begin_src emacs-lisp
   (use-package editorconfig
-    :config
-    (editorconfig-mode 1))
+    :hook (on-first-file . editorconfig-mode))
 #+end_src
 
 ** Private config override
@@ -208,7 +226,7 @@
 
 #+begin_src emacs-lisp
   (use-package vertico
-    :demand t
+    :hook (on-first-input . vertico-mode)
     :straight (:files (:defaults "extensions/*"))
     :bind (:map vertico-map
                 ("C-j" . vertico-next)
@@ -273,6 +291,7 @@
 
 #+begin_src emacs-lisp
   (use-package savehist
+    :after vertico
     :config
     (savehist-mode 1))
 #+end_src
@@ -546,31 +565,33 @@
 
 #+begin_src emacs-lisp
   (use-package golden-ratio
+    :hook (on-first-buffer . golden-ratio-mode)
     :custom
-    (golden-ratio-extra-commands
-     '(windmove-left
-       windmove-right
-       windmove-down
-       windmove-up
-       evil-window-left
-       evil-window-right
-       evil-window-up
-       evil-window-down
-       buf-move-left
-       buf-move-right
-       buf-move-up
-       buf-move-down
-       window-number-select
-       select-window
-       select-window-1
-       select-window-2
-       select-window-3
-       select-window-4
-       select-window-5
-       select-window-6
-       select-window-7
-       select-window-8
-       select-window-9))
+    ((golden-ratio-exclude-modes '(treemacs-mode imenu-list-major-mode))
+     (golden-ratio-extra-commands
+      '(windmove-left
+        windmove-right
+        windmove-down
+        windmove-up
+        evil-window-left
+        evil-window-right
+        evil-window-up
+        evil-window-down
+        buf-move-left
+        buf-move-right
+        buf-move-up
+        buf-move-down
+        window-number-select
+        select-window
+        select-window-1
+        select-window-2
+        select-window-3
+        select-window-4
+        select-window-5
+        select-window-6
+        select-window-7
+        select-window-8
+        select-window-9)))
     :config
     (golden-ratio-mode 1))
 #+end_src
@@ -613,10 +634,9 @@
 
 #+begin_src emacs-lisp
   (use-package which-key
+    :hook (on-first-input . which-key-mode)
     :custom
-    (which-key-idle-delay 1)
-    :config
-    (which-key-mode))
+    (which-key-idle-delay 1))
 #+end_src
 
 ** Better help interface
@@ -756,7 +776,7 @@
 
 #+begin_src emacs-lisp
   (use-package org-tempo
-    :after org
+    :defer 2
     :straight nil
     :config
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
@@ -779,13 +799,15 @@
 *** Pandoc
 
 #+begin_src emacs-lisp
-  (use-package ox-pandoc)
+  (use-package ox-pandoc
+    :defer 2)
 #+end_src
 
 *** Markdown
 
 #+begin_src emacs-lisp
-  (use-package ox-gfm)
+  (use-package ox-gfm
+    :defer 2)
 #+end_src
 
 ** Capture templates
@@ -858,6 +880,7 @@
 
 #+begin_src emacs-lisp
   (use-package projectile
+    :defer 1
     :general
     (jtd/leader-key
       "p" '(:keymap projectile-command-map :wk "projectile"))
@@ -913,7 +936,8 @@
 
 #+begin_src emacs-lisp
   (use-package tramp
-    :straight f
+    :straight nil
+    :defer 2
     :config
     (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 #+end_src
@@ -954,7 +978,7 @@
 
 #+begin_src emacs-lisp
   (use-package flycheck
-    :demand t
+    :defer 2
     :general
     (jtd/leader-key
       "e" '(:ignore t :wk "errors")
