@@ -1308,3 +1308,16 @@
       "p" 'outline-previous-visible-heading
       "u" 'outline-up-heading))
 #+end_src
+
+* IRC
+
+#+begin_src emacs-lisp
+  (use-package circe
+    :custom
+    (circe-reduce-lurker-spam t)
+    :general
+    (jtd/leader-key
+      "ac" 'circe)
+    :config
+    (enable-circe-color-nicks))
+#+end_src
