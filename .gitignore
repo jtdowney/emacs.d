@@ -2,6 +2,7 @@
 /.lsp*
 /config.el
 /custom.el
+/eln-cache
 /forge-database.sqlite
 /history
 /private.el
