@@ -1,6 +1,3 @@
-(setq garbage-collection-messages nil
-      gc-cons-threshold (* 512 1000 1000))
-
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
