@@ -428,6 +428,18 @@
       "bi" 'imenu-list-smart-toggle))
 #+end_src
 
+** Snipe
+
+#+begin_src emacs-lisp
+  (use-package evil-snipe
+    :defer 1
+    :custom
+    (evil-snipe-scope 'buffer)
+    :config
+    (evil-snipe-mode 1)
+    (evil-snipe-override-mode 1))
+#+end_src
+
 * Operating systems
 
 ** macOS
