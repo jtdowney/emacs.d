@@ -219,6 +219,18 @@
     :defer t)
 #+end_src
 
+** Preview registers
+
+#+begin_src emacs-lisp
+  (use-package evil-owl
+    :defer 2
+    :custom
+    ((evil-owl-max-string-length 500)
+     (evil-owl-display-method 'window))
+    :config
+    (evil-owl-mode 1))
+#+end_src
+
 * Completion
 
 ** Ignore case
