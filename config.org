@@ -212,6 +212,13 @@
          (load-file private-file)))))
 #+end_src
 
+** Ripgrep
+
+#+begin_src emacs-lisp
+  (use-package rg
+    :defer t)
+#+end_src
+
 * Completion
 
 ** Ignore case
