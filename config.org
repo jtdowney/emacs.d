@@ -592,6 +592,15 @@
     :commands hide-mode-line)
 #+end_src
 
+** Emoji
+
+#+begin_src emacs-lisp
+  (use-package emojify
+    :hook (after-init . global-emojify-mode)
+    :config
+    (delete 'mu4e-headers-mode emojify-inhibit-major-modes))
+#+end_src
+
 * Window management
 
 ** Disable built-in
