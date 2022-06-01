@@ -1202,6 +1202,16 @@
     :commands toml-mode)
 #+end_src
 
+** HTML
+
+*** Emmet
+
+#+begin_src emacs-lisp
+  (use-package emmet-mode
+    :hook ((sgml-mode . emmet-mode)
+           (css-mode . emmet-mode)))
+#+end_src
+
 ** Markdown
 
 #+begin_src emacs-lisp
