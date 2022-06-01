@@ -825,14 +825,6 @@
                               heading)))
 #+end_src
 
-** Beautiful bullets
-
-#+begin_src emacs-lisp
-  (use-package org-bullets
-    :after org
-    :hook (org-mode . org-bullets-mode))
-#+end_src
-
 ** Structure templates
 
 #+begin_src emacs-lisp
@@ -887,6 +879,15 @@
            (file ,(concat org-directory "/blog-ideas.org"))
            "* %?\n")
           ))
+#+end_src
+
+** Modern
+
+#+begin_src emacs-lisp
+  (use-package org-modern
+    :after org
+    :config
+    (global-org-modern-mode))
 #+end_src
 
 * Writing
