@@ -362,6 +362,7 @@
 
 #+begin_src emacs-lisp
   (use-package ranger
+    :defer 2
     :custom
     (ranger-key "zp")
     :general
