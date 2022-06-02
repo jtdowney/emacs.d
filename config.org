@@ -722,6 +722,14 @@
       "om" 'org-tags-view
       "oo" 'org-agenda
       "ot" 'org-todo-list)
+    :custom
+    ((org-agenda-files '("~/org/inbox.org"
+                         "~/org/projects.org"
+                         "~/org/tickler.org"))
+     (org-refile-targets '(("~/org/projects.org" :maxlevel . 3)
+                           ("~/org/someday.org" :level . 1)
+                           ("~/org/tickler.org" :maxlevel . 2)))
+     (org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
     :config
     (dolist (face '(org-level-1
                     org-level-2
@@ -875,6 +883,13 @@
           ("br" "Book to read" entry
            (file+headline ,(concat org-directory "/books.org") "To Read")
            "* %i%?\n")
+          ("g" "GTD")
+          ("gt" "Todo [inbox]" entry
+           (file+headline ,(concat org-directory "/inbox.org") "Tasks")
+           "* TODO %i%?")
+          ("gT" "Tickler" entry
+           (file+headline ,(concat org-directory "/tickler.org") "Tickler")
+           "* %i%? \n %U")
           ("i" "Ideas")
           ("ib" "Blog idea" entry
            (file ,(concat org-directory "/blog-ideas.org"))
