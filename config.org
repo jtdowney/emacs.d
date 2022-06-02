@@ -731,7 +731,7 @@
                     org-level-6
                     org-level-7
                     org-level-8))
-      (set-face-attribute face nil :font "Baskerville" :height 180 :weight 'bold))
+      (set-face-attribute face nil :font "Libre Baskerville" :height 180 :weight 'bold))
 
     (jtd/local-leader-key :keymaps 'org-mode-map
       "!" 'org-time-stamp-inactive
