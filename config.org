@@ -327,11 +327,19 @@
 ** Better search matching
 
 #+begin_src emacs-lisp
-  (use-package orderless
+  (use-package fussy
     :after vertico
-    :custom
-    ((completion-styles '(orderless basic))
-     (completion-category-overrides '((file (styles basic partial-completion))))))
+    :config
+    (push 'fussy completion-styles)
+    (setq
+     completion-category-defaults nil
+     completion-category-overrides nil))
+
+  (use-package orderless
+    :after fussy
+    :commands orderless-filter
+    :init
+    (setq fussy-filter-fn 'fussy-filter-orderless))
 #+end_src
 
 * Terminal
