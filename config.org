@@ -1159,6 +1159,11 @@
     :hook (before-save . lsp-format-buffer)
     :custom
     ((lsp-rust-analyzer-server-display-inlay-hints t)
+     (lsp-rust-analyzer-display-chaining-hints t)
+     (lsp-rust-analyzer-display-closure-return-type-hints t)
+     (lsp-rust-analyzer-display-parameter-hints t)
+     (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+     (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names t)
      (lsp-headerline-breadcrumb-icons-enable t))
     :config
     (jtd/local-leader-key
