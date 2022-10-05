@@ -1,0 +1,295 @@
+#+TITLE: Emacs config
+#+STARTUP: show3levels
+#+PROPERTY: header-args:emacs-lisp :comments link
+
+* early-init.el and init.el
+
+** early-init.el
+
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  ;;; early-init.el --- Early Init File -*- lexical-binding: t; no-byte-compile: t -*-
+
+  ;; Defer garbage collection further back in the startup process
+  (setq gc-cons-threshold most-positive-fixnum
+	gc-cons-percentage 0.6)
+
+  ;; In Emacs 27+, package initialization occurs before `user-init-file' is
+  ;; loaded, but after `early-init-file'. Doom handles package initialization, so
+  ;; we must prevent Emacs from doing it early!
+  (setq package-enable-at-startup nil)
+  ;; Do not allow loading from the package cache (same reason).
+  (setq package-quickstart nil)
+
+  ;; Prevent the glimpse of un-styled Emacs by disabling these UI elements early.
+  (push '(menu-bar-lines . 0) default-frame-alist)
+  (push '(tool-bar-lines . 0) default-frame-alist)
+  (push '(vertical-scroll-bars) default-frame-alist)
+
+  ;; Resizing the Emacs frame can be a terribly expensive part of changing the
+  ;; font. By inhibiting this, we easily halve startup times with fonts that are
+  ;; larger than the system default.
+  (setq frame-inhibit-implied-resize t)
+
+  ;; Disable GUI elements
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (setq inhibit-splash-screen t)
+  (setq use-file-dialog nil)
+
+  ;; Prevent unwanted runtime builds in gccemacs (native-comp); packages are
+  ;; compiled ahead-of-time when they are installed and site files are compiled
+  ;; when gccemacs is installed.
+  (setq comp-deferred-compilation nil)
+
+  ;; Mitigate https://debbugs.gnu.org/cgi/bugreport.cgi?bug=57849
+  (when (eq system-type 'darwin)
+    (setq native-comp-driver-options '("-Wl,-w")))
+#+END_SRC
+
+** init.el: startup optimization
+
+#+BEGIN_SRC emacs-lisp :tangle init.el
+  ;;; init.el --- Personal configuration file -*- lexical-binding: t; no-byte-compile: t; -*-
+
+  ;; `file-name-handler-alist' is consulted on every `require', `load' and various
+  ;; path/io functions. You get a minor speed up by nooping this. However, this
+  ;; may cause problems on builds of Emacs where its site lisp files aren't
+  ;; byte-compiled and we're forced to load the *.el.gz files (e.g. on Alpine)
+  (unless (daemonp)
+    (defvar doom--initial-file-name-handler-alist file-name-handler-alist)
+    (setq file-name-handler-alist nil)
+    ;; Restore `file-name-handler-alist' later, because it is needed for handling
+    ;; encrypted or compressed files, among other things.
+    (defun doom-reset-file-handler-alist-h ()
+      ;; Re-add rather than `setq', because changes to `file-name-handler-alist'
+      ;; since startup ought to be preserved.
+      (dolist (handler file-name-handler-alist)
+	(add-to-list 'doom--initial-file-name-handler-alist handler))
+      (setq file-name-handler-alist doom--initial-file-name-handler-alist))
+    (add-hook 'emacs-startup-hook #'doom-reset-file-handler-alist-h)
+    (add-hook 'after-init-hook '(lambda ()
+				  ;; restore after startup
+				  (setq gc-cons-threshold 16777216
+					gc-cons-percentage 0.1)))
+    )
+  ;; Ensure Doom is running out of this file's directory
+  (setq user-emacs-directory (file-truename (file-name-directory load-file-name)))
+#+END_SRC
+
+** init.el: load modules
+
+#+BEGIN_SRC emacs-lisp :tangle init.el
+	(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
+	(let ((file-name-handler-alist nil)
+	(gc-cons-threshold 100000000))
+		(load "init-core")
+		(load "init-evil")
+		)
+#+END_SRC
+
+* Package manager
+:PROPERTIES:
+:header-args: :tangle lisp/init-core.el
+:END:
+
+** bootstrap straight and straight-use-package
+
+#+BEGIN_SRC emacs-lisp
+  (setq straight-use-package-by-default t)
+  (setq straight-vc-git-default-clone-depth 1)
+  (setq straight-recipes-gnu-elpa-use-mirror t)
+  (setq straight-check-for-modifications nil)
+  (setq use-package-always-defer t)
+
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	(bootstrap-version 6))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+	  (url-retrieve-synchronously
+	   "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+	   'silent 'inhibit-cookies)
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
+      (load bootstrap-file nil 'nomessage))
+
+  (straight-use-package 'use-package)
+
+  (setq comp-deferred-compilation-black-list nil)
+#+END_SRC
+
+** Enable use-package statistics
+
+If you’d like to see how many packages you’ve loaded, what stage of initialization they’ve reached, and how much aggregate time they’ve spent (roughly), you can enable use-package-compute-statistics after loading use-package but before any use-package forms, and then run the command M-x use-package-report to see the results. The buffer displayed is a tabulated list. You can use S in a column to sort the rows based on it.
+
+#+BEGIN_SRC emacs-lisp
+  (setq use-package-compute-statistics t)
+#+END_SRC
+
+* Emacs
+:PROPERTIES:
+:header-args: :tangle lisp/init-core.el
+:END:
+
+** Sane defaults
+
+#+BEGIN_SRC emacs-lisp
+  (use-package emacs
+    :init
+    (setq inhibit-startup-screen t
+	  initial-scratch-message nil
+	  sentence-end-double-space nil
+	  ring-bell-function 'ignore
+	  frame-resize-pixelwise t)
+
+    (setq user-full-name "John Downey"
+	  user-mail-address "jdowney@gmail.com")
+
+    (setq read-process-output-max (* 1024 1024)) ;; 1mb
+
+    ;; always allow 'y' instead of 'yes'.
+    (defalias 'yes-or-no-p 'y-or-n-p)
+
+    ;; default to utf-8 for all the things
+    (set-charset-priority 'unicode)
+    (setq locale-coding-system 'utf-8
+	  coding-system-for-read 'utf-8
+	  coding-system-for-write 'utf-8)
+    (set-terminal-coding-system 'utf-8)
+    (set-keyboard-coding-system 'utf-8)
+    (set-selection-coding-system 'utf-8)
+    (prefer-coding-system 'utf-8)
+    (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+
+    ;; write over selected text on input... like all modern editors do
+    (delete-selection-mode t)
+
+    ;; enable recent files mode.
+    (recentf-mode t)
+    (setq recentf-exclude `(,(expand-file-name "straight/build/" user-emacs-directory)
+			    ,(expand-file-name "eln-cache/" user-emacs-directory)
+			    ,(expand-file-name "etc/" user-emacs-directory)
+			    ,(expand-file-name "var/" user-emacs-directory)))
+
+    ;; don't want ESC as a modifier
+    (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+    ;; Don't persist a custom file, this bites me more than it helps
+    (setq custom-file (make-temp-file "")) ; use a temp file as a placeholder
+    (setq custom-safe-themes t)            ; mark all themes as safe, since we can't persist now
+    (setq enable-local-variables :all)     ; fix =defvar= warnings
+
+    ;; stop emacs from littering the file system with backup files
+    (setq make-backup-files nil
+	  auto-save-default nil
+	  create-lockfiles nil)
+
+    ;; follow symlinks 
+    (setq vc-follow-symlinks t)
+
+    ;; don't show any extra window chrome
+    (when (window-system)
+      (tool-bar-mode -1)
+      (toggle-scroll-bar -1))
+
+    ;; enable winner mode globally for undo/redo window layout changes
+    (winner-mode t)
+
+    (show-paren-mode t)
+
+    ;; less noise when compiling elisp
+    (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
+    (setq native-comp-async-report-warnings-errors nil)
+    (setq load-prefer-newer t)
+
+    ;; clean up the mode line
+    (display-time-mode -1)
+    (setq column-number-mode t)
+  
+    ;; use common convention for indentation by default
+    (setq-default indent-tabs-mode t)
+    (setq-default tab-width 2)
+
+    ;; Enable indentation+completion using the TAB key.
+    ;; Completion is often bound to M-TAB.
+    (setq tab-always-indent 'complete))
+#+END_SRC
+
+** Zoom
+
+#+BEGIN_SRC emacs-lisp
+	(use-package emacs
+		:init
+		(global-set-key (kbd "C-=") 'text-scale-increase)
+		(global-set-key (kbd "C--") 'text-scale-decrease))
+#+END_SRC
+
+** macOS
+
+#+BEGIN_SRC emacs-lisp
+	(use-package emacs
+		:init
+		(when (eq system-type 'darwin)
+			(setq mac-command-modifier 'super)     ; command as super
+			(setq mac-option-modifier 'meta)     ; alt as meta
+			(setq mac-control-modifier 'control))
+
+		;; when on emacs-mac 
+		(when (fboundp 'mac-auto-operator-composition-mode)
+				(mac-auto-operator-composition-mode)   ;; enables font ligatures
+				(global-set-key [(s c)] 'kill-ring-save)
+				(global-set-key [(s v)] 'yank)
+				(global-set-key [(s x)] 'kill-region)
+				(global-set-key [(s q)] 'kill-emacs)))
+#+END_SRC
+
+** Garbage collector magic hack
+
+#+BEGIN_SRC emacs-lisp
+	(use-package gcmh
+		:demand
+		:config
+		(gcmh-mode 1))
+#+END_SRC
+
+* Evil
+:PROPERTIES:
+:header-args: :tangle lisp/init-evil.el
+:END:
+
+** evil mode
+
+#+BEGIN_SRC emacs-lisp
+	(use-package evil
+		:demand
+		;; :general
+		;; (lc/leader-keys
+		;;   "wv" 'evil-window-vsplit
+		;;   "ws" 'evil-window-split)
+		:custom
+		((evil-want-integration t)
+		 (evil-want-keybinding nil)
+		 (evil-want-abbrev-expand-on-insert-exit nil)
+		 (evil-respect-visual-line-mode t)
+		 (evil-want-C-i-jump nil)
+		 (evil-want-C-d-scroll t)
+		 (evil-want-C-u-scroll t)
+		 (evil-want-C-w-delete nil)
+		 (evil-want-Y-yank-to-eol t)
+		 (evil-undo-system 'undo-fu)
+		 (evil-search-module 'evil-search)  ;; enables gn
+		 (evil-split-window-below t)
+		 (evil-vsplit-window-right t)
+		 (evil-auto-indent nil)
+		 (evil-want-C-w-in-emacs-state t))
+		:init
+		(evil-mode 1)
+		(define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+		(define-key evil-motion-state-map "_" 'evil-end-of-line)
+		(define-key evil-motion-state-map "0" 'evil-beginning-of-line)
+		(evil-set-initial-state 'messages-buffer-mode 'normal)
+		(evil-set-initial-state 'dashboard-mode 'normal))
+#+END_SRC
