@@ -29,3 +29,11 @@
 	(evil-set-initial-state 'messages-buffer-mode 'normal)
 	(evil-set-initial-state 'dashboard-mode 'normal))
 ;; evil mode:1 ends here
+
+;; [[file:../readme.org::*evil-collection][evil-collection:1]]
+(use-package evil-collection
+	:after evil
+	:demand
+	:config
+	(evil-collection-init))
+;; evil-collection:1 ends here

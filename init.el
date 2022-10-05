@@ -33,5 +33,6 @@
 (gc-cons-threshold 100000000))
 	(load "init-core")
 	(load "init-evil")
+	(load "init-ui")
 	)
 ;; init.el: load modules:1 ends here

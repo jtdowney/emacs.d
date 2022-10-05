@@ -86,6 +86,7 @@
 	(gc-cons-threshold 100000000))
 		(load "init-core")
 		(load "init-evil")
+		(load "init-ui")
 		)
 #+END_SRC
 
@@ -292,4 +293,39 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 		(define-key evil-motion-state-map "0" 'evil-beginning-of-line)
 		(evil-set-initial-state 'messages-buffer-mode 'normal)
 		(evil-set-initial-state 'dashboard-mode 'normal))
+#+END_SRC
+
+** evil-collection
+
+#+BEGIN_SRC emacs-lisp
+	(use-package evil-collection
+		:after evil
+		:demand
+		:config
+		(evil-collection-init))
+#+END_SRC
+
+* UI
+:PROPERTIES:
+:header-args: :tangle lisp/init-ui.el
+:END:
+
+** theme
+
+#+BEGIN_SRC emacs-lisp
+	(load-theme 'modus-vivendi t)
+#+END_SRC
+
+** doom modeline
+
+#+BEGIN_SRC emacs-lisp
+	(use-package doom-modeline
+		:demand
+		:custom
+		(doom-modeline-buffer-encoding nil)
+		(doom-modeline-env-enable-python nil)
+		(doom-modeline-height 15)
+		(doom-modeline-project-detection 'projectile)
+		:config
+		(doom-modeline-mode 1))
 #+END_SRC
