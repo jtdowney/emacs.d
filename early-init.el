@@ -3,7 +3,7 @@
 
 ;; Defer garbage collection further back in the startup process
 (setq gc-cons-threshold most-positive-fixnum
-gc-cons-percentage 0.6)
+			gc-cons-percentage 0.6)
 
 ;; In Emacs 27+, package initialization occurs before `user-init-file' is
 ;; loaded, but after `early-init-file'. Doom handles package initialization, so
@@ -36,5 +36,5 @@ gc-cons-percentage 0.6)
 
 ;; Mitigate https://debbugs.gnu.org/cgi/bugreport.cgi?bug=57849
 (when (eq system-type 'darwin)
-  (setq native-comp-driver-options '("-Wl,-w")))
+	(setq native-comp-driver-options '("-Wl,-w")))
 ;; early-init.el:1 ends here

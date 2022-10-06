@@ -3,20 +3,19 @@
 (setq straight-vc-git-default-clone-depth 1)
 (setq straight-recipes-gnu-elpa-use-mirror t)
 (setq straight-check-for-modifications nil)
-(setq use-package-always-defer t)
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
- (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-(bootstrap-version 6))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-	(url-retrieve-synchronously
-	 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-	 'silent 'inhibit-cookies)
-(goto-char (point-max))
-(eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
+			 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+			(bootstrap-version 6))
+	(unless (file-exists-p bootstrap-file)
+		(with-current-buffer
+				(url-retrieve-synchronously
+				 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+				 'silent 'inhibit-cookies)
+			(goto-char (point-max))
+			(eval-print-last-sexp)))
+	(load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'use-package)
 
@@ -135,7 +134,6 @@
 
 ;; [[file:../readme.org::*Garbage collector magic hack][Garbage collector magic hack:1]]
 (use-package gcmh
-	:demand
 	:config
 	(gcmh-mode 1))
 ;; Garbage collector magic hack:1 ends here
