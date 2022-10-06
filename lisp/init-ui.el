@@ -117,3 +117,12 @@
 	:config
 	(delete 'mu4e-headers-mode emojify-inhibit-major-modes))
 ;; Emoji:1 ends here
+
+;; [[file:../readme.org::*Fill column indicator][Fill column indicator:1]]
+(use-package display-fill-column-indicator
+	:straight (:type built-in)
+	:hook
+	(prog-mode . display-fill-column-indicator-mode)
+	:custom
+	(fill-column 120))
+;; Fill column indicator:1 ends here

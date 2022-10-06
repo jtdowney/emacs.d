@@ -137,3 +137,11 @@
 	:config
 	(gcmh-mode 1))
 ;; Garbage collector magic hack:1 ends here
+
+;; [[file:../readme.org::*Save recent files][Save recent files:1]]
+(use-package recentf
+	:defer 1
+	:straight (:type built-in)
+	:config
+	(recentf-mode 1))
+;; Save recent files:1 ends here

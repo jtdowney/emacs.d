@@ -1,9 +1,9 @@
 ;; [[file:../readme.org::*evil mode][evil mode:1]]
 (use-package evil
-	;; :general
-	;; (lc/leader-keys
-	;;   "wv" 'evil-window-vsplit
-	;;   "ws" 'evil-window-split)
+	:general
+	(jtd/leader-key
+		"wv" 'evil-window-vsplit
+		"ws" 'evil-window-split)
 	:custom
 	((evil-want-integration t)
 	 (evil-want-keybinding nil)
@@ -35,3 +35,13 @@
 	:config
 	(evil-collection-init))
 ;; evil-collection:1 ends here
+
+;; [[file:../readme.org::*Preview registers][Preview registers:1]]
+(use-package evil-owl
+	:defer 2
+	:custom
+	((evil-owl-max-string-length 500)
+	 (evil-owl-display-method 'window))
+	:config
+	(evil-owl-mode 1))
+;; Preview registers:1 ends here

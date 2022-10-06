@@ -1,4 +1,4 @@
-#+TITLE: Emacs config
+#+Title: Emacs config
 #+STARTUP: show3levels
 #+PROPERTY: header-args:emacs-lisp :comments link
 
@@ -85,12 +85,27 @@
 	(let ((file-name-handler-alist nil)
 	(gc-cons-threshold 100000000))
 		(load "init-core")
+		(load "init-keybindings")
 		(load "init-evil")
 		(load "init-ui")
 		(load "init-window")
+		(load "init-completion")
 		(load "init-org")
+		(load "init-prog")
 		)
 #+END_SRC
+
+** init.el: measure startup
+
+#+begin_src emacs-lisp :tangle init.el
+	(add-hook 'emacs-startup-hook
+			(lambda ()
+				(message "Emacs started in %s with %d garbage collections."
+					 (format "%.3f seconds"
+						 (float-time
+				(time-subtract after-init-time before-init-time)))
+					 gcs-done)))
+#+end_src
 
 * Package manager
 :PROPERTIES:
@@ -131,7 +146,7 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
   (setq use-package-compute-statistics t)
 #+END_SRC
 
-* Emacs
+* Core
 :PROPERTIES:
 :header-args: :tangle lisp/init-core.el
 :END:
@@ -256,6 +271,93 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 		(gcmh-mode 1))
 #+END_SRC
 
+** Save recent files
+
+#+begin_src emacs-lisp
+	(use-package recentf
+		:defer 1
+		:straight (:type built-in)
+		:config
+		(recentf-mode 1))
+#+end_src
+
+* Keybindings
+:PROPERTIES:
+:header-args: :tangle lisp/init-keybindings.el
+:END:
+
+** General
+
+#+begin_src emacs-lisp
+	(defun jtd/find-file-in-emacs ()
+		"Find files in the emacs configuration directory"
+		(interactive)
+		(ido-find-file-in-dir user-emacs-directory))
+
+	(defun jtd/switch-to-scratch-buffer ()
+		"Switch to the scratch buffer"
+		(interactive)
+		(switch-to-buffer "*scratch*"))
+
+	(defun jtd/copy-buffer ()
+		"Copy the entire buffer"
+		(interactive)
+		(mark-whole-buffer)
+		(kill-ring-save 0 0 t))
+
+	(use-package general
+		:config
+		(general-create-definer jtd/leader-key
+			:states '(normal visual)
+			:prefix "SPC"
+			:global-prefix "C-SPC")
+		(general-create-definer jtd/local-leader-key
+			:states '(normal visual motion)
+			:prefix ","
+			:global-prefix "C-,")
+
+		(general-def '(normal insert visual emacs) "C-@" (general-simulate-key "C-SPC"))
+
+		(jtd/leader-key
+			":" 'execute-extended-command
+			"a" '(:ignore t :wk "apps")
+			"b" '(:ignore t :wk "buffer")
+			"bK" 'kill-buffer-and-window
+			"bs" 'jtd/switch-to-scratch-buffer
+			"bY" 'jtd/copy-buffer
+			"f" '(:ignore t :wk "file")
+			"ff" '(find-file :wk "find file")
+			"fe" '(jtd/find-file-in-emacs :wk "find file in emacs.d")
+			"g" '(:ignore t :wk "git")
+			"h" '(:ignore t :wk "help")
+			"ha" 'apropos-command
+			"hf" 'helpful-function
+			"hk" 'helpful-key
+			"hm" 'helpful-macro
+			"ho" 'helpful-symbol
+			"hv" 'helpful-variable
+			"hx" 'helpful-command
+			"p" '(:ignore t :wk "project")
+			"s" '(:ignore t :wk "search")
+			"sj" '(imenu :wk "jump"))
+
+		(general-define-key
+		 :definer 'minor-mode
+		 :states '(normal motion)
+		 :keymaps 'outline-minor-mode
+		 "]h" 'outline-next-visible-heading
+		 "[h" 'outline-prev-visible-heading))
+#+end_src
+
+** Which key
+
+#+begin_src emacs-lisp
+	(use-package which-key
+		:hook (after-init . which-key-mode)
+		:custom
+		(which-key-idle-delay 1))
+#+end_src
+
 * Evil
 :PROPERTIES:
 :header-args: :tangle lisp/init-evil.el
@@ -265,10 +367,10 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 
 #+BEGIN_SRC emacs-lisp
 	(use-package evil
-		;; :general
-		;; (lc/leader-keys
-		;;   "wv" 'evil-window-vsplit
-		;;   "ws" 'evil-window-split)
+		:general
+		(jtd/leader-key
+		  "wv" 'evil-window-vsplit
+		  "ws" 'evil-window-split)
 		:custom
 		((evil-want-integration t)
 		 (evil-want-keybinding nil)
@@ -302,6 +404,18 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 		:config
 		(evil-collection-init))
 #+END_SRC
+
+** Preview registers
+
+#+begin_src emacs-lisp
+	(use-package evil-owl
+		:defer 2
+		:custom
+		((evil-owl-max-string-length 500)
+		 (evil-owl-display-method 'window))
+		:config
+		(evil-owl-mode 1))
+#+end_src
 
 * UI
 :PROPERTIES:
@@ -454,10 +568,30 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 		(delete 'mu4e-headers-mode emojify-inhibit-major-modes))
 #+end_src
 
+** Fill column indicator
+
+#+begin_src emacs-lisp
+	(use-package display-fill-column-indicator
+		:straight (:type built-in)
+		:hook
+		(prog-mode . display-fill-column-indicator-mode)
+		:custom
+		(fill-column 120))
+#+end_src
+
 * Window management
 :PROPERTIES:
 :header-args: :tangle lisp/init-window.el
 :END:
+
+** Disable built in
+
+#+begin_src emacs-lisp
+	(tab-bar-mode -1)
+	(tab-line-mode -1)
+
+	(global-unset-key (kbd "C-<tab>"))
+#+end_src
 
 ** Centaur tabs
 
@@ -513,6 +647,7 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 		(org-agenda-mode . centaur-tabs-local-mode)
 		(org-src-mode . centaur-tabs-local-mode)
 		(helpful-mode . centaur-tabs-local-mode)
+		(after-init . centaur-tabs-mode)
 		:bind
 		("C-<prior>" . centaur-tabs-backward)
 		("C-<next>" . centaur-tabs-forward)
@@ -524,6 +659,222 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 					("g T" . centaur-tabs-backward)))
 #+end_src
 
+** Golden ratio
+
+#+begin_src emacs-lisp
+	(use-package golden-ratio
+		:hook (after-init . golden-ratio-mode)
+		:custom
+		((golden-ratio-exclude-modes '(treemacs-mode imenu-list-major-mode))
+		 (golden-ratio-extra-commands
+			'(windmove-left
+				windmove-right
+				windmove-down
+				windmove-up
+				evil-window-left
+				evil-window-right
+				evil-window-up
+				evil-window-down
+				buf-move-left
+				buf-move-right
+				buf-move-up
+				buf-move-down
+				window-number-select
+				select-window
+				select-window-1
+				select-window-2
+				select-window-3
+				select-window-4
+				select-window-5
+				select-window-6
+				select-window-7
+				select-window-8
+				select-window-9)))
+		:config
+		(golden-ratio-mode 1))
+#+end_src
+
+** Transpose frame
+
+#+begin_src emacs-lisp
+	(use-package transpose-frame
+		:general
+		(jtd/leader-key
+			"wt" '(transpose-frame :wk "transpose")
+			"wf" '(rotate-frame :wk "flip")))
+#+end_src
+
+* Completion
+:PROPERTIES:
+:header-args: :tangle lisp/init-completion.el
+:END:
+
+** Ignore case
+
+#+begin_src emacs-lisp
+	(setq read-buffer-completion-ignore-case t
+				read-file-name-completion-ignore-case t
+				completion-ignore-case t)
+#+end_src
+
+** Vertico
+
+#+begin_src emacs-lisp
+	(use-package vertico
+		:hook (after-init . vertico-mode)
+		:straight (:files (:defaults "extensions/*"))
+		:bind (:map vertico-map
+								("C-j" . vertico-next)
+								("C-k" . vertico-previous)
+								("C-l" . vertico-insert)
+					 :map minibuffer-local-map
+								("M-h" . backward-kill-word))
+		:custom
+		(vertico-cycle t)
+		:config
+		(vertico-mode 1)
+		(advice-add #'vertico--format-candidate :around
+							(lambda (orig cand prefix suffix index _start)
+								(setq cand (funcall orig cand prefix suffix index _start))
+								(concat
+								 (if (= vertico--index index)
+										 (propertize "» " 'face 'vertico-current)
+									 "  ")
+								 cand))))
+
+	(use-package vertico-directory
+		:after vertico
+		:straight nil
+		:bind (:map vertico-map
+								("RET" . vertico-directory-enter)
+								("DEL" . vertico-directory-delete-char)
+								("M-DEL" . vertico-directory-delete-word))
+		:hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+#+end_src
+
+** Save history
+
+#+begin_src emacs-lisp
+	(use-package savehist
+		:after vertico
+		:config
+		(savehist-mode 1))
+#+end_src
+
+** Consult
+
+#+begin_src emacs-lisp
+	(use-package consult
+		:general
+		(jtd/leader-key
+			"bB" 'consult-buffer
+			"fr" 'consult-recent-file
+			"pb" 'consult-project-buffer
+			"so" 'consult-outline
+			"si" 'consult-isearch
+			"sr" 'consult-ripgrep
+			"ss" 'consult-line)
+		:init
+		(setq xref-show-xrefs-function #'consult-xref
+					xref-show-definitions-function #'consult-xref)  
+		:config
+		(autoload 'projectile-project-root "projectile")
+		(setq consult-project-root-function #'projectile-project-root))
+#+end_src
+
+** Embark
+
+#+begin_src emacs-lisp
+	(use-package embark
+		:bind
+		(("C-." . embark-act)
+		 ("C-;" . embark-dwim)
+		 ("C-h B" . embark-bindings))
+		:init
+		(setq prefix-help-command #'embark-prefix-help-command)
+		:config
+		(add-to-list 'display-buffer-alist
+								 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+									 nil
+									 (window-parameters (mode-line-format . none)))))
+
+	(use-package embark-consult
+		:after (embark consult)
+    :demand t
+		:hook
+		(embark-collect-mode . consult-preview-at-point-mode))
+#+end_src
+
+** Marginalia
+
+#+begin_src emacs-lisp
+	(use-package marginalia
+		:after vertico
+		:config
+		(marginalia-mode 1))
+#+end_src
+
+** Better search matching
+
+#+begin_src emacs-lisp
+	(use-package fussy
+		:after vertico
+		:config
+		(push 'fussy completion-styles)
+		(setq completion-category-defaults nil
+					completion-category-overrides nil))
+
+	(use-package orderless
+		:after fussy
+		:commands orderless-filter
+		:init
+		(setq fussy-filter-fn 'fussy-filter-orderless))
+#+end_src
+
+** Corfu
+
+#+begin_src emacs-lisp
+	(use-package corfu
+		:hook ((prog-mode . corfu-mode)
+					 (org-mode . corfu-mode))
+		:bind
+		(:map corfu-map
+					("C-j" . corfu-next)
+					("C-k" . corfu-previous))
+		:general
+		(evil-insert-state-map "C-k" nil)
+		:custom
+		(corfu-auto nil)
+		(corfu-cycle t)
+		(corfu-min-width 80)
+		(corfu-max-width corfu-min-width)
+		(corfu-preselect-first t)
+		:init
+		(defun corfu-enable-always-in-minibuffer ()
+			"Enable Corfu in the minibuffer if Vertico/Mct are not active."
+			(unless (or (bound-and-true-p mct--active) ; Useful if I ever use MCT
+									(bound-and-true-p vertico--input))
+				(setq-local corfu-auto nil)       ; Ensure auto completion is disabled
+				(corfu-mode 1)))
+		(add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1))
+
+	(use-package corfu-terminal
+		:if (not (display-graphic-p))
+		:config
+		(corfu-terminal-mode +1))
+#+end_src
+
+** Kind icon
+
+#+begin_src emacs-lisp
+	(use-package kind-icon
+		:after corfu
+		:custom
+		(kind-icon-default-face 'corfu-default)
+		:config
+		(add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+#+end_src
+
 * Org
 :PROPERTIES:
 :header-args: :tangle lisp/init-org.el
@@ -533,7 +884,121 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 
 #+begin_src emacs-lisp
 	(use-package org
-		:hook (org-mode . variable-pitch-mode))
+		:hook
+		(org-mode . variable-pitch-mode)
+		(org-mode . visual-line-mode)
+		:general
+		(jtd/leader-key
+			"o" '(:ignore t :wk "org")
+			"oa" 'org-agenda-list
+			"oc" 'org-capture
+			"om" 'org-tags-view
+			"oo" 'org-agenda
+			"ot" 'org-todo-list)
+		:custom
+		((org-agenda-files '("~/org/inbox.org"
+												 "~/org/projects.org"
+												 "~/org/tickler.org"))
+		 (org-refile-targets '(("~/org/projects.org" :maxlevel . 3)
+													 ("~/org/someday.org" :level . 1)
+													 ("~/org/tickler.org" :maxlevel . 2)))
+		 (org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
+		:config
+		(jtd/local-leader-key :keymaps 'org-mode-map
+			"!" 'org-time-stamp-inactive
+			"'" 'org-edit-special
+			"*" 'org-ctrl-c-star
+			"," 'org-ctrl-c-ctrl-c
+			"-" 'org-ctrl-c-minus
+			"." 'org-time-stamp
+			"/" 'org-sparse-tree
+			":" 'org-set-tags
+			"A" 'org-archive-subtree
+			"D" 'org-insert-drawer
+			"H" 'org-shiftleft
+			"I" 'org-clock-in
+			"J" 'org-shiftdown
+			"K" 'org-shiftup
+			"L" 'org-shiftright
+			"N" 'widen
+			"O" 'org-clock-out
+			"P" 'org-set-property
+			"R" 'org-refile
+			"Sh" 'org-promote-subtree
+			"Sj" 'org-move-subtree-down
+			"Sk" 'org-move-subtree-up
+			"Sl" 'org-demote-subtree
+			"T" 'org-show-todo-tree
+			"^" 'org-sort
+			"a" 'org-agenda
+			"b" 'org-tree-to-indirect-buffer
+			"c" 'org-capture
+			"d" 'org-deadline
+			"e" 'org-export-dispatch
+			"f" 'org-set-effort
+			"hI" 'org-insert-heading
+			"hi" 'org-insert-heading-after-current
+			"hs" 'org-insert-subheading
+			"ia" 'org-attach
+			"if" 'org-footnote-new
+			"il" 'org-insert-link
+			"l" 'org-open-at-point
+			"n" 'org-narrow-to-subtree
+			"q" 'org-clock-cancel
+			"s" 'org-schedule
+			"tE" 'org-table-export
+			"tH" 'org-table-move-column-left
+			"tI" 'org-table-import
+			"tJ" 'org-table-move-row-down
+			"tK" 'org-table-move-row-up
+			"tL" 'org-table-move-column-right
+			"tN" 'org-table-create-with-table.el
+			"ta" 'org-table-align
+			"tb" 'org-table-blank-field
+			"tc" 'org-table-convert
+			"tdc" 'org-table-delete-column
+			"tdr" 'org-table-kill-row
+			"te" 'org-table-eval-formula
+			"th" 'org-table-previous-field
+			"tiH" 'org-table-hline-and-move
+			"tic" 'org-table-insert-column
+			"tih" 'org-table-insert-hline
+			"tir" 'org-table-insert-row
+			"tj" 'org-table-next-row
+			"tl" 'org-table-next-field
+			"tn" 'org-table-create
+			"tr" 'org-table-recalculate
+			"ts" 'org-table-sort-lines
+			"ttf" 'org-table-toggle-formula-debugger
+			"tto" 'org-table-toggle-coordinate-overlays
+			"tw" 'org-table-wrap-region
+			"RET" 'org-ctrl-c-ret)
+		(jtd/local-leader-key
+			:definer 'minor-mode
+			:keymaps 'org-src-mode
+			"c" 'org-edit-src-exit
+			"a" 'org-edit-src-abort
+			"k" 'org-edit-src-abort)
+		(setq org-capture-templates
+					`(("b" "Books")
+						("bf" "Finished book" table-line
+						 (file+headline ,(concat org-directory "/books.org") "Finished")
+						 "| %^{Title} | %^{Author} | %u |")
+						("br" "Book to read" entry
+						 (file+headline ,(concat org-directory "/books.org") "To Read")
+						 "* %i%?\n")
+						("g" "GTD")
+						("gt" "Todo [inbox]" entry
+						 (file+headline ,(concat org-directory "/inbox.org") "Tasks")
+						 "* TODO %i%?")
+						("gT" "Tickler" entry
+						 (file+headline ,(concat org-directory "/tickler.org") "Tickler")
+						 "* %i%? \n %U")
+						("i" "Ideas")
+						("ib" "Blog idea" entry
+						 (file ,(concat org-directory "/blog-ideas.org"))
+						 "* %?\n")
+						)))
 #+end_src
 
 ** Evil integration
@@ -569,4 +1034,54 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 	(use-package org-modern
 		:init
 		(global-org-modern-mode))
+#+end_src
+
+* Programming
+:PROPERTIES:
+:header-args: :tangle lisp/init-prog.el
+:END:
+
+** Project management
+
+#+begin_src emacs-lisp
+	(use-package projectile
+		:defer 1
+		:general
+		(jtd/leader-key
+			"p" '(:keymap projectile-command-map :wk "projectile"))
+		:custom ((projectile-project-search-path '("~/code"))
+						 (projectile-switch-project-action #'projectile-dired))
+		:config
+		(projectile-mode 1))
+#+end_src
+
+** Version control
+
+*** magit
+
+#+begin_src emacs-lisp
+	(use-package magit
+		:general
+		(jtd/leader-key
+			"gb" 'magit-blame
+			"gl" 'magit-log
+			"gg" 'magit-status
+			"gG" 'magit-status-here))
+#+end_src
+
+*** Time machine
+
+#+begin_src emacs-lisp
+	(use-package git-timemachine
+		:hook
+		(git-time-machine-mode . evil-normalize-keymaps)
+		:custom
+		(git-timemachine-show-minibuffer-details t)
+		:general
+		(jtd/leader-key
+			"gt" 'git-timemachine)
+		(git-timemachine-mode-map
+		 "C-k" 'git-timemachine-show-previous-revision
+		 "C-j" 'git-timemachine-show-next-revision
+		 "q" 'git-timemachine-quit))
 #+end_src
