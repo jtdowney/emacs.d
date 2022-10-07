@@ -89,8 +89,10 @@
 		(load "init-evil")
 		(load "init-ui")
 		(load "init-window")
+		(load "init-navigation")
 		(load "init-completion")
 		(load "init-org")
+		(load "init-writing")
 		(load "init-prog")
 		)
 #+END_SRC
@@ -293,6 +295,14 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 		(recentf-mode 1))
 #+end_src
 
+** Highlight trailing whitespace
+
+#+begin_src emacs-lisp
+	(dolist (hook '(prog-mode-hook text-mode-hook))
+		(add-hook hook (lambda ())
+				(setq-local show-trailing-whitespace t)))
+#+end_src
+
 * Keybindings
 :PROPERTIES:
 :header-args: :tangle lisp/init-keybindings.el
@@ -317,6 +327,14 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 		(mark-whole-buffer)
 		(kill-ring-save 0 0 t))
 
+	(defun jtd/kill-other-buffers ()
+		"Kill all buffers but the current one.
+	Don't mess with special buffers."
+		(interactive)
+		(dolist (buffer (buffer-list))
+			(unless (or (eql buffer (current-buffer)) (not (buffer-file-name buffer)))
+				(kill-buffer buffer))))
+
 	(use-package general
 		:config
 		(general-create-definer jtd/leader-key
@@ -335,6 +353,7 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 			"a" '(:ignore t :wk "apps")
 			"b" '(:ignore t :wk "buffer")
 			"bk" 'kill-buffer-and-window
+			"bK" 'jtd/kill-other-buffers
 			"bs" 'jtd/switch-to-scratch-buffer
 			"bY" 'jtd/copy-buffer
 			"f" '(:ignore t :wk "file")
@@ -368,6 +387,12 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 		:hook (after-init . which-key-mode)
 		:custom
 		(which-key-idle-delay 1))
+#+end_src
+
+** Hydra
+
+#+begin_src emacs-lisp
+	(use-package hydra)
 #+end_src
 
 * Evil
@@ -600,6 +625,23 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 		(fill-column 120))
 #+end_src
 
+** Dashboard
+
+#+begin_src emacs-lisp
+	(use-package dashboard
+		:custom
+		(dashboard-project-backend 'projectile)
+		(dashboard-set-heading-icons t)
+		(dashboard-set-file-icons t)
+		(dashboard-banner-logo-title nil)
+		(dashboard-set-footer nil)
+		(dashboard-items '((agenda . 5)
+											 (recents . 5)
+											 (projects . 5)))
+		:config
+		(dashboard-setup-startup-hook))
+#+end_src
+
 * Window management
 :PROPERTIES:
 :header-args: :tangle lisp/init-window.el
@@ -723,6 +765,65 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 		(jtd/leader-key
 			"wt" '(transpose-frame :wk "transpose")
 			"wf" '(rotate-frame :wk "flip")))
+#+end_src
+
+* Navigation
+:PROPERTIES:
+:header-args: :tangle lisp/init-navigation.el
+:END:
+
+** Ranger
+
+#+begin_src emacs-lisp
+	(use-package ranger
+		:custom
+		(ranger-key "zp")
+		:general
+		(jtd/leader-key
+			"ar" 'ranger))
+#+end_src
+
+** dired
+
+#+begin_src emacs-lisp
+	(use-package dired
+		:straight (:type built-in)
+		:general
+		(jtd/leader-key
+			"ad" 'dired)
+		:config
+		(require 'dired-x)
+		(evil-define-key 'normal 'global
+		 (kbd "_") 'projectile-dired
+		 (kbd "-") 'dired-jump)
+		(evil-define-key 'normal dired-mode-map (kbd "SPC") nil)
+		(evil-define-key 'normal dired-mode-map "c" 'find-file))
+#+end_src
+
+** Treemacs
+
+#+begin_src emacs-lisp
+	(use-package treemacs
+		:custom
+		((treemacs-project-follow-mode t)
+		 (treemacs-follow-mode t)
+		 (treemacs-filewatch-mode t))
+		:general
+		(jtd/leader-key
+			"fd" 'treemacs-find-file
+			"ft" 'treemacs))
+
+	(use-package treemacs-evil
+		:after (treemacs evil))
+
+	(use-package treemacs-projectile
+		:after (treemacs projectile))
+
+	(use-package treemacs-icons-dired
+		:hook (dired-mode . treemacs-icons-dired-enable-once))
+
+	(use-package treemacs-magit
+		:after (treemacs magit))
 #+end_src
 
 * Completion
@@ -1057,6 +1158,33 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 		(org-mode . org-modern-mode))
 #+end_src
 
+* Writing
+:PROPERTIES:
+:header-args: :tangle lisp/init-writing.el
+:END:
+
+** Writeroom
+
+#+begin_src emacs-lisp
+	(use-package writeroom-mode
+		:commands writeroom-mode)
+#+end_src
+
+** Spelling
+
+#+begin_src emacs-lisp
+	(use-package flyspell
+		:custom
+		(ispell-program-name "aspell")
+		:hook ((text-mode . flyspell-mode))
+		(prog-mode . flyspell-prog-mode))
+
+	(use-package flyspell-correct
+		:after flyspell
+		:bind (:map flyspell-mode-map
+								("C-;" . flyspell-correct-wrapper)))
+#+end_src
+
 * Programming
 :PROPERTIES:
 :header-args: :tangle lisp/init-prog.el
@@ -1112,6 +1240,55 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 					 (magit-post-refresh . diff-hl-magit-post-refresh)))
 #+end_src
 
+*** smerge
+
+#+begin_src emacs-lisp
+	(use-package smerge-mode
+		:straight (:type built-in)
+		:after hydra
+		:general
+		(jtd/leader-key "gm" 'smerge-hydra/body)
+		:hook
+		(magit-diff-visit-file . (lambda ()
+															 (when smerge-mode
+																 (smerge-hydra/body))))
+		:init
+		(defhydra smerge-hydra (:hint nil
+																	:pre (smerge-mode 1)
+																	:post (smerge-auto-leave))
+			"
+																											╭────────┐
+		Movement   Keep           Diff              Other │ smerge │
+		╭─────────────────────────────────────────────────┴────────╯
+			 ^_g_^       [_b_] base       [_<_] upper/base    [_C_] Combine
+			 ^_C-k_^     [_u_] upper      [_=_] upper/lower   [_r_] resolve
+			 ^_k_ ↑^     [_l_] lower      [_>_] base/lower    [_R_] remove
+			 ^_j_ ↓^     [_a_] all        [_H_] hightlight
+			 ^_C-j_^     [_RET_] current  [_E_] ediff             ╭──────────
+			 ^_G_^                                            │ [_q_] quit"
+			("g" (progn (goto-char (point-min)) (smerge-next)))
+			("G" (progn (goto-char (point-max)) (smerge-prev)))
+			("C-j" smerge-next)
+			("C-k" smerge-prev)
+			("j" next-line)
+			("k" previous-line)
+			("b" smerge-keep-base)
+			("u" smerge-keep-upper)
+			("l" smerge-keep-lower)
+			("a" smerge-keep-all)
+			("RET" smerge-keep-current)
+			("\C-m" smerge-keep-current)
+			("<" smerge-diff-base-upper)
+			("=" smerge-diff-upper-lower)
+			(">" smerge-diff-base-lower)
+			("H" smerge-refine)
+			("E" smerge-ediff)
+			("C" smerge-combine-with-next)
+			("r" smerge-resolve)
+			("R" smerge-kill-current)
+			("q" nil :color blue)))
+#+end_src
+
 ** Project management
 
 #+begin_src emacs-lisp
@@ -1146,6 +1323,20 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 						(lambda ()
 							(when (derived-mode-p 'prog-mode)
 								(whitespace-cleanup))))
+#+end_src
+
+** Terminal emulation
+
+#+begin_src emacs-lisp
+	(use-package vterm
+		:general
+		(jtd/leader-key
+			"'" 'vterm))
+
+	(use-package vterm-toggle
+		:general
+		(jtd/leader-key
+			"`" 'vterm-toggle-cd))
 #+end_src
 
 ** Completion

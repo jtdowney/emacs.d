@@ -38,6 +38,53 @@
 				 (magit-post-refresh . diff-hl-magit-post-refresh)))
 ;; Highlight uncommitted changes:1 ends here
 
+;; [[file:../readme.org::*smerge][smerge:1]]
+(use-package smerge-mode
+	:straight (:type built-in)
+	:after hydra
+	:general
+	(jtd/leader-key "gm" 'smerge-hydra/body)
+	:hook
+	(magit-diff-visit-file . (lambda ()
+														 (when smerge-mode
+															 (smerge-hydra/body))))
+	:init
+	(defhydra smerge-hydra (:hint nil
+																:pre (smerge-mode 1)
+																:post (smerge-auto-leave))
+		"
+																										╭────────┐
+	Movement   Keep           Diff              Other │ smerge │
+	╭─────────────────────────────────────────────────┴────────╯
+		 ^_g_^       [_b_] base       [_<_] upper/base    [_C_] Combine
+		 ^_C-k_^     [_u_] upper      [_=_] upper/lower   [_r_] resolve
+		 ^_k_ ↑^     [_l_] lower      [_>_] base/lower    [_R_] remove
+		 ^_j_ ↓^     [_a_] all        [_H_] hightlight
+		 ^_C-j_^     [_RET_] current  [_E_] ediff             ╭──────────
+		 ^_G_^                                            │ [_q_] quit"
+		("g" (progn (goto-char (point-min)) (smerge-next)))
+		("G" (progn (goto-char (point-max)) (smerge-prev)))
+		("C-j" smerge-next)
+		("C-k" smerge-prev)
+		("j" next-line)
+		("k" previous-line)
+		("b" smerge-keep-base)
+		("u" smerge-keep-upper)
+		("l" smerge-keep-lower)
+		("a" smerge-keep-all)
+		("RET" smerge-keep-current)
+		("\C-m" smerge-keep-current)
+		("<" smerge-diff-base-upper)
+		("=" smerge-diff-upper-lower)
+		(">" smerge-diff-base-lower)
+		("H" smerge-refine)
+		("E" smerge-ediff)
+		("C" smerge-combine-with-next)
+		("r" smerge-resolve)
+		("R" smerge-kill-current)
+		("q" nil :color blue)))
+;; smerge:1 ends here
+
 ;; [[file:../readme.org::*Project management][Project management:1]]
 (use-package projectile
 	:defer 1
@@ -65,6 +112,18 @@
 						(when (derived-mode-p 'prog-mode)
 							(whitespace-cleanup))))
 ;; Delete trailing white space:1 ends here
+
+;; [[file:../readme.org::*Terminal emulation][Terminal emulation:1]]
+(use-package vterm
+	:general
+	(jtd/leader-key
+		"'" 'vterm))
+
+(use-package vterm-toggle
+	:general
+	(jtd/leader-key
+		"`" 'vterm-toggle-cd))
+;; Terminal emulation:1 ends here
 
 ;; [[file:../readme.org::*Completion][Completion:1]]
 (use-package company

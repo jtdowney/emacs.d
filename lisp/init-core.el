@@ -155,3 +155,9 @@
 	:config
 	(recentf-mode 1))
 ;; Save recent files:1 ends here
+
+;; [[file:../readme.org::*Highlight trailing whitespace][Highlight trailing whitespace:1]]
+(dolist (hook '(prog-mode-hook text-mode-hook))
+	(add-hook hook (lambda ())
+			(setq-local show-trailing-whitespace t)))
+;; Highlight trailing whitespace:1 ends here

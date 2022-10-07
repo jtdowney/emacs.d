@@ -15,6 +15,14 @@
 	(mark-whole-buffer)
 	(kill-ring-save 0 0 t))
 
+(defun jtd/kill-other-buffers ()
+	"Kill all buffers but the current one.
+Don't mess with special buffers."
+	(interactive)
+	(dolist (buffer (buffer-list))
+		(unless (or (eql buffer (current-buffer)) (not (buffer-file-name buffer)))
+			(kill-buffer buffer))))
+
 (use-package general
 	:config
 	(general-create-definer jtd/leader-key
@@ -33,6 +41,7 @@
 		"a" '(:ignore t :wk "apps")
 		"b" '(:ignore t :wk "buffer")
 		"bk" 'kill-buffer-and-window
+		"bK" 'jtd/kill-other-buffers
 		"bs" 'jtd/switch-to-scratch-buffer
 		"bY" 'jtd/copy-buffer
 		"f" '(:ignore t :wk "file")
@@ -65,3 +74,7 @@
 	:custom
 	(which-key-idle-delay 1))
 ;; Which key:1 ends here
+
+;; [[file:../readme.org::*Hydra][Hydra:1]]
+(use-package hydra)
+;; Hydra:1 ends here

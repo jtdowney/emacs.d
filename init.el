@@ -36,8 +36,10 @@
 	(load "init-evil")
 	(load "init-ui")
 	(load "init-window")
+	(load "init-navigation")
 	(load "init-completion")
 	(load "init-org")
+	(load "init-writing")
 	(load "init-prog")
 	)
 ;; init.el: load modules:1 ends here

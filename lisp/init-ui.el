@@ -126,3 +126,18 @@
 	:custom
 	(fill-column 120))
 ;; Fill column indicator:1 ends here
+
+;; [[file:../readme.org::*Dashboard][Dashboard:1]]
+(use-package dashboard
+	:custom
+	(dashboard-project-backend 'projectile)
+	(dashboard-set-heading-icons t)
+	(dashboard-set-file-icons t)
+	(dashboard-banner-logo-title nil)
+	(dashboard-set-footer nil)
+	(dashboard-items '((agenda . 5)
+										 (recents . 5)
+										 (projects . 5)))
+	:config
+	(dashboard-setup-startup-hook))
+;; Dashboard:1 ends here
