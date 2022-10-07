@@ -32,7 +32,7 @@
 		":" 'execute-extended-command
 		"a" '(:ignore t :wk "apps")
 		"b" '(:ignore t :wk "buffer")
-		"bK" 'kill-buffer-and-window
+		"bk" 'kill-buffer-and-window
 		"bs" 'jtd/switch-to-scratch-buffer
 		"bY" 'jtd/copy-buffer
 		"f" '(:ignore t :wk "file")

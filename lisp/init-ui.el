@@ -8,7 +8,7 @@
 ;; Font:1 ends here
 
 ;; [[file:../readme.org::*Highlight current line][Highlight current line:1]]
-(global-hl-line-mode t)
+(global-hl-line-mode 1)
 ;; Highlight current line:1 ends here
 
 ;; [[file:../readme.org::*Highlight indentation guides][Highlight indentation guides:1]]

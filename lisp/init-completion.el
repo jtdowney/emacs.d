@@ -48,7 +48,7 @@
 (use-package consult
 	:general
 	(jtd/leader-key
-		"bB" 'consult-buffer
+		"bb" 'consult-buffer
 		"fr" 'consult-recent-file
 		"pb" 'consult-project-buffer
 		"so" 'consult-outline
@@ -57,7 +57,7 @@
 		"ss" 'consult-line)
 	:init
 	(setq xref-show-xrefs-function #'consult-xref
-				xref-show-definitions-function #'consult-xref)  
+				xref-show-definitions-function #'consult-xref)
 	:config
 	(autoload 'projectile-project-root "projectile")
 	(setq consult-project-root-function #'projectile-project-root))
@@ -79,7 +79,7 @@
 
 (use-package embark-consult
 	:after (embark consult)
-  :demand t
+	:demand t
 	:hook
 	(embark-collect-mode . consult-preview-at-point-mode))
 ;; Embark:1 ends here

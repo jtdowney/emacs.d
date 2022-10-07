@@ -36,6 +36,13 @@
 	(evil-collection-init))
 ;; evil-collection:1 ends here
 
+;; [[file:../readme.org::*Surround][Surround:1]]
+(use-package evil-surround
+	:after evil
+	:hook
+	(after-init . global-evil-surround-mode))
+;; Surround:1 ends here
+
 ;; [[file:../readme.org::*Preview registers][Preview registers:1]]
 (use-package evil-owl
 	:defer 2

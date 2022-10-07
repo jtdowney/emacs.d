@@ -142,6 +142,6 @@
 
 ;; [[file:../readme.org::*Modern][Modern:1]]
 (use-package org-modern
-	:init
-	(global-org-modern-mode))
+	:hook
+	(org-mode . org-modern-mode))
 ;; Modern:1 ends here
