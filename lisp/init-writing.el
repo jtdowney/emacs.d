@@ -1,7 +1,14 @@
 ;; [[file:../readme.org::*Writeroom][Writeroom:1]]
 (use-package writeroom-mode
-	:commands writeroom-mode)
+	:general
+	(jtd/leader-key "tw" 'writeroom-mode))
 ;; Writeroom:1 ends here
+
+;; [[file:../readme.org::*Darkroom][Darkroom:1]]
+(use-package darkroom
+	:general
+	(jtd/leader-key "td" 'darkroom-tentative-mode))
+;; Darkroom:1 ends here
 
 ;; [[file:../readme.org::*Spelling][Spelling:1]]
 (use-package flyspell

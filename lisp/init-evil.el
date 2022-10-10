@@ -14,7 +14,7 @@
 	 (evil-want-C-u-scroll t)
 	 (evil-want-C-w-delete nil)
 	 (evil-want-Y-yank-to-eol t)
-	 ;; (evil-undo-system 'undo-fu)
+	 (evil-undo-system 'undo-fu)
 	 (evil-search-module 'evil-search)  ;; enables gn
 	 (evil-split-window-below t)
 	 (evil-vsplit-window-right t)

@@ -57,7 +57,8 @@
 	(org-agenda-mode . centaur-tabs-local-mode)
 	(org-src-mode . centaur-tabs-local-mode)
 	(helpful-mode . centaur-tabs-local-mode)
-	(after-init . centaur-tabs-mode)
+	:general
+	(jtd/leader-key "tt" 'centaur-tabs-mode)
 	:bind
 	("C-<prior>" . centaur-tabs-backward)
 	("C-<next>" . centaur-tabs-forward)

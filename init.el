@@ -41,6 +41,7 @@
 	(load "init-org")
 	(load "init-writing")
 	(load "init-prog")
+	(load "init-apps")
 	)
 ;; init.el: load modules:1 ends here
 

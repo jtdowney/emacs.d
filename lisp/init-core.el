@@ -109,6 +109,15 @@
 	(setq tab-always-indent 'complete))
 ;; Sane defaults:1 ends here
 
+;; [[file:../readme.org::*Private configuration][Private configuration:1]]
+(add-hook
+ 'after-init-hook
+ (lambda ()
+	 (let ((private-file (concat user-emacs-directory "private.el")))
+		 (when (file-exists-p private-file)
+			 (load-file private-file)))))
+;; Private configuration:1 ends here
+
 ;; [[file:../readme.org::*Zoom][Zoom:1]]
 (use-package emacs
 	:init
@@ -161,3 +170,28 @@
 	(add-hook hook (lambda ())
 			(setq-local show-trailing-whitespace t)))
 ;; Highlight trailing whitespace:1 ends here
+
+;; [[file:../readme.org::*Undo][Undo:1]]
+(use-package undo-fu)
+;; Undo:1 ends here
+
+;; [[file:../readme.org::*Tramp][Tramp:1]]
+(use-package tramp
+	:defer 1
+	:straight (:type built-in)
+	:custom
+	(vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)"
+																vc-ignore-dir-regexp
+																tramp-file-name-regexp))
+	(tramp-default-method "ssh")
+	(tramp-auto-save-directory (expand-file-name "tramp-auto-save" user-emacs-directory))
+	(tramp-persistency-file-name (expand-file-name "tramp-connection-history" user-emacs-directory))
+	(tramp-use-ssh-controlmaster-options nil)
+	(remote-file-name-inhibit-cache nil)
+	(tramp-ssh-controlmaster-options (concat
+																		"-o ControlPath=/tmp/ssh-tramp-%%r@%%h:%%p "
+																		"-o ControlMaster=auto -o ControlPersist=yes")))
+
+(use-package docker-tramp
+	:defer 2)
+;; Tramp:1 ends here
