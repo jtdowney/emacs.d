@@ -1171,6 +1171,8 @@ If you’d like to see how many packages you’ve loaded, what stage of initiali
 	(use-package evil-org
 		:hook (org-mode . evil-org-mode)
 		:config
+		(require 'evil-org-agenda)
+		(evil-org-agenda-set-keys)
 		(evil-org-set-key-theme '(textobjects
 															insert
 															navigation

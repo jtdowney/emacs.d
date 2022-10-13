@@ -121,6 +121,8 @@
 (use-package evil-org
 	:hook (org-mode . evil-org-mode)
 	:config
+	(require 'evil-org-agenda)
+	(evil-org-agenda-set-keys)
 	(evil-org-set-key-theme '(textobjects
 														insert
 														navigation
