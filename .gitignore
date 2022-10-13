@@ -1,5 +1,6 @@
 /.cache
 /.lsp*
+/bookmarks
 /config.el
 /custom.el
 /eln-cache
