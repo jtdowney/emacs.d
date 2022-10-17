@@ -6,21 +6,21 @@
 ;; may cause problems on builds of Emacs where its site lisp files aren't
 ;; byte-compiled and we're forced to load the *.el.gz files (e.g. on Alpine)
 (unless (daemonp)
-	(defvar doom--initial-file-name-handler-alist file-name-handler-alist)
-	(setq file-name-handler-alist nil)
-	;; Restore `file-name-handler-alist' later, because it is needed for handling
-	;; encrypted or compressed files, among other things.
-	(defun doom-reset-file-handler-alist-h ()
-		;; Re-add rather than `setq', because changes to `file-name-handler-alist'
-		;; since startup ought to be preserved.
-		(dolist (handler file-name-handler-alist)
-			(add-to-list 'doom--initial-file-name-handler-alist handler))
-		(setq file-name-handler-alist doom--initial-file-name-handler-alist))
-	(add-hook 'emacs-startup-hook #'doom-reset-file-handler-alist-h)
-	(add-hook 'after-init-hook (lambda ()
-																;; restore after startup
-																(setq gc-cons-threshold 16777216
-																			gc-cons-percentage 0.1))))
+  (defvar doom--initial-file-name-handler-alist file-name-handler-alist)
+  (setq file-name-handler-alist nil)
+  ;; Restore `file-name-handler-alist' later, because it is needed for handling
+  ;; encrypted or compressed files, among other things.
+  (defun doom-reset-file-handler-alist-h ()
+    ;; Re-add rather than `setq', because changes to `file-name-handler-alist'
+    ;; since startup ought to be preserved.
+    (dolist (handler file-name-handler-alist)
+      (add-to-list 'doom--initial-file-name-handler-alist handler))
+    (setq file-name-handler-alist doom--initial-file-name-handler-alist))
+  (add-hook 'emacs-startup-hook #'doom-reset-file-handler-alist-h)
+  (add-hook 'after-init-hook (lambda ()
+			       ;; restore after startup
+			       (setq gc-cons-threshold 16777216
+				     gc-cons-percentage 0.1))))
 
 ;; Ensure Doom is running out of this file's directory
 (setq user-emacs-directory (file-truename (file-name-directory load-file-name)))
@@ -30,27 +30,27 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (let ((file-name-handler-alist nil)
-(gc-cons-threshold 100000000))
-	(load "init-core")
-	(load "init-keybindings")
-	(load "init-evil")
-	(load "init-ui")
-	(load "init-window")
-	(load "init-navigation")
-	(load "init-completion")
-	(load "init-org")
-	(load "init-writing")
-	(load "init-prog")
-	(load "init-apps")
-	)
+      (gc-cons-threshold 100000000))
+  (load "init-core")
+  (load "init-keybindings")
+  (load "init-evil")
+  (load "init-ui")
+  (load "init-window")
+  (load "init-navigation")
+  (load "init-completion")
+  (load "init-org")
+  (load "init-writing")
+  (load "init-prog")
+  (load "init-apps")
+  )
 ;; init.el: load modules:1 ends here
 
 ;; [[file:readme.org::*init.el: measure startup][init.el: measure startup:1]]
 (add-hook 'emacs-startup-hook
-		(lambda ()
-			(message "Emacs started in %s with %d garbage collections."
-				 (format "%.3f seconds"
-					 (float-time
-			(time-subtract after-init-time before-init-time)))
-				 gcs-done)))
+	  (lambda ()
+	    (message "Emacs started in %s with %d garbage collections."
+		     (format "%.3f seconds"
+			     (float-time
+			      (time-subtract after-init-time before-init-time)))
+		     gcs-done)))
 ;; init.el: measure startup:1 ends here
