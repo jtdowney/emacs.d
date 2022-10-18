@@ -14,12 +14,12 @@
     ;; Re-add rather than `setq', because changes to `file-name-handler-alist'
     ;; since startup ought to be preserved.
     (dolist (handler file-name-handler-alist)
-      (add-to-list 'doom--initial-file-name-handler-alist handler))
+(add-to-list 'doom--initial-file-name-handler-alist handler))
     (setq file-name-handler-alist doom--initial-file-name-handler-alist))
   (add-hook 'emacs-startup-hook #'doom-reset-file-handler-alist-h)
   (add-hook 'after-init-hook (lambda ()
-			       ;; restore after startup
-			       (setq gc-cons-threshold 16777216
+			 ;; restore after startup
+			 (setq gc-cons-threshold 16777216
 				     gc-cons-percentage 0.1))))
 
 ;; Ensure Doom is running out of this file's directory
@@ -30,7 +30,7 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (let ((file-name-handler-alist nil)
-      (gc-cons-threshold 100000000))
+(gc-cons-threshold 100000000))
   (load "init-core")
   (load "init-keybindings")
   (load "init-evil")
@@ -51,6 +51,6 @@
 	    (message "Emacs started in %s with %d garbage collections."
 		     (format "%.3f seconds"
 			     (float-time
-			      (time-subtract after-init-time before-init-time)))
+			(time-subtract after-init-time before-init-time)))
 		     gcs-done)))
 ;; init.el: measure startup:1 ends here

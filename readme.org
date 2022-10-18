@@ -351,16 +351,18 @@
       (unless (or (eql buffer (current-buffer)) (not (buffer-file-name buffer)))
 	(kill-buffer buffer))))
 
-  (use-package general
-    :config
-    (general-create-definer jtd/leader-key
-      :states '(normal visual)
-      :prefix "SPC"
-      :global-prefix "C-SPC")
-    (general-create-definer jtd/local-leader-key
-      :states '(normal visual motion)
-      :prefix ","
-      :global-prefix "C-,")
+	(use-package general
+		:config
+		(general-evil-setup)
+	
+		(general-create-definer jtd/leader-key
+			:states '(normal visual)
+			:prefix "SPC"
+			:global-prefix "C-SPC")
+		(general-create-definer jtd/local-leader-key
+			:states '(normal visual motion)
+			:prefix ","
+			:global-prefix "C-,")
 
     (general-def '(normal insert visual emacs) "C-@" (general-simulate-key "C-SPC"))
 
@@ -660,7 +662,7 @@
   (tab-bar-mode -1)
   (tab-line-mode -1)
 
-  (global-unset-key (kbd "C-<tab>"))
+	(global-unset-key (kbd "C-<tab>"))
 #+end_src
 
 ** Golden ratio
@@ -707,6 +709,33 @@
       "wf" '(rotate-frame :wk "flip")))
 #+end_src
 
+** Perspective
+
+#+begin_src emacs-lisp
+	(use-package perspective
+		:demand
+		:after consult
+		:custom
+		(persp-state-default-file (expand-file-name ".persp" user-emacs-directory))
+		(persp-mode-prefix-key (kbd "C-c M-p"))
+		:general
+		(jtd/leader-key
+			"TAB" '(:ignore true :wk "tab")
+			"TAB TAB" 'persp-switch
+			"TAB `" 'persp-switch-last
+			"TAB d" 'persp-kill
+			"TAB h" 'persp-prev
+			"TAB l" 'persp-next
+			"TAB x" '((lambda () (interactive) (persp-kill (persp-current-name))) :wk "kill current")
+			"TAB X" '((lambda () (interactive) (persp-kill (persp-names))) :wk "kill all"))
+		:init
+		:config
+		(persp-mode)
+		(consult-customize consult--source-buffer :hidden t :default nil)
+		(add-to-list 'consult-buffer-sources persp-consult-source)
+		(add-hook 'kill-emacs-hook #'persp-state-save))
+#+end_src
+
 * Navigation
 :PROPERTIES:
 :header-args: :tangle lisp/init-navigation.el
@@ -726,18 +755,18 @@
 ** dired
 
 #+begin_src emacs-lisp
-  (use-package dired
-    :straight (:type built-in)
-    :general
-    (jtd/leader-key
-      "ad" 'dired)
-    :config
-    (require 'dired-x)
-    (evil-define-key 'normal 'global
-      (kbd "_") 'projectile-dired
-      (kbd "-") 'dired-jump)
-    (evil-define-key 'normal dired-mode-map (kbd "SPC") nil)
-    (evil-define-key 'normal dired-mode-map "c" 'find-file))
+	(use-package dired
+		:straight (:type built-in)
+		:general
+		(jtd/leader-key
+			"ad" 'dired)
+		(general-nmap
+			"-" 'dired-jump)
+		(general-nmap dired-mode-map
+									"SPC" nil
+									"c" 'find-file)
+		:config
+		(require 'dired-x))
 #+end_src
 
 ** Treemacs
@@ -1244,14 +1273,16 @@
 ** Project management
 
 #+begin_src emacs-lisp
-  (use-package projectile
-    :hook
-    (after-init . projectile-mode)
-    :general
-    (jtd/leader-key
-      "p" '(:keymap projectile-command-map :wk "projectile"))
-    :custom ((projectile-project-search-path '("~/code"))
-	     (projectile-switch-project-action #'projectile-dired)))
+	(use-package projectile
+		:hook
+		(after-init . projectile-mode)
+		:general
+		(jtd/leader-key
+			"p" '(:keymap projectile-command-map :wk "projectile"))
+		(general-nmap dired-mode-map
+			"_" 'projectile-dired)
+		:custom ((projectile-project-search-path '("~/code"))
+						 (projectile-switch-project-action #'projectile-dired)))
 #+end_src
 
 ** Comments

@@ -9,17 +9,17 @@
 
 ;; [[file:../readme.org::*dired][dired:1]]
 (use-package dired
-  :straight (:type built-in)
-  :general
-  (jtd/leader-key
-    "ad" 'dired)
-  :config
-  (require 'dired-x)
-  (evil-define-key 'normal 'global
-    (kbd "_") 'projectile-dired
-    (kbd "-") 'dired-jump)
-  (evil-define-key 'normal dired-mode-map (kbd "SPC") nil)
-  (evil-define-key 'normal dired-mode-map "c" 'find-file))
+	:straight (:type built-in)
+	:general
+	(jtd/leader-key
+		"ad" 'dired)
+	(general-nmap
+		"-" 'dired-jump)
+	(general-nmap dired-mode-map
+								"SPC" nil
+								"c" 'find-file)
+	:config
+	(require 'dired-x))
 ;; dired:1 ends here
 
 ;; [[file:../readme.org::*Treemacs][Treemacs:1]]
