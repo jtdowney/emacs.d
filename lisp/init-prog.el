@@ -159,6 +159,10 @@
   :hook (prog-mode . smartparens-mode))
 ;; Smartparens:1 ends here
 
+;; [[file:../readme.org::*Docker][Docker:1]]
+(use-package dockerfile-mode)
+;; Docker:1 ends here
+
 ;; [[file:../readme.org::*Lispy][Lispy:1]]
 (use-package lispy
   :hook (emacs-lisp-mode . lispy-mode))

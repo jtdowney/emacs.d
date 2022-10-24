@@ -151,21 +151,19 @@
 
 ;; [[file:../readme.org::*Tramp][Tramp:1]]
 (use-package tramp
-  :defer 1
   :straight (:type built-in)
-  :custom
-  (vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)"
-				vc-ignore-dir-regexp
-				tramp-file-name-regexp))
-  (tramp-default-method "ssh")
-  (tramp-auto-save-directory (expand-file-name "tramp-auto-save" user-emacs-directory))
-  (tramp-persistency-file-name (expand-file-name "tramp-connection-history" user-emacs-directory))
-  (tramp-use-ssh-controlmaster-options nil)
-  (remote-file-name-inhibit-cache nil)
-  (tramp-ssh-controlmaster-options (concat
-				    "-o ControlPath=/tmp/ssh-tramp-%%r@%%h:%%p "
-				    "-o ControlMaster=auto -o ControlPersist=yes")))
+  :config
+  (setq vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)"
+				     vc-ignore-dir-regexp
+				     tramp-file-name-regexp)
+	tramp-default-method "ssh"
+	tramp-auto-save-directory (expand-file-name "tramp-auto-save" user-emacs-directory)
+	tramp-persistency-file-name (expand-file-name "tramp-connection-history" user-emacs-directory)
+	tramp-use-ssh-controlmaster-options nil
+	remote-file-name-inhibit-cache nil
+	tramp-ssh-controlmaster-options (concat
+					 "-o ControlPath=/tmp/ssh-tramp-%%r@%%h:%%p "
+					 "-o ControlMaster=auto -o ControlPersist=yes")))
 
-(use-package docker-tramp
-  :defer 2)
+(use-package docker-tramp)
 ;; Tramp:1 ends here

@@ -1,5 +1,4 @@
 #+Title: Emacs configuration
-
 #+STARTUP: show3levels
 #+PROPERTY: header-args:emacs-lisp :comments link
 
@@ -297,24 +296,22 @@
 ** Tramp
 
 #+begin_src emacs-lisp
-	(use-package tramp
-		:defer 1
-		:straight (:type built-in)
-		:custom
-		(vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)"
-																	vc-ignore-dir-regexp
-																	tramp-file-name-regexp))
-		(tramp-default-method "ssh")
-		(tramp-auto-save-directory (expand-file-name "tramp-auto-save" user-emacs-directory))
-		(tramp-persistency-file-name (expand-file-name "tramp-connection-history" user-emacs-directory))
-		(tramp-use-ssh-controlmaster-options nil)
-		(remote-file-name-inhibit-cache nil)
-		(tramp-ssh-controlmaster-options (concat
-																			"-o ControlPath=/tmp/ssh-tramp-%%r@%%h:%%p "
-																			"-o ControlMaster=auto -o ControlPersist=yes")))
+  (use-package tramp
+    :straight (:type built-in)
+    :config
+    (setq vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)"
+				       vc-ignore-dir-regexp
+				       tramp-file-name-regexp)
+	  tramp-default-method "ssh"
+	  tramp-auto-save-directory (expand-file-name "tramp-auto-save" user-emacs-directory)
+	  tramp-persistency-file-name (expand-file-name "tramp-connection-history" user-emacs-directory)
+	  tramp-use-ssh-controlmaster-options nil
+	  remote-file-name-inhibit-cache nil
+	  tramp-ssh-controlmaster-options (concat
+					   "-o ControlPath=/tmp/ssh-tramp-%%r@%%h:%%p "
+					   "-o ControlMaster=auto -o ControlPersist=yes")))
 
-	(use-package docker-tramp
-		:defer 2)
+  (use-package docker-tramp)
 #+end_src
 
 * Keybindings
@@ -1360,6 +1357,12 @@
 #+begin_src emacs-lisp
   (use-package smartparens
     :hook (prog-mode . smartparens-mode))
+#+end_src
+
+** Docker
+
+#+begin_src emacs-lisp
+  (use-package dockerfile-mode)
 #+end_src
 
 ** Lisps
