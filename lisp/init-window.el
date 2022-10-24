@@ -2,7 +2,7 @@
 (tab-bar-mode -1)
 (tab-line-mode -1)
 
-(global-unset-key (kbd "C-<tab>"))
+      (global-unset-key (kbd "C-<tab>"))
 ;; Disable built in:1 ends here
 
 ;; [[file:../readme.org::*Golden ratio][Golden ratio:1]]

@@ -13,8 +13,8 @@
     "ot" 'org-todo-list)
   :custom
   ((org-agenda-files '("~/org/inbox.org"
-		 "~/org/projects.org"
-		 "~/org/tickler.org"))
+		       "~/org/projects.org"
+		       "~/org/tickler.org"))
    (org-refile-targets '(("~/org/projects.org" :maxlevel . 3)
 			 ("~/org/someday.org" :level . 1)
 			 ("~/org/tickler.org" :maxlevel . 2)))

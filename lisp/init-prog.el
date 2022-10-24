@@ -15,9 +15,9 @@
 ;; [[file:../readme.org::*Time machine][Time machine:1]]
 (use-package git-timemachine
   :straight (:package "git-timemachine"
-		:type git
-		:host nil
-		:repo "https://codeberg.org/pidu/git-timemachine.git")
+		      :type git
+		      :host nil
+		      :repo "https://codeberg.org/pidu/git-timemachine.git")
   :hook
   (git-time-machine-mode . evil-normalize-keymaps)
   :custom
@@ -47,7 +47,7 @@
   :hook
   (magit-diff-visit-file . (lambda ()
 			     (when smerge-mode
-			 (smerge-hydra/body))))
+			       (smerge-hydra/body))))
   :init
   (defhydra smerge-hydra (:hint nil
 				:pre (smerge-mode 1)
@@ -111,7 +111,7 @@
 (add-hook 'before-save-hook
 	  (lambda ()
 	    (when (derived-mode-p 'prog-mode)
-	(whitespace-cleanup))))
+	      (whitespace-cleanup))))
 ;; Delete trailing white space:1 ends here
 
 ;; [[file:../readme.org::*Terminal emulation][Terminal emulation:1]]
@@ -173,10 +173,10 @@
   :hook (lispy-mode . lispyville-mode)
   :config
   (lispyville-set-key-theme '((operators normal)
-			c-w
-			(prettify insert)
-			(atom-movement t)
-			slurp/barf-lispy
-			additional
-			additional-insert)))
+			      c-w
+			      (prettify insert)
+			      (atom-movement t)
+			      slurp/barf-lispy
+			      additional
+			      additional-insert)))
 ;; Lispyville:1 ends here

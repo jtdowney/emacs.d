@@ -1,7 +1,7 @@
 ;; [[file:../readme.org::*Ignore case][Ignore case:1]]
 (setq read-buffer-completion-ignore-case t
-read-file-name-completion-ignore-case t
-completion-ignore-case t)
+      read-file-name-completion-ignore-case t
+      completion-ignore-case t)
 ;; Ignore case:1 ends here
 
 ;; [[file:../readme.org::*Vertico][Vertico:1]]
@@ -9,17 +9,17 @@ completion-ignore-case t)
   :demand
   :straight (:files (:defaults "extensions/*"))
   :bind (:map vertico-map
-	("C-j" . vertico-next)
-	("C-k" . vertico-previous)
-	("C-l" . vertico-insert)
-	:map minibuffer-local-map
-	("M-h" . backward-kill-word))
+	      ("C-j" . vertico-next)
+	      ("C-k" . vertico-previous)
+	      ("C-l" . vertico-insert)
+	      :map minibuffer-local-map
+	      ("M-h" . backward-kill-word))
   :custom
   (vertico-cycle t)
   :config
   (vertico-mode 1)
   (advice-add #'vertico--format-candidate :around
-	(lambda (orig cand prefix suffix index _start)
+	      (lambda (orig cand prefix suffix index _start)
 		(setq cand (funcall orig cand prefix suffix index _start))
 		(concat
 		 (if (= vertico--index index)
@@ -31,9 +31,9 @@ completion-ignore-case t)
   :after vertico
   :straight nil
   :bind (:map vertico-map
-	("RET" . vertico-directory-enter)
-	("DEL" . vertico-directory-delete-char)
-	("M-DEL" . vertico-directory-delete-word))
+	      ("RET" . vertico-directory-enter)
+	      ("DEL" . vertico-directory-delete-char)
+	      ("M-DEL" . vertico-directory-delete-word))
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 ;; Vertico:1 ends here
 
@@ -73,7 +73,7 @@ completion-ignore-case t)
   (setq prefix-help-command #'embark-prefix-help-command)
   :config
   (add-to-list 'display-buffer-alist
-	 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+	       '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
 		 nil
 		 (window-parameters (mode-line-format . none)))))
 
@@ -127,8 +127,8 @@ completion-ignore-case t)
     "Enable Corfu in the minibuffer if Vertico/Mct are not active."
     (unless (or (bound-and-true-p mct--active) ; Useful if I ever use MCT
 		(bound-and-true-p vertico--input))
-(setq-local corfu-auto nil)       ; Ensure auto completion is disabled
-(corfu-mode 1)))
+      (setq-local corfu-auto nil)       ; Ensure auto completion is disabled
+      (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1))
 
 (use-package corfu-terminal

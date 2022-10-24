@@ -21,5 +21,5 @@
 (use-package flyspell-correct
   :after flyspell
   :bind (:map flyspell-mode-map
-	("C-;" . flyspell-correct-wrapper)))
+	      ("C-;" . flyspell-correct-wrapper)))
 ;; Spelling:1 ends here
