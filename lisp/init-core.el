@@ -149,6 +149,7 @@
 
 ;; [[file:../readme.org::*Tramp][Tramp:1]]
 (use-package tramp
+  :defer 1 
   :straight (:type built-in)
   :config
   (setq vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)"
@@ -163,5 +164,6 @@
 					 "-o ControlPath=/tmp/ssh-tramp-%%r@%%h:%%p "
 					 "-o ControlMaster=auto -o ControlPersist=yes")))
 
-(use-package docker-tramp)
+(use-package docker-tramp
+  :defer 2)
 ;; Tramp:1 ends here

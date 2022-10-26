@@ -29,6 +29,7 @@
 
 ;; [[file:../readme.org::*evil-collection][evil-collection:1]]
 (use-package evil-collection
+  :defer 1
   :after evil
   :config
   (evil-collection-init))

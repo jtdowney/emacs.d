@@ -23,18 +23,18 @@ Don't mess with special buffers."
     (unless (or (eql buffer (current-buffer)) (not (buffer-file-name buffer)))
       (kill-buffer buffer))))
 
-      (use-package general
-	      :config
-	      (general-evil-setup)
+(use-package general
+  :config
+  (general-evil-setup)
 
-	      (general-create-definer jtd/leader-key
-		      :states '(normal visual)
-		      :prefix "SPC"
-		      :global-prefix "C-SPC")
-	      (general-create-definer jtd/local-leader-key
-		      :states '(normal visual motion)
-		      :prefix ","
-		      :global-prefix "C-,")
+  (general-create-definer jtd/leader-key
+    :states '(normal visual)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+  (general-create-definer jtd/local-leader-key
+    :states '(normal visual motion)
+    :prefix ","
+    :global-prefix "C-,")
 
   (general-def '(normal insert visual emacs) "C-@" (general-simulate-key "C-SPC"))
 
@@ -58,7 +58,6 @@ Don't mess with special buffers."
     "ho" 'helpful-symbol
     "hv" 'helpful-variable
     "hx" 'helpful-command
-    "p" '(:ignore t :wk "project")
     "s" '(:ignore t :wk "search")
     "sj" '(imenu :wk "jump")
     "t" '(:ignore t :wk "tabs")

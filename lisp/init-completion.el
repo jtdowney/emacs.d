@@ -59,8 +59,7 @@
   (setq xref-show-xrefs-function #'consult-xref
 	xref-show-definitions-function #'consult-xref)
   :config
-  (autoload 'projectile-project-root "projectile")
-  (setq consult-project-root-function #'projectile-project-root))
+  (setq consult-project-root-function #'project-root))
 ;; Consult:1 ends here
 
 ;; [[file:../readme.org::*Embark][Embark:1]]

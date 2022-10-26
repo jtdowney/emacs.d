@@ -26,8 +26,7 @@
   :custom
   (doom-modeline-buffer-encoding nil)
   (doom-modeline-env-enable-python nil)
-  (doom-modeline-height 15)
-  (doom-modeline-project-detection 'projectile))
+  (doom-modeline-height 15))
 ;; Doom modeline:1 ends here
 
 ;; [[file:../readme.org::*All the icons][All the icons:1]]
@@ -123,7 +122,7 @@
 ;; [[file:../readme.org::*Dashboard][Dashboard:1]]
 (use-package dashboard
   :custom
-  (dashboard-project-backend 'projectile)
+  (dashboard-projects-backend 'project-el)
   (dashboard-set-heading-icons t)
   (dashboard-set-file-icons t)
   (dashboard-banner-logo-title nil)

@@ -297,6 +297,7 @@
 
 #+begin_src emacs-lisp
   (use-package tramp
+    :defer 1 
     :straight (:type built-in)
     :config
     (setq vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)"
@@ -311,7 +312,8 @@
 					   "-o ControlPath=/tmp/ssh-tramp-%%r@%%h:%%p "
 					   "-o ControlMaster=auto -o ControlPersist=yes")))
 
-  (use-package docker-tramp)
+  (use-package docker-tramp
+    :defer 2)
 #+end_src
 
 * Keybindings
@@ -346,18 +348,18 @@
       (unless (or (eql buffer (current-buffer)) (not (buffer-file-name buffer)))
 	(kill-buffer buffer))))
 
-	(use-package general
-		:config
-		(general-evil-setup)
-	
-		(general-create-definer jtd/leader-key
-			:states '(normal visual)
-			:prefix "SPC"
-			:global-prefix "C-SPC")
-		(general-create-definer jtd/local-leader-key
-			:states '(normal visual motion)
-			:prefix ","
-			:global-prefix "C-,")
+  (use-package general
+    :config
+    (general-evil-setup)
+
+    (general-create-definer jtd/leader-key
+      :states '(normal visual)
+      :prefix "SPC"
+      :global-prefix "C-SPC")
+    (general-create-definer jtd/local-leader-key
+      :states '(normal visual motion)
+      :prefix ","
+      :global-prefix "C-,")
 
     (general-def '(normal insert visual emacs) "C-@" (general-simulate-key "C-SPC"))
 
@@ -381,7 +383,6 @@
       "ho" 'helpful-symbol
       "hv" 'helpful-variable
       "hx" 'helpful-command
-      "p" '(:ignore t :wk "project")
       "s" '(:ignore t :wk "search")
       "sj" '(imenu :wk "jump")
       "t" '(:ignore t :wk "tabs")
@@ -451,6 +452,7 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package evil-collection
+    :defer 1
     :after evil
     :config
     (evil-collection-init))
@@ -519,8 +521,7 @@
     :custom
     (doom-modeline-buffer-encoding nil)
     (doom-modeline-env-enable-python nil)
-    (doom-modeline-height 15)
-    (doom-modeline-project-detection 'projectile))
+    (doom-modeline-height 15))
 #+END_SRC
 
 ** All the icons
@@ -634,7 +635,7 @@
 #+begin_src emacs-lisp
   (use-package dashboard
     :custom
-    (dashboard-project-backend 'projectile)
+    (dashboard-projects-backend 'project-el)
     (dashboard-set-heading-icons t)
     (dashboard-set-file-icons t)
     (dashboard-banner-logo-title nil)
@@ -750,18 +751,18 @@
 ** dired
 
 #+begin_src emacs-lisp
-	(use-package dired
-		:straight (:type built-in)
-		:general
-		(jtd/leader-key
-			"ad" 'dired)
-		(general-nmap
-			"-" 'dired-jump)
-		(general-nmap dired-mode-map
-									"SPC" nil
-									"c" 'find-file)
-		:config
-		(require 'dired-x))
+  (use-package dired
+    :straight (:type built-in)
+    :general
+    (jtd/leader-key
+      "ad" 'dired)
+    (general-nmap
+      "-" 'dired-jump)
+    (general-nmap dired-mode-map
+      "c" 'find-file)
+    :config
+    (require 'dired-x)
+    (evil-define-key 'normal dired-mode-map (kbd "SPC") nil))
 #+end_src
 
 ** Treemacs
@@ -779,9 +780,6 @@
 
   (use-package treemacs-evil
     :after (treemacs evil))
-
-  (use-package treemacs-projectile
-    :after (treemacs projectile))
 
   (use-package treemacs-icons-dired
     :hook (dired-mode . treemacs-icons-dired-enable-once))
@@ -864,8 +862,7 @@
     (setq xref-show-xrefs-function #'consult-xref
 	  xref-show-definitions-function #'consult-xref)
     :config
-    (autoload 'projectile-project-root "projectile")
-    (setq consult-project-root-function #'projectile-project-root))
+    (setq consult-project-root-function #'project-root))
 #+end_src
 
 ** Embark
@@ -1268,16 +1265,15 @@
 ** Project management
 
 #+begin_src emacs-lisp
-	(use-package projectile
-		:hook
-		(after-init . projectile-mode)
-		:general
-		(jtd/leader-key
-			"p" '(:keymap projectile-command-map :wk "projectile"))
-		(general-nmap dired-mode-map
-			"_" 'projectile-dired)
-		:custom ((projectile-project-search-path '("~/code"))
-						 (projectile-switch-project-action #'projectile-dired)))
+  (use-package project
+    :straight (:type built-in)
+    :general
+    (jtd/leader-key
+      "p" '(:ignore t :wk "project")
+      "pD" 'project-dired
+      "pf" 'project-find-file
+      "pk" 'project-kill-buffers
+      "pp" 'project-switch-project))
 #+end_src
 
 ** Comments
@@ -1342,7 +1338,7 @@
     (tree-sitter-after-on-hook . tree-sitter-hl-mode))
 
   (use-package tree-sitter-langs
-    :after tree-sitter)
+    :defer 1)
 #+end_src
 
 ** Rainbow Delimiters
@@ -1362,7 +1358,8 @@
 ** Docker
 
 #+begin_src emacs-lisp
-  (use-package dockerfile-mode)
+  (use-package dockerfile-mode
+    :commands dockerfile-mode)
 #+end_src
 
 ** Lisps

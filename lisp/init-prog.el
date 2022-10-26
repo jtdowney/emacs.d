@@ -86,16 +86,15 @@
 ;; smerge:1 ends here
 
 ;; [[file:../readme.org::*Project management][Project management:1]]
-(use-package projectile
-	:hook
-	(after-init . projectile-mode)
-	:general
-	(jtd/leader-key
-		"p" '(:keymap projectile-command-map :wk "projectile"))
-	(general-nmap dired-mode-map
-		"_" 'projectile-dired)
-	:custom ((projectile-project-search-path '("~/code"))
-					 (projectile-switch-project-action #'projectile-dired)))
+(use-package project
+  :straight (:type built-in)
+  :general
+  (jtd/leader-key
+    "p" '(:ignore t :wk "project")
+    "pD" 'project-dired
+    "pf" 'project-find-file
+    "pk" 'project-kill-buffers
+    "pp" 'project-switch-project))
 ;; Project management:1 ends here
 
 ;; [[file:../readme.org::*Comments][Comments:1]]
@@ -146,7 +145,7 @@
   (tree-sitter-after-on-hook . tree-sitter-hl-mode))
 
 (use-package tree-sitter-langs
-  :after tree-sitter)
+  :defer 1)
 ;; Tree sitter:1 ends here
 
 ;; [[file:../readme.org::*Rainbow Delimiters][Rainbow Delimiters:1]]
@@ -160,7 +159,8 @@
 ;; Smartparens:1 ends here
 
 ;; [[file:../readme.org::*Docker][Docker:1]]
-(use-package dockerfile-mode)
+(use-package dockerfile-mode
+  :commands dockerfile-mode)
 ;; Docker:1 ends here
 
 ;; [[file:../readme.org::*Lispy][Lispy:1]]
