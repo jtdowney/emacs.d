@@ -6,16 +6,16 @@
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
-			 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-			(bootstrap-version 6))
-	(unless (file-exists-p bootstrap-file)
-		(with-current-buffer
-				(url-retrieve-synchronously
-				 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-				 'silent 'inhibit-cookies)
-			(goto-char (point-max))
-			(eval-print-last-sexp)))
-	(load bootstrap-file nil 'nomessage))
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+	(url-retrieve-synchronously
+	 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+	 'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'use-package)
 
@@ -23,8 +23,8 @@
 ;; bootstrap straight and straight-use-package:1 ends here
 
 ;; [[file:../readme.org::*Enable use-package statistics][Enable use-package statistics:1]]
+(setq use-package-always-defer t)
 (setq use-package-compute-statistics t)
-;; (setq use-package-verbose t)
 ;; Enable use-package statistics:1 ends here
 
 ;; [[file:../readme.org::*Sane defaults][Sane defaults:1]]
@@ -35,6 +35,7 @@
 
   (inhibit-startup-screen t)
   (initial-scratch-message nil)
+  (initial-major-mode 'text-mode)
 
   (sentence-end-double-space nil)
   (ring-bell-function 'ignore)
@@ -83,9 +84,9 @@
 (add-hook
  'after-init-hook
  (lambda ()
-	 (let ((private-file (concat user-emacs-directory "private.el")))
-		 (when (file-exists-p private-file)
-			 (load-file private-file)))))
+   (let ((private-file (concat user-emacs-directory "private.el")))
+     (when (file-exists-p private-file)
+       (load-file private-file)))))
 ;; Private configuration:1 ends here
 
 ;; [[file:../readme.org::*Zoom][Zoom:1]]
@@ -129,7 +130,7 @@
 (use-package recentf
   :straight (:type built-in)
   :hook
-  (on-first-file . recentf-mode)
+  (after-init . recentf-mode)
   :custom
   (recentf-exclude `(,(expand-file-name "straight/build/" user-emacs-directory)
 		     ,(expand-file-name "eln-cache/" user-emacs-directory)

@@ -1,5 +1,5 @@
 /.cache
-/.lsp*
+/.persp
 /bookmarks
 /config.el
 /custom.el

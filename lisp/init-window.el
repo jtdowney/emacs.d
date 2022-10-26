@@ -2,7 +2,7 @@
 (tab-bar-mode -1)
 (tab-line-mode -1)
 
-      (global-unset-key (kbd "C-<tab>"))
+(global-unset-key (kbd "C-<tab>"))
 ;; Disable built in:1 ends here
 
 ;; [[file:../readme.org::*Golden ratio][Golden ratio:1]]
@@ -47,25 +47,25 @@
 
 ;; [[file:../readme.org::*Perspective][Perspective:1]]
 (use-package perspective
-	:demand
-	:after consult
-	:custom
-	(persp-state-default-file (expand-file-name ".persp" user-emacs-directory))
-	(persp-mode-prefix-key (kbd "C-c M-p"))
-	:general
-	(jtd/leader-key
-		"TAB" '(:ignore true :wk "tab")
-		"TAB TAB" 'persp-switch
-		"TAB `" 'persp-switch-last
-		"TAB d" 'persp-kill
-		"TAB h" 'persp-prev
-		"TAB l" 'persp-next
-		"TAB x" '((lambda () (interactive) (persp-kill (persp-current-name))) :wk "kill current")
-		"TAB X" '((lambda () (interactive) (persp-kill (persp-names))) :wk "kill all"))
-	:init
-	:config
-	(persp-mode)
-	(consult-customize consult--source-buffer :hidden t :default nil)
-	(add-to-list 'consult-buffer-sources persp-consult-source)
-	(add-hook 'kill-emacs-hook #'persp-state-save))
+  :demand
+  :after consult
+  :custom
+  (persp-state-default-file (expand-file-name ".persp" user-emacs-directory))
+  (persp-mode-prefix-key (kbd "C-c M-p"))
+  :general
+  (jtd/leader-key
+    "TAB" '(:ignore true :wk "tab")
+    "TAB TAB" 'persp-switch
+    "TAB `" 'persp-switch-last
+    "TAB d" 'persp-kill
+    "TAB h" 'persp-prev
+    "TAB l" 'persp-next
+    "TAB x" '((lambda () (interactive) (persp-kill (persp-current-name))) :wk "kill current")
+    "TAB X" '((lambda () (interactive) (persp-kill (persp-names))) :wk "kill all"))
+  :init
+  :config
+  (persp-mode)
+  (consult-customize consult--source-buffer :hidden t :default nil)
+  (add-to-list 'consult-buffer-sources persp-consult-source)
+  (add-hook 'kill-emacs-hook #'persp-state-save))
 ;; Perspective:1 ends here

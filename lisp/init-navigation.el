@@ -18,8 +18,7 @@
   (general-nmap dired-mode-map
     "c" 'find-file)
   :config
-  (require 'dired-x)
-  (evil-define-key 'normal dired-mode-map (kbd "SPC") nil))
+  (require 'dired-x))
 ;; dired:1 ends here
 
 ;; [[file:../readme.org::*Treemacs][Treemacs:1]]

@@ -33,9 +33,10 @@
 
 ;; [[file:../readme.org::*Highlight uncommitted changes][Highlight uncommitted changes:1]]
 (use-package diff-hl
-  :hook (((prog-mode text-mode vc-dir-mode) . diff-hl-mode)
-	 (magit-pre-refresh . diff-hl-magit-pre-refresh)
-	 (magit-post-refresh . diff-hl-magit-post-refresh)))
+  :hook
+  ((prog-mode text-mode vc-dir-mode) . diff-hl-mode)
+  (magit-pre-refresh . diff-hl-magit-pre-refresh)
+  (magit-post-refresh . diff-hl-magit-post-refresh))
 ;; Highlight uncommitted changes:1 ends here
 
 ;; [[file:../readme.org::*smerge][smerge:1]]
@@ -142,7 +143,7 @@
 (use-package tree-sitter
   :hook
   (on-first-buffer . global-tree-sitter-mode)
-  (tree-sitter-after-on-hook . tree-sitter-hl-mode))
+  (tree-sitter-after-on . tree-sitter-hl-mode))
 
 (use-package tree-sitter-langs
   :defer 1)
@@ -160,7 +161,7 @@
 
 ;; [[file:../readme.org::*Docker][Docker:1]]
 (use-package dockerfile-mode
-  :commands dockerfile-mode)
+  :defer t)
 ;; Docker:1 ends here
 
 ;; [[file:../readme.org::*Lispy][Lispy:1]]
@@ -180,3 +181,17 @@
 			      additional
 			      additional-insert)))
 ;; Lispyville:1 ends here
+
+;; [[file:../readme.org::*Eglot][Eglot:1]]
+(use-package eglot
+  :commands eglot)
+;; Eglot:1 ends here
+
+;; [[file:../readme.org::*Rust][Rust:1]]
+(use-package rustic
+  :defer t
+  :hook
+  (rustic-mode . eglot-ensure)
+  :custom
+  (rustic-lsp-client 'eglot))
+;; Rust:1 ends here

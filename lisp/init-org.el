@@ -1,5 +1,6 @@
 ;; [[file:../readme.org::*Org mode][Org mode:1]]
 (use-package org
+  :defer t
   :hook
   (org-mode . variable-pitch-mode)
   (org-mode . visual-line-mode)
@@ -12,13 +13,13 @@
     "oo" 'org-agenda
     "ot" 'org-todo-list)
   :custom
-  ((org-agenda-files '("~/org/inbox.org"
-		       "~/org/projects.org"
-		       "~/org/tickler.org"))
-   (org-refile-targets '(("~/org/projects.org" :maxlevel . 3)
-			 ("~/org/someday.org" :level . 1)
-			 ("~/org/tickler.org" :maxlevel . 2)))
-   (org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
+  (org-agenda-files '("~/org/inbox.org"
+		      "~/org/projects.org"
+		      "~/org/tickler.org"))
+  (org-refile-targets '(("~/org/projects.org" :maxlevel . 3)
+			("~/org/someday.org" :level . 1)
+			("~/org/tickler.org" :maxlevel . 2)))
+  (org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
   :config
   (jtd/local-leader-key :keymaps 'org-mode-map
     "!" 'org-time-stamp-inactive

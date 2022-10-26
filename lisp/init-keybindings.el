@@ -16,8 +16,7 @@
   (kill-ring-save 0 0 t))
 
 (defun jtd/kill-other-buffers ()
-  "Kill all buffers but the current one.
-Don't mess with special buffers."
+  "Kill all buffers but the current one. Don't mess with special buffers."
   (interactive)
   (dolist (buffer (buffer-list))
     (unless (or (eql buffer (current-buffer)) (not (buffer-file-name buffer)))
@@ -28,6 +27,7 @@ Don't mess with special buffers."
   (general-evil-setup)
 
   (general-create-definer jtd/leader-key
+    :keymaps 'override
     :states '(normal visual)
     :prefix "SPC"
     :global-prefix "C-SPC")

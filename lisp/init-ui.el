@@ -121,14 +121,14 @@
 
 ;; [[file:../readme.org::*Dashboard][Dashboard:1]]
 (use-package dashboard
+  :demand t
   :custom
   (dashboard-projects-backend 'project-el)
   (dashboard-set-heading-icons t)
   (dashboard-set-file-icons t)
   (dashboard-banner-logo-title nil)
   (dashboard-set-footer nil)
-  (dashboard-items '((agenda . 5)
-		     (recents . 5)
+  (dashboard-items '((recents . 5)
 		     (projects . 5)))
   :config
   (dashboard-setup-startup-hook))

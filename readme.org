@@ -118,34 +118,34 @@
 ** bootstrap straight and straight-use-package
 
 #+BEGIN_SRC emacs-lisp
-	(setq straight-use-package-by-default t)
-	(setq straight-vc-git-default-clone-depth 1)
-	(setq straight-recipes-gnu-elpa-use-mirror t)
-	(setq straight-check-for-modifications nil)
+  (setq straight-use-package-by-default t)
+  (setq straight-vc-git-default-clone-depth 1)
+  (setq straight-recipes-gnu-elpa-use-mirror t)
+  (setq straight-check-for-modifications nil)
 
-	(defvar bootstrap-version)
-	(let ((bootstrap-file
-				 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-				(bootstrap-version 6))
-		(unless (file-exists-p bootstrap-file)
-			(with-current-buffer
-					(url-retrieve-synchronously
-					 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-					 'silent 'inhibit-cookies)
-				(goto-char (point-max))
-				(eval-print-last-sexp)))
-		(load bootstrap-file nil 'nomessage))
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	(bootstrap-version 6))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+	  (url-retrieve-synchronously
+	   "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+	   'silent 'inhibit-cookies)
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
 
-	(straight-use-package 'use-package)
+  (straight-use-package 'use-package)
 
-	(setq comp-deferred-compilation-black-list nil)
+  (setq comp-deferred-compilation-black-list nil)
 #+END_SRC
 
 ** Enable use-package statistics
 
 #+BEGIN_SRC emacs-lisp
+  (setq use-package-always-defer t)
   (setq use-package-compute-statistics t)
-  ;; (setq use-package-verbose t)
 #+END_SRC
 
 * Core
@@ -163,6 +163,7 @@
 
     (inhibit-startup-screen t)
     (initial-scratch-message nil)
+    (initial-major-mode 'text-mode)
 
     (sentence-end-double-space nil)
     (ring-bell-function 'ignore)
@@ -212,19 +213,19 @@
 ** Private configuration
 
 #+begin_src emacs-lisp
-	(add-hook
-	 'after-init-hook
-	 (lambda ()
-		 (let ((private-file (concat user-emacs-directory "private.el")))
-			 (when (file-exists-p private-file)
-				 (load-file private-file)))))
+  (add-hook
+   'after-init-hook
+   (lambda ()
+     (let ((private-file (concat user-emacs-directory "private.el")))
+       (when (file-exists-p private-file)
+	 (load-file private-file)))))
 #+end_src
 
 ** Zoom
 
 #+BEGIN_SRC emacs-lisp
-	(global-set-key (kbd "C-=") 'text-scale-increase)
-	(global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "C-=") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
 #+END_SRC
 
 ** macOS
@@ -271,7 +272,7 @@
   (use-package recentf
     :straight (:type built-in)
     :hook
-    (on-first-file . recentf-mode)
+    (after-init . recentf-mode)
     :custom
     (recentf-exclude `(,(expand-file-name "straight/build/" user-emacs-directory)
 		       ,(expand-file-name "eln-cache/" user-emacs-directory)
@@ -341,8 +342,7 @@
     (kill-ring-save 0 0 t))
 
   (defun jtd/kill-other-buffers ()
-    "Kill all buffers but the current one.
-  Don't mess with special buffers."
+    "Kill all buffers but the current one. Don't mess with special buffers."
     (interactive)
     (dolist (buffer (buffer-list))
       (unless (or (eql buffer (current-buffer)) (not (buffer-file-name buffer)))
@@ -353,6 +353,7 @@
     (general-evil-setup)
 
     (general-create-definer jtd/leader-key
+      :keymaps 'override
       :states '(normal visual)
       :prefix "SPC"
       :global-prefix "C-SPC")
@@ -634,14 +635,14 @@
 
 #+begin_src emacs-lisp
   (use-package dashboard
+    :demand t
     :custom
     (dashboard-projects-backend 'project-el)
     (dashboard-set-heading-icons t)
     (dashboard-set-file-icons t)
     (dashboard-banner-logo-title nil)
     (dashboard-set-footer nil)
-    (dashboard-items '((agenda . 5)
-		       (recents . 5)
+    (dashboard-items '((recents . 5)
 		       (projects . 5)))
     :config
     (dashboard-setup-startup-hook))
@@ -658,7 +659,7 @@
   (tab-bar-mode -1)
   (tab-line-mode -1)
 
-	(global-unset-key (kbd "C-<tab>"))
+  (global-unset-key (kbd "C-<tab>"))
 #+end_src
 
 ** Golden ratio
@@ -708,28 +709,28 @@
 ** Perspective
 
 #+begin_src emacs-lisp
-	(use-package perspective
-		:demand
-		:after consult
-		:custom
-		(persp-state-default-file (expand-file-name ".persp" user-emacs-directory))
-		(persp-mode-prefix-key (kbd "C-c M-p"))
-		:general
-		(jtd/leader-key
-			"TAB" '(:ignore true :wk "tab")
-			"TAB TAB" 'persp-switch
-			"TAB `" 'persp-switch-last
-			"TAB d" 'persp-kill
-			"TAB h" 'persp-prev
-			"TAB l" 'persp-next
-			"TAB x" '((lambda () (interactive) (persp-kill (persp-current-name))) :wk "kill current")
-			"TAB X" '((lambda () (interactive) (persp-kill (persp-names))) :wk "kill all"))
-		:init
-		:config
-		(persp-mode)
-		(consult-customize consult--source-buffer :hidden t :default nil)
-		(add-to-list 'consult-buffer-sources persp-consult-source)
-		(add-hook 'kill-emacs-hook #'persp-state-save))
+  (use-package perspective
+    :demand
+    :after consult
+    :custom
+    (persp-state-default-file (expand-file-name ".persp" user-emacs-directory))
+    (persp-mode-prefix-key (kbd "C-c M-p"))
+    :general
+    (jtd/leader-key
+      "TAB" '(:ignore true :wk "tab")
+      "TAB TAB" 'persp-switch
+      "TAB `" 'persp-switch-last
+      "TAB d" 'persp-kill
+      "TAB h" 'persp-prev
+      "TAB l" 'persp-next
+      "TAB x" '((lambda () (interactive) (persp-kill (persp-current-name))) :wk "kill current")
+      "TAB X" '((lambda () (interactive) (persp-kill (persp-names))) :wk "kill all"))
+    :init
+    :config
+    (persp-mode)
+    (consult-customize consult--source-buffer :hidden t :default nil)
+    (add-to-list 'consult-buffer-sources persp-consult-source)
+    (add-hook 'kill-emacs-hook #'persp-state-save))
 #+end_src
 
 * Navigation
@@ -761,8 +762,7 @@
     (general-nmap dired-mode-map
       "c" 'find-file)
     :config
-    (require 'dired-x)
-    (evil-define-key 'normal dired-mode-map (kbd "SPC") nil))
+    (require 'dired-x))
 #+end_src
 
 ** Treemacs
@@ -967,6 +967,7 @@
 
 #+begin_src emacs-lisp
   (use-package org
+    :defer t
     :hook
     (org-mode . variable-pitch-mode)
     (org-mode . visual-line-mode)
@@ -979,13 +980,13 @@
       "oo" 'org-agenda
       "ot" 'org-todo-list)
     :custom
-    ((org-agenda-files '("~/org/inbox.org"
-			 "~/org/projects.org"
-			 "~/org/tickler.org"))
-     (org-refile-targets '(("~/org/projects.org" :maxlevel . 3)
-			   ("~/org/someday.org" :level . 1)
-			   ("~/org/tickler.org" :maxlevel . 2)))
-     (org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
+    (org-agenda-files '("~/org/inbox.org"
+			"~/org/projects.org"
+			"~/org/tickler.org"))
+    (org-refile-targets '(("~/org/projects.org" :maxlevel . 3)
+			  ("~/org/someday.org" :level . 1)
+			  ("~/org/tickler.org" :maxlevel . 2)))
+    (org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
     :config
     (jtd/local-leader-key :keymaps 'org-mode-map
       "!" 'org-time-stamp-inactive
@@ -1208,9 +1209,10 @@
 
 #+begin_src emacs-lisp
   (use-package diff-hl
-    :hook (((prog-mode text-mode vc-dir-mode) . diff-hl-mode)
-	   (magit-pre-refresh . diff-hl-magit-pre-refresh)
-	   (magit-post-refresh . diff-hl-magit-post-refresh)))
+    :hook
+    ((prog-mode text-mode vc-dir-mode) . diff-hl-mode)
+    (magit-pre-refresh . diff-hl-magit-pre-refresh)
+    (magit-post-refresh . diff-hl-magit-post-refresh))
 #+end_src
 
 *** smerge
@@ -1335,7 +1337,7 @@
   (use-package tree-sitter
     :hook
     (on-first-buffer . global-tree-sitter-mode)
-    (tree-sitter-after-on-hook . tree-sitter-hl-mode))
+    (tree-sitter-after-on . tree-sitter-hl-mode))
 
   (use-package tree-sitter-langs
     :defer 1)
@@ -1359,7 +1361,7 @@
 
 #+begin_src emacs-lisp
   (use-package dockerfile-mode
-    :commands dockerfile-mode)
+    :defer t)
 #+end_src
 
 ** Lisps
@@ -1385,6 +1387,25 @@
 				additional
 				additional-insert)))
 #+end_src
+
+** Eglot
+
+#+begin_src emacs-lisp
+  (use-package eglot
+    :commands eglot)
+#+end_src
+
+** Rust
+
+#+begin_src emacs-lisp
+  (use-package rustic
+    :defer t
+    :hook
+    (rustic-mode . eglot-ensure)
+    :custom
+    (rustic-lsp-client 'eglot))
+#+end_src
+
 * Apps
 :PROPERTIES:
 :header-args: :tangle lisp/init-apps.el
