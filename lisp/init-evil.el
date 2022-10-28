@@ -19,7 +19,7 @@
    (evil-search-module 'evil-search-module 'evil-search)  ;; enables gn
    (evil-split-window-below t)
    (evil-vsplit-window-right t)
-   (evil-auto-indent nil)
+   (evil-auto-indent t)
    (evil-want-C-w-in-emacs-state t))
   :init
   (evil-mode 1)

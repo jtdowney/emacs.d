@@ -6,7 +6,7 @@
 
 ;; [[file:../readme.org::*Vertico][Vertico:1]]
 (use-package vertico
-  :demand
+  :demand t
   :straight (:files (:defaults "extensions/*"))
   :bind (:map vertico-map
 	      ("C-j" . vertico-next)
@@ -28,6 +28,7 @@
 		 cand))))
 
 (use-package vertico-directory
+  :demand t
   :after vertico
   :straight nil
   :bind (:map vertico-map
@@ -39,6 +40,7 @@
 
 ;; [[file:../readme.org::*Save history][Save history:1]]
 (use-package savehist
+  :demand t
   :after vertico
   :hook
   (on-first-input . savehist-mode))
@@ -92,6 +94,7 @@
 
 ;; [[file:../readme.org::*Better search matching][Better search matching:1]]
 (use-package fussy
+  :demand t
   :after vertico
   :config
   (push 'fussy completion-styles)
@@ -99,6 +102,7 @@
 	completion-category-overrides nil))
 
 (use-package orderless
+  :demand t
   :after fussy
   :commands orderless-filter
   :init
@@ -138,6 +142,7 @@
 
 ;; [[file:../readme.org::*Kind icon][Kind icon:1]]
 (use-package kind-icon
+  :demand t
   :after corfu
   :custom
   (kind-icon-default-face 'corfu-default)

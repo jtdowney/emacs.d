@@ -184,14 +184,36 @@
 
 ;; [[file:../readme.org::*Eglot][Eglot:1]]
 (use-package eglot
-  :commands eglot)
+  :general
+  (jtd/local-leader-key eglot-mode-map
+    "l" '(:ignore t :wk "lsp")
+    "la" 'eglot-code-actions
+    "lf" 'eglot-format
+    "lh" 'eldoc
+    "lr" 'eglot-rename))
 ;; Eglot:1 ends here
 
 ;; [[file:../readme.org::*Rust][Rust:1]]
 (use-package rustic
-  :defer t
   :hook
   (rustic-mode . eglot-ensure)
   :custom
-  (rustic-lsp-client 'eglot))
+  (rustic-lsp-client 'eglot)
+  :general
+  (jtd/local-leader-key
+    :keymaps 'rustic-mode-map
+    "=" 'rustic-cargo-fmt
+    "c" '(:ignore t :wk "cargo")
+    "cC" 'rustic-cargo-clippy
+    "ca" 'rustic-cargo-add
+    "cb" 'rustic-cargo-build
+    "cc" 'rustic-cargo-check
+    "cd" 'rustic-cargo-doc
+    "cf" 'rustic-cargo-clippy-fix
+    "co" 'rustic-cargo-outdated
+    "cu" 'rustic-cargo-upgrade
+    "cx" 'rustic-cargo-run
+    "t" '(:ignore t :wk "test")
+    "ta" 'rustic-cargo-test
+    "tt" 'rustic-cargo-current-test))
 ;; Rust:1 ends here
