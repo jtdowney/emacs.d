@@ -38,6 +38,7 @@
   (load "init-window")
   (load "init-navigation")
   (load "init-completion")
+  (load "init-search")
   (load "init-org")
   (load "init-writing")
   (load "init-prog")

@@ -91,6 +91,7 @@
     (load "init-window")
     (load "init-navigation")
     (load "init-completion")
+    (load "init-search")
     (load "init-org")
     (load "init-writing")
     (load "init-prog")
@@ -961,6 +962,25 @@
     (kind-icon-default-face 'corfu-default)
     :config
     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+#+end_src
+
+* Search
+:PROPERTIES:
+:header-args: :tangle lisp/init-search.el
+:END:
+
+** Avy
+
+#+begin_src emacs-lisp
+  (use-package avy
+    :general
+    (jtd/leader-key
+      "SPC" 'evil-avy-goto-subword-1
+      "j" '(:ignore t :wk "jump")
+      "jJ" 'evil-avy-goto-char-2
+      "jj" 'evil-avy-goto-char
+      "jl" 'evil-avy-goto-line
+      "jw" 'evil-avy-goto-subword-1))
 #+end_src
 
 * Org
