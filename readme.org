@@ -1173,6 +1173,7 @@
 
 #+begin_src emacs-lisp
   (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+  (add-hook 'conf-mode-hook #'display-line-numbers-mode)
 #+end_src
 
 ** Version control
