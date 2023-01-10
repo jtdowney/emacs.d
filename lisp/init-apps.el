@@ -24,6 +24,7 @@
 (use-package mu4e
   :straight nil
   :custom
+  (mu4e-attachment-dir (expand-file-name "~/Downloads"))
   (mu4e-headers-fields '((:human-date . 12)
 			 (:flags . 6)
 			 (:from . 22)

@@ -112,11 +112,11 @@
 ;; [[file:../readme.org::*Corfu][Corfu:1]]
 (use-package corfu
   :hook ((prog-mode . corfu-mode)
-	 (org-mode . corfu-mode))
+         (org-mode . corfu-mode))
   :bind
   (:map corfu-map
-	("C-j" . corfu-next)
-	("C-k" . corfu-previous))
+        ("C-j" . corfu-next)
+        ("C-k" . corfu-previous))
   :general
   (evil-insert-state-map "C-k" nil)
   :custom
@@ -129,7 +129,7 @@
   (defun corfu-enable-always-in-minibuffer ()
     "Enable Corfu in the minibuffer if Vertico/Mct are not active."
     (unless (or (bound-and-true-p mct--active) ; Useful if I ever use MCT
-		(bound-and-true-p vertico--input))
+                (bound-and-true-p vertico--input))
       (setq-local corfu-auto nil)       ; Ensure auto completion is disabled
       (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1))
@@ -138,6 +138,23 @@
   :if (not (display-graphic-p))
   :config
   (corfu-terminal-mode +1))
+
+(use-package cape
+  :init
+  ;; Add `completion-at-point-functions', used by `completion-at-point'.
+  ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  ;;(add-to-list 'completion-at-point-functions #'cape-history)
+  ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
+  ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+  ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
+  ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+  ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
+  ;;(add-to-list 'completion-at-point-functions #'cape-ispell)
+  ;;(add-to-list 'completion-at-point-functions #'cape-dict)
+  ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
+  ;;(add-to-list 'completion-at-point-functions #'cape-line)
+)
 ;; Corfu:1 ends here
 
 ;; [[file:../readme.org::*Kind icon][Kind icon:1]]

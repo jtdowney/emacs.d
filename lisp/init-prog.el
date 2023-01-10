@@ -1,5 +1,6 @@
 ;; [[file:../readme.org::*Line numbers][Line numbers:1]]
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+(add-hook 'conf-mode-hook #'display-line-numbers-mode)
 ;; Line numbers:1 ends here
 
 ;; [[file:../readme.org::*magit][magit:1]]
@@ -133,10 +134,21 @@
   (company-minimum-prefix-length 1))
 ;; Completion:1 ends here
 
+;; [[file:../readme.org::*Snippets][Snippets:1]]
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
+
+(use-package yasnippet-snippets
+  :after yasnippet)
+
+(use-package company-yasnippet
+  :straight (:type built-in))
+;; Snippets:1 ends here
+
 ;; [[file:../readme.org::*Formatting][Formatting:1]]
 (use-package apheleia
-  :hook
-  (on-first-file . apheleia-global-mode))
+  :commands apheleia-mode)
 ;; Formatting:1 ends here
 
 ;; [[file:../readme.org::*Tree sitter][Tree sitter:1]]
@@ -183,7 +195,19 @@
 ;; Lispyville:1 ends here
 
 ;; [[file:../readme.org::*Eglot][Eglot:1]]
+(defun jtd/eglot-cap-config ()
+  (setq-local completion-at-point-functions
+              (list (cape-super-capf
+                     #'eglot-completion-at-point
+                     (cape-company-to-capf #'company-yasnippet)))))
+
 (use-package eglot
+  :defer 2
+  :hook
+  (before-save . eglot-format-buffer)
+  (eglot-managed-mode . jtd/eglot-cap-config)
+  :custom
+  (eglot-confirm-server-initiated-edits nil)
   :general
   (jtd/local-leader-key eglot-mode-map
     "l" '(:ignore t :wk "lsp")
@@ -217,3 +241,28 @@
     "ta" 'rustic-cargo-test
     "tt" 'rustic-cargo-current-test))
 ;; Rust:1 ends here
+
+;; [[file:../readme.org::*Elixir][Elixir:1]]
+(use-package elixir-mode
+  :after eglot
+  :hook
+  (elixir-mode . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs '(elixir-mode "~/.emacs.d/elixir-ls/release/language_server.sh")))
+
+(defun jtd/elixir-format-on-save ()
+  (add-hook 'before-save-hook 'elixir-format nil t))
+
+(use-package elixir-format
+  :after elixir-mode
+  :straight nil
+  :hook
+  (elixir-mode . jtd/elixir-format-on-save))
+;; Elixir:1 ends here
+
+;; [[file:../readme.org::*YAML][YAML:1]]
+(use-package yaml-mode
+  :hook
+  (yaml-mode . display-line-numbers-mode)
+  :commands yaml-mode)
+;; YAML:1 ends here

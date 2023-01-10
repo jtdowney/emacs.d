@@ -23,7 +23,6 @@
 ;; bootstrap straight and straight-use-package:1 ends here
 
 ;; [[file:../readme.org::*Enable use-package statistics][Enable use-package statistics:1]]
-(setq use-package-always-defer t)
 (setq use-package-compute-statistics t)
 ;; Enable use-package statistics:1 ends here
 
@@ -71,7 +70,9 @@
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
   (winner-mode 1)
   (show-paren-mode 1)
-  (display-time-mode -1))
+  (display-time-mode -1)
+
+  (setq-default indent-tabs-mode nil))
 ;; Sane defaults:1 ends here
 
 ;; [[file:../readme.org::*On hooks][On hooks:1]]
@@ -165,6 +166,7 @@
 					 "-o ControlPath=/tmp/ssh-tramp-%%r@%%h:%%p "
 					 "-o ControlMaster=auto -o ControlPersist=yes")))
 
-(use-package docker-tramp
-  :defer 2)
+(use-package tramp-container
+  :defer 2
+  :straight (:type built-in))
 ;; Tramp:1 ends here
