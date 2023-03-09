@@ -495,7 +495,7 @@
 ** Font
 
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil :font "Fira Code" :height 160)
+  (set-face-attribute 'default nil :font "Berkeley Mono" :height 160)
   (set-face-attribute 'variable-pitch nil :font "Fira Sans" :height 160)
 #+end_src
 

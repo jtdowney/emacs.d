@@ -3,7 +3,7 @@
 ;; Theme:1 ends here
 
 ;; [[file:../readme.org::*Font][Font:1]]
-(set-face-attribute 'default nil :font "Fira Code" :height 160)
+(set-face-attribute 'default nil :font "Berkeley Mono" :height 160)
 (set-face-attribute 'variable-pitch nil :font "Fira Sans" :height 160)
 ;; Font:1 ends here
 
