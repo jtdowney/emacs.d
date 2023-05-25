@@ -171,6 +171,23 @@
   :hook (prog-mode . smartparens-mode))
 ;; Smartparens:1 ends here
 
+;; [[file:../readme.org::*Copilot][Copilot:1]]
+(use-package copilot
+  :straight (:host github :repo "zerolfx/copilot.el"
+                   :files ("dist" "*.el"))
+  :general
+  (jtd/leader-key
+    "c" '(:ignore t :wk "copilot")
+    "cx" 'copilot-clear-overlay
+    "cc" 'copilot-complete)
+  (copilot-completion-map
+   "TAB" 'copilot-accept-completion)
+  :init
+  (with-eval-after-load 'company
+    ;; disable inline previews
+    (delq 'company-preview-if-just-one-frontend company-frontends)))
+;; Copilot:1 ends here
+
 ;; [[file:../readme.org::*Docker][Docker:1]]
 (use-package dockerfile-mode
   :defer t)

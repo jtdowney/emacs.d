@@ -1414,6 +1414,25 @@
     :hook (prog-mode . smartparens-mode))
 #+end_src
 
+** Copilot
+
+#+begin_src emacs-lisp
+  (use-package copilot
+    :straight (:host github :repo "zerolfx/copilot.el"
+                     :files ("dist" "*.el"))
+    :general
+    (jtd/leader-key
+      "c" '(:ignore t :wk "copilot")
+      "cx" 'copilot-clear-overlay
+      "cc" 'copilot-complete)
+    (copilot-completion-map
+     "TAB" 'copilot-accept-completion)
+    :init
+    (with-eval-after-load 'company
+      ;; disable inline previews
+      (delq 'company-preview-if-just-one-frontend company-frontends)))
+#+end_src
+
 ** Docker
 
 #+begin_src emacs-lisp
