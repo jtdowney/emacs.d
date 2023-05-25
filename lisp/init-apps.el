@@ -63,3 +63,23 @@
   :config
   (enable-circe-color-nicks))
 ;; IRC:1 ends here
+
+;; [[file:../readme.org::*ChatGPT][ChatGPT:1]]
+(use-package chatgpt-shell
+  :straight (:host github :repo "xenodium/chatgpt-shell")
+  :custom
+  (chatgpt-shell-openai-key
+   (lambda ()
+     (auth-source-pick-first-password :host "api.openai.com")))
+  :commands chatgpt-shell)
+;; ChatGPT:1 ends here
+
+;; [[file:../readme.org::*Dall-E][Dall-E:1]]
+(use-package dall-e-shell
+  :straight (:host github :repo "xenodium/chatgpt-shell")
+  :custom
+  (dall-e-shell-openai-key
+   (lambda ()
+     (auth-source-pick-first-password :host "api.openai.com")))
+  :commands dall-e-shell)
+;; Dall-E:1 ends here

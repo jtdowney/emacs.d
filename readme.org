@@ -1627,3 +1627,29 @@
     :config
     (enable-circe-color-nicks))
 #+end_src
+
+** OpenAI
+
+*** ChatGPT
+
+#+begin_src emacs-lisp
+  (use-package chatgpt-shell
+    :straight (:host github :repo "xenodium/chatgpt-shell")
+    :custom
+    (chatgpt-shell-openai-key
+     (lambda ()
+       (auth-source-pick-first-password :host "api.openai.com")))
+    :commands chatgpt-shell)
+#+end_src
+
+*** Dall-E
+
+#+begin_src emacs-lisp
+  (use-package dall-e-shell
+    :straight (:host github :repo "xenodium/chatgpt-shell")
+    :custom
+    (dall-e-shell-openai-key
+     (lambda ()
+       (auth-source-pick-first-password :host "api.openai.com")))
+    :commands dall-e-shell)
+#+end_src
