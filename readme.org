@@ -1489,6 +1489,19 @@
       "lr" 'eglot-rename))
 #+end_src
 
+** Breadcrumb
+
+#+begin_src emacs-lisp
+  (cl-defgeneric project-name (project)
+    "A human-readable name for the project.
+  Nominally unique, but not enforced."
+    (file-name-base (directory-file-name (project-root project))))
+
+  (use-package breadcrumb
+    :straight (:repo "joaotavora/breadcrumb"
+               :host github))
+#+end_src
+
 ** Rust
 
 #+begin_src emacs-lisp

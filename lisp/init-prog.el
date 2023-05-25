@@ -234,6 +234,17 @@
     "lr" 'eglot-rename))
 ;; Eglot:1 ends here
 
+;; [[file:../readme.org::*Breadcrumb][Breadcrumb:1]]
+(cl-defgeneric project-name (project)
+  "A human-readable name for the project.
+Nominally unique, but not enforced."
+  (file-name-base (directory-file-name (project-root project))))
+
+(use-package breadcrumb
+  :straight (:repo "joaotavora/breadcrumb"
+             :host github))
+;; Breadcrumb:1 ends here
+
 ;; [[file:../readme.org::*Rust][Rust:1]]
 (use-package rustic
   :hook
