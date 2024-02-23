@@ -1023,6 +1023,7 @@
       "oo" 'org-agenda
       "ot" 'org-todo-list)
     :custom
+    (org-startup-indented t)
     (org-agenda-files '("~/org/inbox.org"
 			"~/org/projects.org"
 			"~/org/tickler.org"))
